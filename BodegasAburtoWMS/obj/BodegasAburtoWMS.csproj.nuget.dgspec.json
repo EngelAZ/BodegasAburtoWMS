@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\engel\\Desktop\\RepositorioDeProyectos\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS.csproj": {}
+    "C:\\Users\\engel\\Desktop\\Sistema de gestión de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\engel\\Desktop\\RepositorioDeProyectos\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS.csproj": {
+    "C:\\Users\\engel\\Desktop\\Sistema de gestión de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\engel\\Desktop\\RepositorioDeProyectos\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS.csproj",
+        "projectUniqueName": "C:\\Users\\engel\\Desktop\\Sistema de gestión de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS.csproj",
         "projectName": "BodegasAburtoWMS",
-        "projectPath": "C:\\Users\\engel\\Desktop\\RepositorioDeProyectos\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS.csproj",
+        "projectPath": "C:\\Users\\engel\\Desktop\\Sistema de gestión de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS.csproj",
         "packagesPath": "C:\\Users\\engel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\engel\\Desktop\\RepositorioDeProyectos\\BodegasAburtoWMS\\BodegasAburtoWMS\\obj\\",
+        "outputPath": "C:\\Users\\engel\\Desktop\\Sistema de gestión de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
