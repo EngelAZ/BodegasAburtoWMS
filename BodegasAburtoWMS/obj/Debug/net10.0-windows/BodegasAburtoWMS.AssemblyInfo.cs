@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BodegasAburtoWMS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7677de0a0105856355acec49809bd52f0019100")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+74850aee46152f0c6bdab160a42815c7dad35b1b")]
 [assembly: System.Reflection.AssemblyProductAttribute("BodegasAburtoWMS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BodegasAburtoWMS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

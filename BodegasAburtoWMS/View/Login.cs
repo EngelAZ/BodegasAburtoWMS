@@ -1,4 +1,7 @@
 using Microsoft.Data.SqlClient;
+using BodegasAburtoWMS.Helpers;
+using BodegasAburtoWMS.Model;
+using BodegasAburtoWMS.Repository;
 
 namespace BodegasAburtoWMS
 {
@@ -21,36 +24,65 @@ namespace BodegasAburtoWMS
 
         }
 
+
         private void btnInicioSesion_Click(object sender, EventArgs e)
         {
-            string connectionString =
-        @"Server=(localdb)\MSSQLLocalDB;Database=BodegasAburtoWMS;Trusted_Connection=True;TrustServerCertificate=True;";
-
             try
             {
-                using (SqlConnection conexion = new SqlConnection(connectionString))
-                {
-                    conexion.Open();
+                string contraseña = "Admin123*";
 
+                PasswordHelper.CrearHash(
+                    contraseña,
+                    out byte[] passwordHash,
+                    out byte[] passwordSalt
+                );
+
+                Usuario nuevoUsuario = new Usuario
+                {
+                    UsuarioNombre = "admin",
+                    Nombre = "Administrador",
+                    Apellido = "Sistema",
+                    Correo = "admin@bodegasaburto.com",
+                    IdRol = 1,
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
+                    Activo = true
+                };
+
+                IBodegasAburtoWMSRepository repository =
+                    new BodegasAburtoWMSRepository();
+
+                bool registrado = repository.RegistrarUsuario(nuevoUsuario);
+
+                if (registrado)
+                {
                     MessageBox.Show(
-                        "¡Conexión exitosa con BodegasAburtoWMS!",
-                        "Conexión exitosa",
+                        "Usuario administrador creado correctamente.",
+                        "Registro exitoso",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information
+                    );
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "No se pudo registrar el usuario.",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
                     );
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "No se pudo conectar con la base de datos.\n\n" +
-                    "Error: " + ex.Message,
-                    "Error de conexión",
+                    "Ocurrió un error al registrar el usuario.\n\n" +
+                    ex.Message,
+                    "Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
             }
-
         }
 
         private void tbxContrasena_Enter(object sender, EventArgs e)

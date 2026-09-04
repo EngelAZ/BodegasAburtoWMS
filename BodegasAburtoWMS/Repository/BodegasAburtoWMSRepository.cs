@@ -1,4 +1,5 @@
-﻿using BodegasAburtoWMS.Model;
+﻿using BodegasAburtoWMS.Helpers;
+using BodegasAburtoWMS.Model;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -126,44 +127,56 @@ namespace BodegasAburtoWMS.Repository
         public bool RegistrarUsuario(Usuario usuario)
         {
             string query = @"
-                INSERT INTO Usuarios
-                (
-                    Usuario,
-                    Nombre,
-                    Apellido,
-                    Correo,
-                    IdRol,
-                    PasswordHash,
-                    PasswordSalt,
-                    Activo
-                )
-                VALUES
-                (
-                    @Usuario,
-                    @Nombre,
-                    @Apellido,
-                    @Correo,
-                    @IdRol,
-                    @PasswordHash,
-                    @PasswordSalt,
-                    @Activo
-                );";
+        INSERT INTO Usuarios
+        (
+            Usuario,
+            Nombre,
+            Apellido,
+            Correo,
+            IdRol,
+            PasswordHash,
+            PasswordSalt,
+            Activo
+        )
+        VALUES
+        (
+            @Usuario,
+            @Nombre,
+            @Apellido,
+            @Correo,
+            @IdRol,
+            @PasswordHash,
+            @PasswordSalt,
+            @Activo
+        );";
 
             using (SqlConnection conexion = new SqlConnection(connectionString))
             {
                 using (SqlCommand comando = new SqlCommand(query, conexion))
                 {
-                    comando.Parameters.AddWithValue("@Usuario", usuario.UsuarioNombre);
-                    comando.Parameters.AddWithValue("@Nombre", usuario.Nombre);
-                    comando.Parameters.AddWithValue("@Apellido", usuario.Apellido);
-                    comando.Parameters.AddWithValue(
-                        "@Correo",
-                        (object)usuario.Correo ?? DBNull.Value
-                    );
-                    comando.Parameters.AddWithValue("@IdRol", usuario.IdRol);
-                    comando.Parameters.AddWithValue("@PasswordHash", usuario.PasswordHash);
-                    comando.Parameters.AddWithValue("@PasswordSalt", usuario.PasswordSalt);
-                    comando.Parameters.AddWithValue("@Activo", usuario.Activo);
+                    comando.Parameters.Add("@Usuario", System.Data.SqlDbType.NVarChar, 50)
+                        .Value = usuario.UsuarioNombre;
+
+                    comando.Parameters.Add("@Nombre", System.Data.SqlDbType.NVarChar, 100)
+                        .Value = usuario.Nombre;
+
+                    comando.Parameters.Add("@Apellido", System.Data.SqlDbType.NVarChar, 100)
+                        .Value = usuario.Apellido;
+
+                    comando.Parameters.Add("@Correo", System.Data.SqlDbType.NVarChar, 150)
+                        .Value = (object)usuario.Correo ?? DBNull.Value;
+
+                    comando.Parameters.Add("@IdRol", System.Data.SqlDbType.Int)
+                        .Value = usuario.IdRol;
+
+                    comando.Parameters.Add("@PasswordHash", System.Data.SqlDbType.VarBinary, 64)
+                        .Value = usuario.PasswordHash;
+
+                    comando.Parameters.Add("@PasswordSalt", System.Data.SqlDbType.VarBinary, 32)
+                        .Value = usuario.PasswordSalt;
+
+                    comando.Parameters.Add("@Activo", System.Data.SqlDbType.Bit)
+                        .Value = usuario.Activo;
 
                     conexion.Open();
 
