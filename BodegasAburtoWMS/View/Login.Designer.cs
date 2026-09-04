@@ -38,6 +38,7 @@
             tbxUsuario = new TextBox();
             tbxContrasena = new TextBox();
             btnInicioSesion = new Button();
+            customTitleBar1 = new BodegasAburtoWMS.Components.CustomTitleBar();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -45,7 +46,7 @@
             // 
             pictureBox1.BackgroundImageLayout = ImageLayout.Center;
             pictureBox1.Image = Properties.Resources.IconoVentana;
-            pictureBox1.Location = new Point(176, 12);
+            pictureBox1.Location = new Point(176, 50);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(149, 117);
             pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -57,7 +58,7 @@
             lbTituloLogin.AutoSize = true;
             lbTituloLogin.Font = new Font("Cinzel", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbTituloLogin.ForeColor = Color.FromArgb(30, 77, 140);
-            lbTituloLogin.Location = new Point(150, 132);
+            lbTituloLogin.Location = new Point(150, 170);
             lbTituloLogin.Name = "lbTituloLogin";
             lbTituloLogin.Size = new Size(198, 36);
             lbTituloLogin.TabIndex = 1;
@@ -68,7 +69,7 @@
             lblSubtitulo2.AutoSize = true;
             lblSubtitulo2.Font = new Font("Alegreya Medium", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblSubtitulo2.ForeColor = SystemColors.ControlDark;
-            lblSubtitulo2.Location = new Point(131, 192);
+            lblSubtitulo2.Location = new Point(131, 225);
             lblSubtitulo2.Name = "lblSubtitulo2";
             lblSubtitulo2.Size = new Size(228, 24);
             lblSubtitulo2.TabIndex = 2;
@@ -79,7 +80,7 @@
             lblContrasena.AutoSize = true;
             lblContrasena.Font = new Font("Lora SemiBold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblContrasena.ForeColor = Color.FromArgb(38, 50, 56);
-            lblContrasena.Location = new Point(61, 332);
+            lblContrasena.Location = new Point(61, 365);
             lblContrasena.Name = "lblContrasena";
             lblContrasena.Size = new Size(126, 31);
             lblContrasena.TabIndex = 3;
@@ -90,7 +91,7 @@
             lblUsuario.AutoSize = true;
             lblUsuario.Font = new Font("Lora SemiBold", 15.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblUsuario.ForeColor = Color.FromArgb(38, 50, 56);
-            lblUsuario.Location = new Point(61, 247);
+            lblUsuario.Location = new Point(61, 286);
             lblUsuario.Name = "lblUsuario";
             lblUsuario.Size = new Size(92, 31);
             lblUsuario.TabIndex = 4;
@@ -101,7 +102,7 @@
             lblSubtitulo1.AutoSize = true;
             lblSubtitulo1.Font = new Font("Lora Medium", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblSubtitulo1.ForeColor = SystemColors.ControlDarkDark;
-            lblSubtitulo1.Location = new Point(122, 168);
+            lblSubtitulo1.Location = new Point(122, 205);
             lblSubtitulo1.Name = "lblSubtitulo1";
             lblSubtitulo1.Size = new Size(248, 24);
             lblSubtitulo1.TabIndex = 5;
@@ -111,7 +112,7 @@
             // 
             tbxUsuario.Font = new Font("Alegreya Medium", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tbxUsuario.ForeColor = SystemColors.ButtonShadow;
-            tbxUsuario.Location = new Point(61, 281);
+            tbxUsuario.Location = new Point(61, 320);
             tbxUsuario.Name = "tbxUsuario";
             tbxUsuario.Size = new Size(378, 29);
             tbxUsuario.TabIndex = 6;
@@ -124,7 +125,7 @@
             // 
             tbxContrasena.Font = new Font("Alegreya Medium", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             tbxContrasena.ForeColor = SystemColors.ButtonShadow;
-            tbxContrasena.Location = new Point(61, 366);
+            tbxContrasena.Location = new Point(61, 399);
             tbxContrasena.Name = "tbxContrasena";
             tbxContrasena.Size = new Size(378, 29);
             tbxContrasena.TabIndex = 7;
@@ -142,7 +143,7 @@
             btnInicioSesion.FlatStyle = FlatStyle.Flat;
             btnInicioSesion.Font = new Font("Lora SemiBold", 14.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             btnInicioSesion.ForeColor = Color.White;
-            btnInicioSesion.Location = new Point(61, 424);
+            btnInicioSesion.Location = new Point(61, 457);
             btnInicioSesion.Name = "btnInicioSesion";
             btnInicioSesion.Size = new Size(378, 43);
             btnInicioSesion.TabIndex = 8;
@@ -150,12 +151,25 @@
             btnInicioSesion.UseVisualStyleBackColor = false;
             btnInicioSesion.Click += btnInicioSesion_Click;
             // 
+            // customTitleBar1
+            // 
+            customTitleBar1.BackColor = Color.FromArgb(30, 78, 140);
+            customTitleBar1.Dock = DockStyle.Top;
+            customTitleBar1.Font = new Font("Cinzel", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            customTitleBar1.Location = new Point(0, 0);
+            customTitleBar1.Name = "customTitleBar1";
+            customTitleBar1.Size = new Size(487, 40);
+            customTitleBar1.TabIndex = 9;
+            customTitleBar1.TitleIcon = Properties.Resources.IconoVentana;
+            customTitleBar1.TitleText = "Aburto WMS - Inicio de Sesión";
+            // 
             // Login
             // 
             AutoScaleDimensions = new SizeF(11F, 22F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(254, 254, 254);
             ClientSize = new Size(487, 544);
+            Controls.Add(customTitleBar1);
             Controls.Add(btnInicioSesion);
             Controls.Add(tbxContrasena);
             Controls.Add(tbxUsuario);
@@ -167,11 +181,13 @@
             Controls.Add(pictureBox1);
             Font = new Font("Cinzel", 11.9999981F, FontStyle.Regular, GraphicsUnit.Point, 0);
             ForeColor = SystemColors.ControlText;
+            FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(5, 4, 5, 4);
             Name = "Login";
             RightToLeft = RightToLeft.No;
             RightToLeftLayout = true;
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Aburto WMS - Inicio de Sesión";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
@@ -189,5 +205,6 @@
         private TextBox tbxUsuario;
         private TextBox tbxContrasena;
         private Button btnInicioSesion;
+        private Components.CustomTitleBar customTitleBar1;
     }
 }

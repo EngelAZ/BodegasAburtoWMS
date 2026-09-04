@@ -35,33 +35,33 @@
             herramientasToolStripMenuItem = new ToolStripMenuItem();
             ayudaToolStripMenuItem = new ToolStripMenuItem();
             pnlWMS = new Panel();
-            pnl2WMS = new Panel();
-            pictureboxWMS = new PictureBox();
-            label1WMS = new Label();
-            label2WMS = new Label();
-            labelcat1 = new Label();
-            labelcat2 = new Label();
-            labelcat3 = new Label();
-            button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
+            button8 = new Button();
             button4 = new Button();
             button5 = new Button();
             button6 = new Button();
             button7 = new Button();
-            button8 = new Button();
-            labelConsultas = new Label();
+            button3 = new Button();
+            button2 = new Button();
+            labelcat3 = new Label();
+            button1 = new Button();
+            labelcat1 = new Label();
+            labelcat2 = new Label();
+            label2WMS = new Label();
+            label1WMS = new Label();
+            pictureboxWMS = new PictureBox();
+            pnl2WMS = new Panel();
             tablelp1 = new TableLayoutPanel();
-            lbl1 = new Label();
-            lbl2 = new Label();
-            lbl3 = new Label();
-            lbl4 = new Label();
             lbl5 = new Label();
+            lbl3 = new Label();
+            lbl2 = new Label();
             lbl6 = new Label();
+            lbl4 = new Label();
+            lbl1 = new Label();
+            labelConsultas = new Label();
             MenuStripWMS.SuspendLayout();
             pnlWMS.SuspendLayout();
-            pnl2WMS.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureboxWMS).BeginInit();
+            pnl2WMS.SuspendLayout();
             tablelp1.SuspendLayout();
             SuspendLayout();
             // 
@@ -127,123 +127,19 @@
             pnlWMS.Size = new Size(220, 516);
             pnlWMS.TabIndex = 1;
             // 
-            // pnl2WMS
+            // button8
             // 
-            pnl2WMS.BackColor = Color.LightGray;
-            pnl2WMS.Controls.Add(tablelp1);
-            pnl2WMS.Controls.Add(labelConsultas);
-            pnl2WMS.Dock = DockStyle.Fill;
-            pnl2WMS.Location = new Point(220, 24);
-            pnl2WMS.Name = "pnl2WMS";
-            pnl2WMS.Size = new Size(808, 516);
-            pnl2WMS.TabIndex = 2;
-            // 
-            // pictureboxWMS
-            // 
-            pictureboxWMS.Image = Properties.Resources.IconoVentana;
-            pictureboxWMS.Location = new Point(21, 29);
-            pictureboxWMS.Name = "pictureboxWMS";
-            pictureboxWMS.Size = new Size(31, 31);
-            pictureboxWMS.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureboxWMS.TabIndex = 0;
-            pictureboxWMS.TabStop = false;
-            // 
-            // label1WMS
-            // 
-            label1WMS.AutoSize = true;
-            label1WMS.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1WMS.ForeColor = Color.White;
-            label1WMS.Location = new Point(68, 29);
-            label1WMS.Name = "label1WMS";
-            label1WMS.Size = new Size(52, 16);
-            label1WMS.TabIndex = 0;
-            label1WMS.Text = "Aburto";
-            // 
-            // label2WMS
-            // 
-            label2WMS.AutoSize = true;
-            label2WMS.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2WMS.ForeColor = Color.Gray;
-            label2WMS.Location = new Point(68, 47);
-            label2WMS.Name = "label2WMS";
-            label2WMS.Size = new Size(80, 13);
-            label2WMS.TabIndex = 0;
-            label2WMS.Text = "WMS - Bodega";
-            // 
-            // labelcat1
-            // 
-            labelcat1.AutoSize = true;
-            labelcat1.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelcat1.ForeColor = Color.SkyBlue;
-            labelcat1.Location = new Point(21, 128);
-            labelcat1.Name = "labelcat1";
-            labelcat1.Size = new Size(82, 13);
-            labelcat1.TabIndex = 0;
-            labelcat1.Text = "OPERACIONES";
-            // 
-            // labelcat2
-            // 
-            labelcat2.AutoSize = true;
-            labelcat2.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelcat2.ForeColor = Color.SkyBlue;
-            labelcat2.Location = new Point(21, 219);
-            labelcat2.Name = "labelcat2";
-            labelcat2.Size = new Size(53, 13);
-            labelcat2.TabIndex = 0;
-            labelcat2.Text = "GESTION";
-            // 
-            // labelcat3
-            // 
-            labelcat3.AutoSize = true;
-            labelcat3.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelcat3.ForeColor = Color.SkyBlue;
-            labelcat3.Location = new Point(21, 334);
-            labelcat3.Name = "labelcat3";
-            labelcat3.Size = new Size(63, 13);
-            labelcat3.TabIndex = 1;
-            labelcat3.Text = "FINANZAS";
-            // 
-            // button1
-            // 
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button1.ForeColor = Color.Silver;
-            button1.Location = new Point(45, 154);
-            button1.Name = "button1";
-            button1.Size = new Size(103, 23);
-            button1.TabIndex = 0;
-            button1.Text = "Registro Diario";
-            button1.TextAlign = ContentAlignment.MiddleLeft;
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            button2.FlatAppearance.BorderSize = 0;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button2.ForeColor = Color.Silver;
-            button2.Location = new Point(45, 183);
-            button2.Name = "button2";
-            button2.Size = new Size(120, 23);
-            button2.TabIndex = 1;
-            button2.Text = "Entregas / Salidas";
-            button2.TextAlign = ContentAlignment.MiddleLeft;
-            button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            button3.FlatAppearance.BorderSize = 0;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button3.ForeColor = Color.Silver;
-            button3.Location = new Point(45, 244);
-            button3.Name = "button3";
-            button3.Size = new Size(75, 23);
-            button3.TabIndex = 2;
-            button3.Text = "Agencias";
-            button3.TextAlign = ContentAlignment.MiddleLeft;
-            button3.UseVisualStyleBackColor = true;
+            button8.FlatAppearance.BorderSize = 0;
+            button8.FlatStyle = FlatStyle.Flat;
+            button8.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button8.ForeColor = Color.Silver;
+            button8.Location = new Point(45, 84);
+            button8.Name = "button8";
+            button8.Size = new Size(75, 23);
+            button8.TabIndex = 0;
+            button8.Text = "Inicio";
+            button8.TextAlign = ContentAlignment.MiddleLeft;
+            button8.UseVisualStyleBackColor = true;
             // 
             // button4
             // 
@@ -301,29 +197,123 @@
             button7.TextAlign = ContentAlignment.MiddleLeft;
             button7.UseVisualStyleBackColor = true;
             // 
-            // button8
+            // button3
             // 
-            button8.FlatAppearance.BorderSize = 0;
-            button8.FlatStyle = FlatStyle.Flat;
-            button8.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            button8.ForeColor = Color.Silver;
-            button8.Location = new Point(45, 84);
-            button8.Name = "button8";
-            button8.Size = new Size(75, 23);
-            button8.TabIndex = 0;
-            button8.Text = "Inicio";
-            button8.TextAlign = ContentAlignment.MiddleLeft;
-            button8.UseVisualStyleBackColor = true;
+            button3.FlatAppearance.BorderSize = 0;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button3.ForeColor = Color.Silver;
+            button3.Location = new Point(45, 244);
+            button3.Name = "button3";
+            button3.Size = new Size(75, 23);
+            button3.TabIndex = 2;
+            button3.Text = "Agencias";
+            button3.TextAlign = ContentAlignment.MiddleLeft;
+            button3.UseVisualStyleBackColor = true;
             // 
-            // labelConsultas
+            // button2
             // 
-            labelConsultas.AutoSize = true;
-            labelConsultas.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            labelConsultas.Location = new Point(36, 25);
-            labelConsultas.Name = "labelConsultas";
-            labelConsultas.Size = new Size(181, 20);
-            labelConsultas.TabIndex = 0;
-            labelConsultas.Text = "Consultas y Reportes";
+            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button2.ForeColor = Color.Silver;
+            button2.Location = new Point(45, 183);
+            button2.Name = "button2";
+            button2.Size = new Size(120, 23);
+            button2.TabIndex = 1;
+            button2.Text = "Entregas / Salidas";
+            button2.TextAlign = ContentAlignment.MiddleLeft;
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // labelcat3
+            // 
+            labelcat3.AutoSize = true;
+            labelcat3.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelcat3.ForeColor = Color.SkyBlue;
+            labelcat3.Location = new Point(21, 334);
+            labelcat3.Name = "labelcat3";
+            labelcat3.Size = new Size(63, 13);
+            labelcat3.TabIndex = 1;
+            labelcat3.Text = "FINANZAS";
+            // 
+            // button1
+            // 
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.ForeColor = Color.Silver;
+            button1.Location = new Point(45, 154);
+            button1.Name = "button1";
+            button1.Size = new Size(103, 23);
+            button1.TabIndex = 0;
+            button1.Text = "Registro Diario";
+            button1.TextAlign = ContentAlignment.MiddleLeft;
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // labelcat1
+            // 
+            labelcat1.AutoSize = true;
+            labelcat1.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelcat1.ForeColor = Color.SkyBlue;
+            labelcat1.Location = new Point(21, 128);
+            labelcat1.Name = "labelcat1";
+            labelcat1.Size = new Size(82, 13);
+            labelcat1.TabIndex = 0;
+            labelcat1.Text = "OPERACIONES";
+            // 
+            // labelcat2
+            // 
+            labelcat2.AutoSize = true;
+            labelcat2.Font = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelcat2.ForeColor = Color.SkyBlue;
+            labelcat2.Location = new Point(21, 219);
+            labelcat2.Name = "labelcat2";
+            labelcat2.Size = new Size(53, 13);
+            labelcat2.TabIndex = 0;
+            labelcat2.Text = "GESTION";
+            // 
+            // label2WMS
+            // 
+            label2WMS.AutoSize = true;
+            label2WMS.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2WMS.ForeColor = Color.Gray;
+            label2WMS.Location = new Point(68, 47);
+            label2WMS.Name = "label2WMS";
+            label2WMS.Size = new Size(80, 13);
+            label2WMS.TabIndex = 0;
+            label2WMS.Text = "WMS - Bodega";
+            // 
+            // label1WMS
+            // 
+            label1WMS.AutoSize = true;
+            label1WMS.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1WMS.ForeColor = Color.White;
+            label1WMS.Location = new Point(68, 29);
+            label1WMS.Name = "label1WMS";
+            label1WMS.Size = new Size(52, 16);
+            label1WMS.TabIndex = 0;
+            label1WMS.Text = "Aburto";
+            // 
+            // pictureboxWMS
+            // 
+            pictureboxWMS.Image = Properties.Resources.IconoVentana;
+            pictureboxWMS.Location = new Point(21, 29);
+            pictureboxWMS.Name = "pictureboxWMS";
+            pictureboxWMS.Size = new Size(31, 31);
+            pictureboxWMS.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureboxWMS.TabIndex = 0;
+            pictureboxWMS.TabStop = false;
+            // 
+            // pnl2WMS
+            // 
+            pnl2WMS.BackColor = Color.LightGray;
+            pnl2WMS.Controls.Add(tablelp1);
+            pnl2WMS.Controls.Add(labelConsultas);
+            pnl2WMS.Dock = DockStyle.Fill;
+            pnl2WMS.Location = new Point(220, 24);
+            pnl2WMS.Name = "pnl2WMS";
+            pnl2WMS.Size = new Size(808, 516);
+            pnl2WMS.TabIndex = 2;
             // 
             // tablelp1
             // 
@@ -346,15 +336,25 @@
             tablelp1.Size = new Size(808, 221);
             tablelp1.TabIndex = 1;
             // 
-            // lbl1
+            // lbl5
             // 
-            lbl1.AutoSize = true;
-            lbl1.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lbl1.Location = new Point(3, 0);
-            lbl1.Name = "lbl1";
-            lbl1.Size = new Size(112, 15);
-            lbl1.TabIndex = 0;
-            lbl1.Text = "Envios recibidos";
+            lbl5.AutoSize = true;
+            lbl5.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl5.Location = new Point(272, 110);
+            lbl5.Name = "lbl5";
+            lbl5.Size = new Size(168, 15);
+            lbl5.TabIndex = 4;
+            lbl5.Text = "Movimientos por agencia";
+            // 
+            // lbl3
+            // 
+            lbl3.AutoSize = true;
+            lbl3.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl3.Location = new Point(541, 0);
+            lbl3.Name = "lbl3";
+            lbl3.Size = new Size(124, 15);
+            lbl3.TabIndex = 2;
+            lbl3.Text = "Envios pendientes";
             // 
             // lbl2
             // 
@@ -367,15 +367,15 @@
             lbl2.TabIndex = 1;
             lbl2.Text = "Envios entregados";
             // 
-            // lbl3
+            // lbl6
             // 
-            lbl3.AutoSize = true;
-            lbl3.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lbl3.Location = new Point(541, 0);
-            lbl3.Name = "lbl3";
-            lbl3.Size = new Size(124, 15);
-            lbl3.TabIndex = 2;
-            lbl3.Text = "Envios pendientes";
+            lbl6.AutoSize = true;
+            lbl6.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl6.Location = new Point(541, 110);
+            lbl6.Name = "lbl6";
+            lbl6.Size = new Size(169, 15);
+            lbl6.TabIndex = 5;
+            lbl6.Text = "Liquidaciones generadas";
             // 
             // lbl4
             // 
@@ -387,25 +387,25 @@
             lbl4.TabIndex = 3;
             lbl4.Text = "Bultos de bodega";
             // 
-            // lbl5
+            // lbl1
             // 
-            lbl5.AutoSize = true;
-            lbl5.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lbl5.Location = new Point(272, 110);
-            lbl5.Name = "lbl5";
-            lbl5.Size = new Size(168, 15);
-            lbl5.TabIndex = 4;
-            lbl5.Text = "Movimientos por agencia";
+            lbl1.AutoSize = true;
+            lbl1.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl1.Location = new Point(3, 0);
+            lbl1.Name = "lbl1";
+            lbl1.Size = new Size(112, 15);
+            lbl1.TabIndex = 0;
+            lbl1.Text = "Envios recibidos";
             // 
-            // lbl6
+            // labelConsultas
             // 
-            lbl6.AutoSize = true;
-            lbl6.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lbl6.Location = new Point(541, 110);
-            lbl6.Name = "lbl6";
-            lbl6.Size = new Size(169, 15);
-            lbl6.TabIndex = 5;
-            lbl6.Text = "Liquidaciones generadas";
+            labelConsultas.AutoSize = true;
+            labelConsultas.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelConsultas.Location = new Point(36, 25);
+            labelConsultas.Name = "labelConsultas";
+            labelConsultas.Size = new Size(181, 20);
+            labelConsultas.TabIndex = 0;
+            labelConsultas.Text = "Consultas y Reportes";
             // 
             // Reportes
             // 
@@ -420,13 +420,14 @@
             Margin = new Padding(3, 4, 3, 4);
             Name = "Reportes";
             Text = "Reportes y Consultas -- Aburto WMS";
+            Load += Reportes_Load;
             MenuStripWMS.ResumeLayout(false);
             MenuStripWMS.PerformLayout();
             pnlWMS.ResumeLayout(false);
             pnlWMS.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureboxWMS).EndInit();
             pnl2WMS.ResumeLayout(false);
             pnl2WMS.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureboxWMS).EndInit();
             tablelp1.ResumeLayout(false);
             tablelp1.PerformLayout();
             ResumeLayout(false);
