@@ -57,7 +57,7 @@
             lbTituloLogin.AutoSize = true;
             lbTituloLogin.Font = new Font("Cinzel", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbTituloLogin.ForeColor = Color.FromArgb(30, 77, 140);
-            lbTituloLogin.Location = new Point(147, 132);
+            lbTituloLogin.Location = new Point(150, 132);
             lbTituloLogin.Name = "lbTituloLogin";
             lbTituloLogin.Size = new Size(198, 36);
             lbTituloLogin.TabIndex = 1;
@@ -68,7 +68,7 @@
             lblSubtitulo2.AutoSize = true;
             lblSubtitulo2.Font = new Font("Alegreya Medium", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblSubtitulo2.ForeColor = SystemColors.ControlDark;
-            lblSubtitulo2.Location = new Point(126, 192);
+            lblSubtitulo2.Location = new Point(131, 192);
             lblSubtitulo2.Name = "lblSubtitulo2";
             lblSubtitulo2.Size = new Size(228, 24);
             lblSubtitulo2.TabIndex = 2;
@@ -101,7 +101,7 @@
             lblSubtitulo1.AutoSize = true;
             lblSubtitulo1.Font = new Font("Lora Medium", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblSubtitulo1.ForeColor = SystemColors.ControlDarkDark;
-            lblSubtitulo1.Location = new Point(117, 168);
+            lblSubtitulo1.Location = new Point(122, 168);
             lblSubtitulo1.Name = "lblSubtitulo1";
             lblSubtitulo1.Size = new Size(248, 24);
             lblSubtitulo1.TabIndex = 5;
@@ -117,6 +117,8 @@
             tbxUsuario.TabIndex = 6;
             tbxUsuario.Text = "Ingrese su usuario";
             tbxUsuario.TextChanged += tbxUsuario_TextChanged;
+            tbxUsuario.Enter += tbxUsuario_Enter;
+            tbxUsuario.Leave += tbxUsuario_Leave;
             // 
             // tbxContrasena
             // 
@@ -127,8 +129,8 @@
             tbxContrasena.Size = new Size(378, 29);
             tbxContrasena.TabIndex = 7;
             tbxContrasena.Text = "Ingrese su contraseña";
-            tbxContrasena.Visible = false;
-            tbxContrasena.TextChanged += tbxContrasena_TextChanged;
+            tbxContrasena.Enter += tbxContrasena_Enter;
+            tbxContrasena.Leave += tbxContrasena_Leave;
             // 
             // btnInicioSesion
             // 
