@@ -28,14 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new Panel();
-            panel2 = new Panel();
             panel3 = new Panel();
-            button1 = new Button();
-            button2 = new Button();
-            textBox1 = new TextBox();
-            comboBox1 = new ComboBox();
             comboBox2 = new ComboBox();
+            comboBox1 = new ComboBox();
+            textBox1 = new TextBox();
             dataGridView1 = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
             NumeroGuia = new DataGridViewTextBoxColumn();
@@ -46,32 +42,9 @@
             FechaEntrega = new DataGridViewTextBoxColumn();
             CostoEnvio = new DataGridViewTextBoxColumn();
             Observaciones = new DataGridViewTextBoxColumn();
-            panel1.SuspendLayout();
-            panel2.SuspendLayout();
             panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
-            // 
-            // panel1
-            // 
-            panel1.BackColor = SystemColors.ControlLight;
-            panel1.Controls.Add(panel2);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(800, 39);
-            panel1.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            panel2.BackColor = SystemColors.ControlLight;
-            panel2.Controls.Add(button2);
-            panel2.Controls.Add(button1);
-            panel2.Dock = DockStyle.Top;
-            panel2.Location = new Point(0, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(800, 48);
-            panel2.TabIndex = 1;
             // 
             // panel3
             // 
@@ -80,64 +53,51 @@
             panel3.Controls.Add(comboBox1);
             panel3.Controls.Add(textBox1);
             panel3.Dock = DockStyle.Top;
-            panel3.Location = new Point(0, 39);
+            panel3.Location = new Point(0, 0);
+            panel3.Margin = new Padding(2);
             panel3.Name = "panel3";
-            panel3.Size = new Size(800, 48);
+            panel3.Size = new Size(560, 29);
             panel3.TabIndex = 2;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(22, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(171, 34);
-            button1.TabIndex = 0;
-            button1.Text = "Lista de Envios";
-            button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            button2.Location = new Point(228, 3);
-            button2.Name = "button2";
-            button2.Size = new Size(171, 34);
-            button2.TabIndex = 1;
-            button2.Text = "+ Nuevo Envio";
-            button2.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(22, 6);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(334, 31);
-            textBox1.TabIndex = 0;
-            textBox1.Text = "Buscar por Guia, Remitente o destinatario";
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Todas las Agencias" });
-            comboBox1.Location = new Point(362, 6);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(182, 33);
-            comboBox1.TabIndex = 1;
             // 
             // comboBox2
             // 
             comboBox2.FormattingEnabled = true;
             comboBox2.Items.AddRange(new object[] { "Todos los Estados" });
-            comboBox2.Location = new Point(564, 6);
+            comboBox2.Location = new Point(395, 4);
+            comboBox2.Margin = new Padding(2);
             comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(182, 33);
+            comboBox2.Size = new Size(129, 23);
             comboBox2.TabIndex = 2;
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Todas las Agencias" });
+            comboBox1.Location = new Point(253, 4);
+            comboBox1.Margin = new Padding(2);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(129, 23);
+            comboBox1.TabIndex = 1;
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(15, 4);
+            textBox1.Margin = new Padding(2);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(235, 23);
+            textBox1.TabIndex = 0;
+            textBox1.Text = "Buscar por Guia, Remitente o destinatario";
             // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ID, NumeroGuia, Agencia, Remitente, Destinatario, FechaEnvio, FechaEntrega, CostoEnvio, Observaciones });
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 87);
+            dataGridView1.Location = new Point(0, 29);
+            dataGridView1.Margin = new Padding(2);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.Size = new Size(800, 363);
+            dataGridView1.Size = new Size(560, 241);
             dataGridView1.TabIndex = 3;
             // 
             // ID
@@ -205,16 +165,16 @@
             // 
             // RegistroDiario
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(560, 270);
             Controls.Add(dataGridView1);
             Controls.Add(panel3);
-            Controls.Add(panel1);
+            FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(2);
             Name = "RegistroDiario";
             Text = "RegistroDiario";
-            panel1.ResumeLayout(false);
-            panel2.ResumeLayout(false);
+            Load += RegistroDiario_Load;
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -222,11 +182,6 @@
         }
 
         #endregion
-
-        private Panel panel1;
-        private Panel panel2;
-        private Button button2;
-        private Button button1;
         private Panel panel3;
         private ComboBox comboBox1;
         private TextBox textBox1;

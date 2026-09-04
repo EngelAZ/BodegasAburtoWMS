@@ -61,7 +61,7 @@ namespace BodegasAburtoWMS.View
         }
 
         // Método para incrustar cualquier Forms en la zona gris central
-        private void MostrarFormEnCentro(Form formHijo)
+        public void MostrarFormEnCentro(Form formHijo)
         {
             // 1. Si ya hay una pantalla cargada en la zona gris, la cerramos para liberar memoria
             if (this.PanelContenedor.Controls.Count > 0)
@@ -73,6 +73,8 @@ namespace BodegasAburtoWMS.View
                 }
                 this.PanelContenedor.Controls.Clear();
             }
+            // --- Limpiamos también la barra blanca superior cada vez que cambiamos de pantalla ---
+            this.PanelOpciones.Controls.Clear();
 
             // 2. CONFIGURACIÓN CLAVE: Le decimos al formulario que se comporte como un control secundario
             formHijo.TopLevel = false;            // IMPORTANTE: Le quita la propiedad de ventana independiente

@@ -30,6 +30,7 @@ namespace BodegasAburtoWMS.View
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Principal));
             panel1 = new Panel();
             btnInicio = new Button();
             label6 = new Label();
@@ -46,7 +47,7 @@ namespace BodegasAburtoWMS.View
             label2 = new Label();
             label1 = new Label();
             pictureBox1 = new PictureBox();
-            panel3 = new Panel();
+            PanelOpciones = new Panel();
             button8 = new Button();
             dateTimePicker1 = new DateTimePicker();
             label3 = new Label();
@@ -61,7 +62,7 @@ namespace BodegasAburtoWMS.View
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            panel3.SuspendLayout();
+            PanelOpciones.SuspendLayout();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -295,18 +296,18 @@ namespace BodegasAburtoWMS.View
             pictureBox1.TabIndex = 2;
             pictureBox1.TabStop = false;
             // 
-            // panel3
+            // PanelOpciones
             // 
-            panel3.BackColor = Color.White;
-            panel3.Controls.Add(button8);
-            panel3.Controls.Add(dateTimePicker1);
-            panel3.Controls.Add(label3);
-            panel3.Dock = DockStyle.Top;
-            panel3.Location = new Point(161, 68);
-            panel3.Margin = new Padding(2);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(856, 41);
-            panel3.TabIndex = 2;
+            PanelOpciones.BackColor = Color.White;
+            PanelOpciones.Controls.Add(button8);
+            PanelOpciones.Controls.Add(dateTimePicker1);
+            PanelOpciones.Controls.Add(label3);
+            PanelOpciones.Dock = DockStyle.Top;
+            PanelOpciones.Location = new Point(161, 68);
+            PanelOpciones.Margin = new Padding(2);
+            PanelOpciones.Name = "PanelOpciones";
+            PanelOpciones.Size = new Size(856, 41);
+            PanelOpciones.TabIndex = 2;
             // 
             // button8
             // 
@@ -409,11 +410,12 @@ namespace BodegasAburtoWMS.View
             BackColor = Color.Silver;
             ClientSize = new Size(1018, 587);
             Controls.Add(PanelContenedor);
-            Controls.Add(panel3);
+            Controls.Add(PanelOpciones);
             Controls.Add(panel1);
             Controls.Add(menuStrip1);
             Controls.Add(BarraSuperior);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             Margin = new Padding(2);
             Name = "Principal";
@@ -425,8 +427,8 @@ namespace BodegasAburtoWMS.View
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            panel3.ResumeLayout(false);
-            panel3.PerformLayout();
+            PanelOpciones.ResumeLayout(false);
+            PanelOpciones.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -446,7 +448,6 @@ namespace BodegasAburtoWMS.View
         private Button btnLiquidacion;
         private Button btnMateriales;
         private Button btnSalidasEntradas;
-        private Panel panel3;
         private Button button8;
         private DateTimePicker dateTimePicker1;
         private Label label3;
@@ -462,5 +463,6 @@ namespace BodegasAburtoWMS.View
         private Label label6;
         private Label label5;
         private Label label4;
+        public Panel PanelOpciones;
     }
 }

@@ -23,5 +23,7 @@ namespace BodegasAburtoWMS.Repository
             string usuarioSistema,
             string detalle
         );
+        bool RegistrarEnvio(Envio envio);
+
     }
 }

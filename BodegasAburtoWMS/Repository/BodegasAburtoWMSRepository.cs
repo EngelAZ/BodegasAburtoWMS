@@ -305,5 +305,48 @@ namespace BodegasAburtoWMS.Repository
                 }
             }
         }
+
+        public bool RegistrarEnvio(Envio envio)
+        {
+            string query = @"
+        INSERT INTO Envios 
+        (
+            NumeroGuia, IdAgencia, IdClienteRemitente, IdClienteDestinatario, 
+            IdTipoEnvio, IdEstado, Origen, Destino, FechaEnvio, 
+            FechaEntregaEstimada, FechaEntregaReal, CostoEnvio, Observaciones
+        )
+        VALUES 
+        (
+            @NumeroGuia, @IdAgencia, @IdClienteRemitente, @IdClienteDestinatario, 
+            @IdTipoEnvio, @IdEstado, @Origen, @Destino, @FechaEnvio, 
+            @FechaEntregaEstimada, @FechaEntregaReal, @CostoEnvio, @Observaciones
+        );";
+
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                using (SqlCommand comando = new SqlCommand(query, conexion))
+                {
+                    comando.Parameters.AddWithValue("@NumeroGuia", envio.NumeroGuia);
+                    comando.Parameters.AddWithValue("@IdAgencia", envio.IdAgencia);
+                    comando.Parameters.AddWithValue("@IdClienteRemitente", envio.IdClienteRemitente);
+                    comando.Parameters.AddWithValue("@IdClienteDestinatario", envio.IdClienteDestinatario);
+
+                    // Campos que aceptan valores nulos en tu base de datos
+                    comando.Parameters.AddWithValue("@IdTipoEnvio", (object)envio.IdTipoEnvio ?? DBNull.Value);
+                    comando.Parameters.AddWithValue("@IdEstado", (object)envio.IdEstado ?? DBNull.Value);
+                    comando.Parameters.AddWithValue("@Origen", (object)envio.Origen ?? DBNull.Value);
+                    comando.Parameters.AddWithValue("@Destino", (object)envio.Destino ?? DBNull.Value);
+                    comando.Parameters.AddWithValue("@FechaEnvio", envio.FechaEnvio);
+                    comando.Parameters.AddWithValue("@FechaEntregaEstimada", (object)envio.FechaEntregaEstimada ?? DBNull.Value);
+                    comando.Parameters.AddWithValue("@FechaEntregaReal", (object)envio.FechaEntregaReal ?? DBNull.Value);
+                    comando.Parameters.AddWithValue("@CostoEnvio", envio.CostoEnvio);
+                    comando.Parameters.AddWithValue("@Observaciones", (object)envio.Observaciones ?? DBNull.Value);
+
+                    conexion.Open();
+                    return comando.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
     }
 }

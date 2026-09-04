@@ -233,6 +233,7 @@
             Controls.Add(label1);
             Name = "DatosEnvios";
             Text = "Datos de Envios";
+            Load += DatosEnvios_Load;
             ResumeLayout(false);
             PerformLayout();
         }
