@@ -348,5 +348,65 @@ namespace BodegasAburtoWMS.Repository
             }
         }
 
+        public List<ComboboxItem> ObtenerAgenciasCombo() => ObtenerItemsGenerico("SELECT IdAgencia AS Id, Nombre FROM Agencias;");
+        public List<ComboboxItem> ObtenerTiposEnvioCombo() => ObtenerItemsGenerico("SELECT IdTipoEnvio AS Id, Nombre FROM TiposEnvio;");
+        public List<ComboboxItem> ObtenerEstadosEnvioCombo() => ObtenerItemsGenerico("SELECT IdEstado AS Id, Nombre FROM EstadosEnvio;");
+
+        public List<ComboboxItem> ObtenerClientesCombo()
+        {
+            // Para los clientes unimos Nombre y Apellido para que sea fácil identificarlos en el diseño
+            return ObtenerItemsGenerico("SELECT IdCliente AS Id, CONCAT(Nombre, ' ', Apellido) AS Nombre FROM Clientes;");
+        }
+
+        // Método interno reutilizable para ahorrar líneas de código
+        private List<ComboboxItem> ObtenerItemsGenerico(string sqlQuery)
+        {
+            List<ComboboxItem> lista = new List<ComboboxItem>();
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                using (SqlCommand comando = new SqlCommand(sqlQuery, conexion))
+                {
+                    conexion.Open();
+                    using (SqlDataReader reader = comando.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lista.Add(new ComboboxItem
+                            {
+                                Value = Convert.ToInt32(reader["Id"]),
+                                Text = reader["Nombre"].ToString() ?? ""
+                            });
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+
+
+        public List<ComboboxItem> ObtenerRolesCombo()
+        {
+            List<ComboboxItem> lista = new List<ComboboxItem>();
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                using (SqlCommand comando = new SqlCommand("SELECT IdRol AS Id, Nombre FROM Roles;", conexion))
+                {
+                    conexion.Open();
+                    using (SqlDataReader reader = comando.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lista.Add(new ComboboxItem
+                            {
+                                Value = Convert.ToInt32(reader["Id"]),
+                                Text = reader["Nombre"].ToString() ?? ""
+                            });
+                        }
+                    }
+                }
+            }
+            return lista;
+        }
+
     }
 }

@@ -25,5 +25,13 @@ namespace BodegasAburtoWMS.Repository
         );
         bool RegistrarEnvio(Envio envio);
 
+        List<ComboboxItem> ObtenerAgenciasCombo();
+        List<ComboboxItem> ObtenerClientesCombo();
+        List<ComboboxItem> ObtenerTiposEnvioCombo();
+        List<ComboboxItem> ObtenerEstadosEnvioCombo();
+
+        List<ComboboxItem> ObtenerRolesCombo();
+
+
     }
 }

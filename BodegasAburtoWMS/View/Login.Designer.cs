@@ -39,6 +39,7 @@
             tbxContrasena = new TextBox();
             btnInicioSesion = new Button();
             customTitleBar1 = new BodegasAburtoWMS.Components.CustomTitleBar();
+            lnklblRegistrarUsuario = new LinkLabel();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -163,12 +164,28 @@
             customTitleBar1.TitleIcon = Properties.Resources.IconoVentana;
             customTitleBar1.TitleText = "Aburto WMS - Inicio de Sesión";
             // 
+            // lnklblRegistrarUsuario
+            // 
+            lnklblRegistrarUsuario.ActiveLinkColor = Color.Blue;
+            lnklblRegistrarUsuario.AutoSize = true;
+            lnklblRegistrarUsuario.Font = new Font("Alegreya Medium", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lnklblRegistrarUsuario.LinkColor = Color.FromArgb(242, 140, 40);
+            lnklblRegistrarUsuario.Location = new Point(163, 511);
+            lnklblRegistrarUsuario.Name = "lnklblRegistrarUsuario";
+            lnklblRegistrarUsuario.Size = new Size(173, 24);
+            lnklblRegistrarUsuario.TabIndex = 10;
+            lnklblRegistrarUsuario.TabStop = true;
+            lnklblRegistrarUsuario.Text = "Registrar Nuevo Usuario";
+            lnklblRegistrarUsuario.VisitedLinkColor = Color.Navy;
+            lnklblRegistrarUsuario.LinkClicked += lnklblRegistrarUsuario_LinkClicked;
+            // 
             // Login
             // 
             AutoScaleDimensions = new SizeF(11F, 22F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(254, 254, 254);
             ClientSize = new Size(487, 544);
+            Controls.Add(lnklblRegistrarUsuario);
             Controls.Add(customTitleBar1);
             Controls.Add(btnInicioSesion);
             Controls.Add(tbxContrasena);
@@ -206,5 +223,6 @@
         private TextBox tbxContrasena;
         private Button btnInicioSesion;
         private Components.CustomTitleBar customTitleBar1;
+        private LinkLabel lnklblRegistrarUsuario;
     }
 }

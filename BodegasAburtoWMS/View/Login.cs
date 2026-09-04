@@ -193,5 +193,16 @@ namespace BodegasAburtoWMS
             }
         }
 
+        private void lnklblRegistrarUsuario_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+            Register ventanaRegistro = new Register();
+            this.Hide(); // Escondemos el Login
+
+            ventanaRegistro.ShowDialog(); // Se abre como ventana emergente. El código se detiene aquí hasta que cierres el Registro
+
+            // --- CUANDO EL REGISTRO HAGA 'this.Close()', EL CÓDIGO SIGUE AQUÍ ABAJO: ---
+            this.Show(); // El Login original se vuelve a mostrar solo, limpio y sin duplicar memoria
+        }
     }
 }

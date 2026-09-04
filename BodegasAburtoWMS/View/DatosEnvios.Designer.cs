@@ -36,17 +36,27 @@
             label6 = new Label();
             label7 = new Label();
             label8 = new Label();
-            dateTimePicker1 = new DateTimePicker();
-            dateTimePicker2 = new DateTimePicker();
-            dateTimePicker3 = new DateTimePicker();
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            textBox3 = new TextBox();
-            textBox4 = new TextBox();
-            textBox5 = new TextBox();
+            dtpFechaEnvio = new DateTimePicker();
+            dtpFechaEntregaEstimada = new DateTimePicker();
+            dtpFechaEntregaReal = new DateTimePicker();
+            txtNumeroGuia = new TextBox();
+            txtOrigen = new TextBox();
+            txtDestino = new TextBox();
+            txtCostoEnvio = new TextBox();
+            txtObservaciones = new TextBox();
             btnGuardar = new Button();
             btnLimpiar = new Button();
             btnSalir = new Button();
+            cmbAgencia = new ComboBox();
+            cmbRemitente = new ComboBox();
+            cmbDestinatario = new ComboBox();
+            cmbTipoEnvio = new ComboBox();
+            cmbEstado = new ComboBox();
+            lblAgencia = new Label();
+            lblRemitente = new Label();
+            lblDestinatatio = new Label();
+            lblTipoEnvio = new Label();
+            lblEstado = new Label();
             SuspendLayout();
             // 
             // label1
@@ -121,64 +131,64 @@
             label8.TabIndex = 7;
             label8.Text = "Observaciones";
             // 
-            // dateTimePicker1
+            // dtpFechaEnvio
             // 
-            dateTimePicker1.Format = DateTimePickerFormat.Short;
-            dateTimePicker1.Location = new Point(137, 168);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(200, 23);
-            dateTimePicker1.TabIndex = 8;
+            dtpFechaEnvio.Format = DateTimePickerFormat.Short;
+            dtpFechaEnvio.Location = new Point(137, 168);
+            dtpFechaEnvio.Name = "dtpFechaEnvio";
+            dtpFechaEnvio.Size = new Size(255, 23);
+            dtpFechaEnvio.TabIndex = 8;
             // 
-            // dateTimePicker2
+            // dtpFechaEntregaEstimada
             // 
-            dateTimePicker2.Format = DateTimePickerFormat.Short;
-            dateTimePicker2.Location = new Point(192, 212);
-            dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(200, 23);
-            dateTimePicker2.TabIndex = 9;
+            dtpFechaEntregaEstimada.Format = DateTimePickerFormat.Short;
+            dtpFechaEntregaEstimada.Location = new Point(192, 212);
+            dtpFechaEntregaEstimada.Name = "dtpFechaEntregaEstimada";
+            dtpFechaEntregaEstimada.Size = new Size(200, 23);
+            dtpFechaEntregaEstimada.TabIndex = 9;
             // 
-            // dateTimePicker3
+            // dtpFechaEntregaReal
             // 
-            dateTimePicker3.Format = DateTimePickerFormat.Short;
-            dateTimePicker3.Location = new Point(170, 252);
-            dateTimePicker3.Name = "dateTimePicker3";
-            dateTimePicker3.Size = new Size(200, 23);
-            dateTimePicker3.TabIndex = 10;
+            dtpFechaEntregaReal.Format = DateTimePickerFormat.Short;
+            dtpFechaEntregaReal.Location = new Point(170, 252);
+            dtpFechaEntregaReal.Name = "dtpFechaEntregaReal";
+            dtpFechaEntregaReal.Size = new Size(222, 23);
+            dtpFechaEntregaReal.TabIndex = 10;
             // 
-            // textBox1
+            // txtNumeroGuia
             // 
-            textBox1.Location = new Point(144, 47);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(100, 23);
-            textBox1.TabIndex = 11;
+            txtNumeroGuia.Location = new Point(144, 47);
+            txtNumeroGuia.Name = "txtNumeroGuia";
+            txtNumeroGuia.Size = new Size(248, 23);
+            txtNumeroGuia.TabIndex = 11;
             // 
-            // textBox2
+            // txtOrigen
             // 
-            textBox2.Location = new Point(94, 86);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 12;
+            txtOrigen.Location = new Point(98, 86);
+            txtOrigen.Name = "txtOrigen";
+            txtOrigen.Size = new Size(294, 23);
+            txtOrigen.TabIndex = 12;
             // 
-            // textBox3
+            // txtDestino
             // 
-            textBox3.Location = new Point(98, 131);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(100, 23);
-            textBox3.TabIndex = 13;
+            txtDestino.Location = new Point(98, 131);
+            txtDestino.Name = "txtDestino";
+            txtDestino.Size = new Size(294, 23);
+            txtDestino.TabIndex = 13;
             // 
-            // textBox4
+            // txtCostoEnvio
             // 
-            textBox4.Location = new Point(144, 297);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(100, 23);
-            textBox4.TabIndex = 14;
+            txtCostoEnvio.Location = new Point(144, 297);
+            txtCostoEnvio.Name = "txtCostoEnvio";
+            txtCostoEnvio.Size = new Size(248, 23);
+            txtCostoEnvio.TabIndex = 14;
             // 
-            // textBox5
+            // txtObservaciones
             // 
-            textBox5.Location = new Point(144, 335);
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(100, 23);
-            textBox5.TabIndex = 15;
+            txtObservaciones.Location = new Point(144, 335);
+            txtObservaciones.Name = "txtObservaciones";
+            txtObservaciones.Size = new Size(248, 23);
+            txtObservaciones.TabIndex = 15;
             // 
             // btnGuardar
             // 
@@ -188,6 +198,7 @@
             btnGuardar.TabIndex = 16;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
+            btnGuardar.Click += btnGuardar_Click;
             // 
             // btnLimpiar
             // 
@@ -197,6 +208,7 @@
             btnLimpiar.TabIndex = 17;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.UseVisualStyleBackColor = true;
+            btnLimpiar.Click += btnLimpiar_Click;
             // 
             // btnSalir
             // 
@@ -206,23 +218,119 @@
             btnSalir.TabIndex = 18;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.Click += btnSalir_Click;
+            // 
+            // cmbAgencia
+            // 
+            cmbAgencia.FormattingEnabled = true;
+            cmbAgencia.Location = new Point(632, 50);
+            cmbAgencia.Name = "cmbAgencia";
+            cmbAgencia.Size = new Size(121, 23);
+            cmbAgencia.TabIndex = 19;
+            // 
+            // cmbRemitente
+            // 
+            cmbRemitente.FormattingEnabled = true;
+            cmbRemitente.Location = new Point(632, 100);
+            cmbRemitente.Name = "cmbRemitente";
+            cmbRemitente.Size = new Size(121, 23);
+            cmbRemitente.TabIndex = 20;
+            // 
+            // cmbDestinatario
+            // 
+            cmbDestinatario.FormattingEnabled = true;
+            cmbDestinatario.Location = new Point(632, 152);
+            cmbDestinatario.Name = "cmbDestinatario";
+            cmbDestinatario.Size = new Size(121, 23);
+            cmbDestinatario.TabIndex = 21;
+            // 
+            // cmbTipoEnvio
+            // 
+            cmbTipoEnvio.FormattingEnabled = true;
+            cmbTipoEnvio.Location = new Point(632, 210);
+            cmbTipoEnvio.Name = "cmbTipoEnvio";
+            cmbTipoEnvio.Size = new Size(121, 23);
+            cmbTipoEnvio.TabIndex = 22;
+            // 
+            // cmbEstado
+            // 
+            cmbEstado.FormattingEnabled = true;
+            cmbEstado.Location = new Point(632, 258);
+            cmbEstado.Name = "cmbEstado";
+            cmbEstado.Size = new Size(121, 23);
+            cmbEstado.TabIndex = 23;
+            // 
+            // lblAgencia
+            // 
+            lblAgencia.AutoSize = true;
+            lblAgencia.Location = new Point(544, 53);
+            lblAgencia.Name = "lblAgencia";
+            lblAgencia.Size = new Size(50, 15);
+            lblAgencia.TabIndex = 24;
+            lblAgencia.Text = "Agencia";
+            // 
+            // lblRemitente
+            // 
+            lblRemitente.AutoSize = true;
+            lblRemitente.Location = new Point(544, 103);
+            lblRemitente.Name = "lblRemitente";
+            lblRemitente.Size = new Size(61, 15);
+            lblRemitente.TabIndex = 25;
+            lblRemitente.Text = "Remitente";
+            // 
+            // lblDestinatatio
+            // 
+            lblDestinatatio.AutoSize = true;
+            lblDestinatatio.Location = new Point(544, 155);
+            lblDestinatatio.Name = "lblDestinatatio";
+            lblDestinatatio.Size = new Size(70, 15);
+            lblDestinatatio.TabIndex = 26;
+            lblDestinatatio.Text = "Destinatario";
+            // 
+            // lblTipoEnvio
+            // 
+            lblTipoEnvio.AutoSize = true;
+            lblTipoEnvio.Location = new Point(544, 213);
+            lblTipoEnvio.Name = "lblTipoEnvio";
+            lblTipoEnvio.Size = new Size(78, 15);
+            lblTipoEnvio.TabIndex = 27;
+            lblTipoEnvio.Text = "Tipo de Envio";
+            // 
+            // lblEstado
+            // 
+            lblEstado.AutoSize = true;
+            lblEstado.Location = new Point(544, 261);
+            lblEstado.Name = "lblEstado";
+            lblEstado.Size = new Size(42, 15);
+            lblEstado.TabIndex = 28;
+            lblEstado.Text = "Estado";
             // 
             // DatosEnvios
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(lblEstado);
+            Controls.Add(lblTipoEnvio);
+            Controls.Add(lblDestinatatio);
+            Controls.Add(lblRemitente);
+            Controls.Add(lblAgencia);
+            Controls.Add(cmbEstado);
+            Controls.Add(cmbTipoEnvio);
+            Controls.Add(cmbDestinatario);
+            Controls.Add(cmbRemitente);
+            Controls.Add(cmbAgencia);
             Controls.Add(btnSalir);
             Controls.Add(btnLimpiar);
             Controls.Add(btnGuardar);
-            Controls.Add(textBox5);
-            Controls.Add(textBox4);
-            Controls.Add(textBox3);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
-            Controls.Add(dateTimePicker3);
-            Controls.Add(dateTimePicker2);
-            Controls.Add(dateTimePicker1);
+            Controls.Add(txtObservaciones);
+            Controls.Add(txtCostoEnvio);
+            Controls.Add(txtDestino);
+            Controls.Add(txtOrigen);
+            Controls.Add(txtNumeroGuia);
+            Controls.Add(dtpFechaEntregaReal);
+            Controls.Add(dtpFechaEntregaEstimada);
+            Controls.Add(dtpFechaEnvio);
             Controls.Add(label8);
             Controls.Add(label7);
             Controls.Add(label6);
@@ -248,16 +356,26 @@
         private Label label6;
         private Label label7;
         private Label label8;
-        private DateTimePicker dateTimePicker1;
-        private DateTimePicker dateTimePicker2;
-        private DateTimePicker dateTimePicker3;
-        private TextBox textBox1;
-        private TextBox textBox2;
-        private TextBox textBox3;
-        private TextBox textBox4;
-        private TextBox textBox5;
+        private DateTimePicker dtpFechaEnvio;
+        private DateTimePicker dtpFechaEntregaEstimada;
+        private DateTimePicker dtpFechaEntregaReal;
+        private TextBox txtNumeroGuia;
+        private TextBox txtOrigen;
+        private TextBox txtDestino;
+        private TextBox txtCostoEnvio;
+        private TextBox txtObservaciones;
         private Button btnGuardar;
         private Button btnLimpiar;
         private Button btnSalir;
+        private ComboBox cmbAgencia;
+        private ComboBox cmbRemitente;
+        private ComboBox cmbDestinatario;
+        private ComboBox cmbTipoEnvio;
+        private ComboBox cmbEstado;
+        private Label lblAgencia;
+        private Label lblRemitente;
+        private Label lblDestinatatio;
+        private Label lblTipoEnvio;
+        private Label lblEstado;
     }
 }
