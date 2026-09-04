@@ -14,5 +14,14 @@ namespace BodegasAburtoWMS.Repository
         bool ActualizarUsuario(Usuario usuario);
 
         bool DesactivarUsuario(int idUsuario);
+
+        void RegistrarUltimoAcceso(int idUsuario);
+
+        void RegistrarAuditoria(
+            int idUsuario,
+            string accion,
+            string usuarioSistema,
+            string detalle
+        );
     }
 }

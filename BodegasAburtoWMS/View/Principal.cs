@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BodegasAburtoWMS.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,11 +11,22 @@ namespace BodegasAburtoWMS.View
 {
     public partial class Principal : Form
     {
-        public Principal()
+        private readonly Usuario usuarioActual;
+
+        public Principal(Usuario usuario)
         {
             InitializeComponent();
+
+            usuarioActual = usuario;
+
+            MessageBox.Show(
+        $"Usuario: {usuarioActual.UsuarioNombre}\n" +
+        $"Nombre: {usuarioActual.Nombre} {usuarioActual.Apellido}\n" +
+        $"Rol: {usuarioActual.Rol}",
+        "Sesión actual",
+        MessageBoxButtons.OK,
+        MessageBoxIcon.Information
+    );
         }
-
-
     }
 }

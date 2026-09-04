@@ -16,22 +16,22 @@ namespace BodegasAburtoWMS.Repository
             Usuario usuarioEncontrado = null;
 
             string query = @"
-                SELECT 
-                    u.IdUsuario,
-                    u.Usuario,
-                    u.Nombre,
-                    u.Apellido,
-                    u.Correo,
-                    u.IdRol,
-                    r.Nombre AS Rol,
-                    u.PasswordHash,
-                    u.PasswordSalt,
-                    u.Activo
-                FROM Usuarios u
-                INNER JOIN Roles r 
-                    ON u.IdRol = r.IdRol
-                WHERE u.Usuario = @Usuario
-                  AND u.Activo = 1;";
+        SELECT 
+            u.IdUsuario,
+            u.Usuario,
+            u.Nombre,
+            u.Apellido,
+            u.Correo,
+            u.IdRol,
+            r.Nombre AS Rol,
+            u.PasswordHash,
+            u.PasswordSalt,
+            u.Activo
+        FROM Usuarios u
+        INNER JOIN Roles r 
+            ON u.IdRol = r.IdRol
+        WHERE u.Usuario = @Usuario
+          AND u.Activo = 1;";
 
             using (SqlConnection conexion = new SqlConnection(connectionString))
             {
@@ -236,6 +236,72 @@ namespace BodegasAburtoWMS.Repository
                     conexion.Open();
 
                     return comando.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public void RegistrarUltimoAcceso(int idUsuario)
+        {
+            string query = @"
+        UPDATE Usuarios
+        SET UltimoAcceso = GETDATE()
+        WHERE IdUsuario = @IdUsuario;";
+
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                using (SqlCommand comando = new SqlCommand(query, conexion))
+                {
+                    comando.Parameters.Add("@IdUsuario", System.Data.SqlDbType.Int)
+                        .Value = idUsuario;
+
+                    conexion.Open();
+
+                    comando.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void RegistrarAuditoria(
+            int idUsuario,
+            string accion,
+            string usuarioSistema,
+            string detalle)
+        {
+            string query = @"
+        INSERT INTO AuditoriaUsuarios
+        (
+            IdUsuario,
+            Accion,
+            UsuarioSistema,
+            Detalle
+        )
+        VALUES
+        (
+            @IdUsuario,
+            @Accion,
+            @UsuarioSistema,
+            @Detalle
+        );";
+
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                using (SqlCommand comando = new SqlCommand(query, conexion))
+                {
+                    comando.Parameters.Add("@IdUsuario", System.Data.SqlDbType.Int)
+                        .Value = idUsuario;
+
+                    comando.Parameters.Add("@Accion", System.Data.SqlDbType.NVarChar, 50)
+                        .Value = accion;
+
+                    comando.Parameters.Add("@UsuarioSistema", System.Data.SqlDbType.NVarChar, 100)
+                        .Value = usuarioSistema;
+
+                    comando.Parameters.Add("@Detalle", System.Data.SqlDbType.NVarChar, 500)
+                        .Value = detalle;
+
+                    conexion.Open();
+
+                    comando.ExecuteNonQuery();
                 }
             }
         }

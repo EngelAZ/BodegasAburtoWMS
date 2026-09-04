@@ -1,16 +1,18 @@
-using Microsoft.Data.SqlClient;
 using BodegasAburtoWMS.Helpers;
 using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
+using BodegasAburtoWMS.View;
 
 namespace BodegasAburtoWMS
 {
     public partial class Login : Form
     {
+        private readonly IBodegasAburtoWMSRepository repository;
         public Login()
         {
             InitializeComponent();
 
+            repository = new BodegasAburtoWMSRepository();
 
             tbxContrasena.Enter += tbxContrasena_Enter;
             tbxContrasena.Leave += tbxContrasena_Leave;
@@ -24,59 +26,101 @@ namespace BodegasAburtoWMS
 
         }
 
+        /*
+            Usuario:
+            admin
 
+            Contraseña:
+            Admin123*
+         */
         private void btnInicioSesion_Click(object sender, EventArgs e)
         {
-            try
-            {
-                string contraseña = "Admin123*";
+            string nombreUsuario = tbxUsuario.Text.Trim();
+            string contraseña = tbxContrasena.Text;
 
-                PasswordHelper.CrearHash(
-                    contraseña,
-                    out byte[] passwordHash,
-                    out byte[] passwordSalt
+            if (nombreUsuario == "" || nombreUsuario == "Ingrese su usuario")
+            {
+                MessageBox.Show(
+                    "Ingrese su usuario.",
+                    "Inicio de sesión",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
                 );
 
-                Usuario nuevoUsuario = new Usuario
-                {
-                    UsuarioNombre = "admin",
-                    Nombre = "Administrador",
-                    Apellido = "Sistema",
-                    Correo = "admin@bodegasaburto.com",
-                    IdRol = 1,
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt,
-                    Activo = true
-                };
+                tbxUsuario.Focus();
+                return;
+            }
 
-                IBodegasAburtoWMSRepository repository =
-                    new BodegasAburtoWMSRepository();
+            if (contraseña == "" || contraseña == "Ingrese su contraseña")
+            {
+                MessageBox.Show(
+                    "Ingrese su contraseña.",
+                    "Inicio de sesión",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
 
-                bool registrado = repository.RegistrarUsuario(nuevoUsuario);
+                tbxContrasena.Focus();
+                return;
+            }
 
-                if (registrado)
-                {
-                    MessageBox.Show(
-                        "Usuario administrador creado correctamente.",
-                        "Registro exitoso",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
-                }
-                else
+            try
+            {
+                Usuario usuario = repository.ObtenerUsuarioPorNombre(nombreUsuario);
+
+                if (usuario == null)
                 {
                     MessageBox.Show(
-                        "No se pudo registrar el usuario.",
-                        "Error",
+                        "El usuario no existe o se encuentra inactivo.",
+                        "Inicio de sesión",
                         MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
+                        MessageBoxIcon.Warning
                     );
+
+                    tbxUsuario.Focus();
+                    return;
                 }
+
+                bool contraseñaCorrecta = PasswordHelper.VerificarPassword(
+                    contraseña,
+                    usuario.PasswordHash,
+                    usuario.PasswordSalt
+                );
+
+                if (!contraseñaCorrecta)
+                {
+                    MessageBox.Show(
+                        "La contraseña es incorrecta.",
+                        "Inicio de sesión",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+
+                    tbxContrasena.Focus();
+                    return;
+                }
+
+                repository.RegistrarUltimoAcceso(usuario.IdUsuario);
+
+                repository.RegistrarAuditoria(
+                    usuario.IdUsuario,
+                    "Inicio de sesión",
+                    usuario.UsuarioNombre,
+                    "Inicio de sesión exitoso."
+                );
+
+                Principal principal = new Principal(usuario);
+
+                this.Hide();
+
+                principal.ShowDialog();
+
+                this.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Ocurrió un error al registrar el usuario.\n\n" +
+                    "Ocurrió un error al intentar iniciar sesión.\n\n" +
                     ex.Message,
                     "Error",
                     MessageBoxButtons.OK,
