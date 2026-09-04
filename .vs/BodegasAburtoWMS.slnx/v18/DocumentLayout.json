@@ -3,20 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\engel\\desktop\\sistema de gesti\u00F3n de inventario de bodega de envios - sistema wms\\bodegasaburtowms\\bodegasaburtowms\\view\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\engel\\desktop\\sistema de gesti\u00F3n de inventario de bodega de envios - sistema wms\\bodegasaburtowms\\bodegasaburtowms\\view\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\engel\\desktop\\sistema de gesti\u00F3n de inventario de bodega de envios - sistema wms\\bodegasaburtowms\\bodegasaburtowms\\view\\login.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\login.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\engel\\desktop\\sistema de gesti\u00F3n de inventario de bodega de envios - sistema wms\\bodegasaburtowms\\bodegasaburtowms\\repository\\ibodegasaburtowmsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\repository\\ibodegasaburtowmsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\engel\\desktop\\sistema de gesti\u00F3n de inventario de bodega de envios - sistema wms\\bodegasaburtowms\\bodegasaburtowms\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\engel\\desktop\\sistema de gesti\u00F3n de inventario de bodega de envios - sistema wms\\bodegasaburtowms\\bodegasaburtowms\\view\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\engel\\desktop\\sistema de gesti\u00F3n de inventario de bodega de envios - sistema wms\\bodegasaburtowms\\bodegasaburtowms\\repository\\bodegasaburtowmsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\repository\\bodegasaburtowmsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\engel\\desktop\\sistema de gesti\u00F3n de inventario de bodega de envios - sistema wms\\bodegasaburtowms\\bodegasaburtowms\\model\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\model\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\engel\\desktop\\sistema de gesti\u00F3n de inventario de bodega de envios - sistema wms\\bodegasaburtowms\\bodegasaburtowms\\view\\login.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\login.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,11 +38,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\Program.cs",
               "RelativeDocumentMoniker": "BodegasAburtoWMS\\Program.cs",
@@ -44,15 +56,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Login.cs [Dise\u00F1o]",
-              "DocumentMoniker": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Login.cs",
-              "RelativeDocumentMoniker": "BodegasAburtoWMS\\View\\Login.cs",
-              "ToolTip": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Login.cs [Dise\u00F1o]",
-              "RelativeToolTip": "BodegasAburtoWMS\\View\\Login.cs [Dise\u00F1o]",
+              "DocumentIndex": 1,
+              "Title": "IBodegasAburtoWMSRepository.cs",
+              "DocumentMoniker": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\Repository\\IBodegasAburtoWMSRepository.cs",
+              "RelativeDocumentMoniker": "BodegasAburtoWMS\\Repository\\IBodegasAburtoWMSRepository.cs",
+              "ToolTip": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\Repository\\IBodegasAburtoWMSRepository.cs",
+              "RelativeToolTip": "BodegasAburtoWMS\\Repository\\IBodegasAburtoWMSRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-04T00:09:38.172Z",
-              "EditorCaption": " [Dise\u00F1o]"
+              "WhenOpened": "2026-09-04T01:27:35.15Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -67,8 +80,63 @@
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
+              "Title": "Login.cs [Dise\u00F1o]",
+              "DocumentMoniker": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Login.cs",
+              "RelativeDocumentMoniker": "BodegasAburtoWMS\\View\\Login.cs",
+              "ToolTip": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Login.cs [Dise\u00F1o]",
+              "RelativeToolTip": "BodegasAburtoWMS\\View\\Login.cs [Dise\u00F1o]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T00:09:38.172Z",
+              "EditorCaption": " [Dise\u00F1o]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Login.cs",
+              "DocumentMoniker": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Login.cs",
+              "RelativeDocumentMoniker": "BodegasAburtoWMS\\View\\Login.cs",
+              "ToolTip": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Login.cs",
+              "RelativeToolTip": "BodegasAburtoWMS\\View\\Login.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAkwCEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-03T23:42:31.008Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BodegasAburtoWMSRepository.cs",
+              "DocumentMoniker": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\Repository\\BodegasAburtoWMSRepository.cs",
+              "RelativeDocumentMoniker": "BodegasAburtoWMS\\Repository\\BodegasAburtoWMSRepository.cs",
+              "ToolTip": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\Repository\\BodegasAburtoWMSRepository.cs",
+              "RelativeToolTip": "BodegasAburtoWMS\\Repository\\BodegasAburtoWMSRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T01:37:03.715Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\Model\\Usuario.cs",
+              "RelativeDocumentMoniker": "BodegasAburtoWMS\\Model\\Usuario.cs",
+              "ToolTip": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\Model\\Usuario.cs",
+              "RelativeToolTip": "BodegasAburtoWMS\\Model\\Usuario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-04T00:54:06.658Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "Login.Designer.cs",
               "DocumentMoniker": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Login.Designer.cs",
               "RelativeDocumentMoniker": "BodegasAburtoWMS\\View\\Login.Designer.cs",
@@ -77,19 +145,6 @@
               "ViewState": "AgIAADIAAAAAAAAAAAAiwEoAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-03T23:49:20.685Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Login.cs",
-              "DocumentMoniker": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Login.cs",
-              "RelativeDocumentMoniker": "BodegasAburtoWMS\\View\\Login.cs",
-              "ToolTip": "C:\\Users\\engel\\Desktop\\Sistema de gesti\u00F3n de inventario de bodega de envios - Sistema WMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Login.cs",
-              "RelativeToolTip": "BodegasAburtoWMS\\View\\Login.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAAAswDwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-03T23:42:31.008Z",
               "EditorCaption": ""
             }
           ]

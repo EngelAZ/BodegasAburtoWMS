@@ -1,10 +1,18 @@
-﻿using System;
+﻿using BodegasAburtoWMS.Model;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BodegasAburtoWMS.Repository
 {
-    internal interface IBodegasAburtoWMSRepository
+    public interface IBodegasAburtoWMSRepository
     {
+        Usuario ObtenerUsuarioPorNombre(string usuario);
+
+        List<Usuario> ObtenerUsuarios();
+
+        bool RegistrarUsuario(Usuario usuario);
+
+        bool ActualizarUsuario(Usuario usuario);
+
+        bool DesactivarUsuario(int idUsuario);
     }
 }
