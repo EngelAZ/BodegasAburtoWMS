@@ -31,6 +31,10 @@ namespace BodegasAburtoWMS.View
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            button9 = new Button();
+            label6 = new Label();
+            label5 = new Label();
+            label4 = new Label();
             button7 = new Button();
             button6 = new Button();
             button5 = new Button();
@@ -64,6 +68,10 @@ namespace BodegasAburtoWMS.View
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(30, 78, 140);
+            panel1.Controls.Add(button9);
+            panel1.Controls.Add(label6);
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(label4);
             panel1.Controls.Add(button7);
             panel1.Controls.Add(button6);
             panel1.Controls.Add(button5);
@@ -79,94 +87,156 @@ namespace BodegasAburtoWMS.View
             panel1.Size = new Size(160, 518);
             panel1.TabIndex = 1;
             // 
+            // button9
+            // 
+            button9.FlatAppearance.BorderSize = 0;
+            button9.FlatStyle = FlatStyle.Flat;
+            button9.ImageAlign = ContentAlignment.MiddleLeft;
+            button9.Location = new Point(8, 54);
+            button9.Margin = new Padding(2);
+            button9.Name = "button9";
+            button9.Size = new Size(142, 25);
+            button9.TabIndex = 12;
+            button9.Text = "Inicio";
+            button9.TextAlign = ContentAlignment.MiddleLeft;
+            button9.TextImageRelation = TextImageRelation.ImageBeforeText;
+            button9.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.ForeColor = SystemColors.ButtonHighlight;
+            label6.Location = new Point(8, 332);
+            label6.Margin = new Padding(2, 0, 2, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(52, 15);
+            label6.TabIndex = 11;
+            label6.Text = "Finanzas";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.ForeColor = SystemColors.ButtonHighlight;
+            label5.Location = new Point(8, 194);
+            label5.Margin = new Padding(2, 0, 2, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(47, 15);
+            label5.TabIndex = 10;
+            label5.Text = "Gestion";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.ForeColor = SystemColors.ButtonHighlight;
+            label4.Location = new Point(8, 91);
+            label4.Margin = new Padding(2, 0, 2, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(73, 15);
+            label4.TabIndex = 1;
+            label4.Text = "Operaciones";
+            // 
             // button7
             // 
+            button7.FlatAppearance.BorderSize = 0;
             button7.FlatStyle = FlatStyle.Flat;
             button7.ImageAlign = ContentAlignment.MiddleLeft;
-            button7.Location = new Point(8, 142);
+            button7.Location = new Point(8, 229);
             button7.Margin = new Padding(2);
             button7.Name = "button7";
             button7.Size = new Size(142, 25);
             button7.TabIndex = 7;
             button7.Text = "Agencias";
+            button7.TextAlign = ContentAlignment.MiddleLeft;
             button7.TextImageRelation = TextImageRelation.ImageBeforeText;
             button7.UseVisualStyleBackColor = true;
             // 
             // button6
             // 
+            button6.FlatAppearance.BorderSize = 0;
             button6.FlatStyle = FlatStyle.Flat;
             button6.ImageAlign = ContentAlignment.MiddleLeft;
-            button6.Location = new Point(8, 176);
+            button6.Location = new Point(8, 258);
             button6.Margin = new Padding(2);
             button6.Name = "button6";
             button6.Size = new Size(142, 25);
             button6.TabIndex = 6;
             button6.Text = "Clientes";
+            button6.TextAlign = ContentAlignment.MiddleLeft;
             button6.TextImageRelation = TextImageRelation.ImageBeforeText;
             button6.UseVisualStyleBackColor = true;
             // 
             // button5
             // 
+            button5.FlatAppearance.BorderSize = 0;
             button5.FlatStyle = FlatStyle.Flat;
             button5.ImageAlign = ContentAlignment.MiddleLeft;
-            button5.Location = new Point(8, 292);
+            button5.Location = new Point(8, 396);
             button5.Margin = new Padding(2);
             button5.Name = "button5";
             button5.Size = new Size(142, 25);
             button5.TabIndex = 5;
             button5.Text = "Reportes";
+            button5.TextAlign = ContentAlignment.MiddleLeft;
             button5.TextImageRelation = TextImageRelation.ImageBeforeText;
             button5.UseVisualStyleBackColor = true;
             // 
             // button4
             // 
+            button4.FlatAppearance.BorderSize = 0;
             button4.FlatStyle = FlatStyle.Flat;
             button4.ImageAlign = ContentAlignment.MiddleLeft;
-            button4.Location = new Point(8, 264);
+            button4.Location = new Point(8, 367);
             button4.Margin = new Padding(2);
             button4.Name = "button4";
             button4.Size = new Size(142, 25);
             button4.TabIndex = 4;
             button4.Text = "Liquidacion";
+            button4.TextAlign = ContentAlignment.MiddleLeft;
             button4.TextImageRelation = TextImageRelation.ImageBeforeText;
             button4.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
+            button3.FlatAppearance.BorderSize = 0;
             button3.FlatStyle = FlatStyle.Flat;
             button3.ImageAlign = ContentAlignment.MiddleLeft;
-            button3.Location = new Point(8, 205);
+            button3.Location = new Point(8, 287);
             button3.Margin = new Padding(2);
             button3.Name = "button3";
             button3.Size = new Size(142, 25);
             button3.TabIndex = 3;
             button3.Text = "Materiales";
+            button3.TextAlign = ContentAlignment.MiddleLeft;
             button3.TextImageRelation = TextImageRelation.ImageBeforeText;
             button3.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
+            button2.FlatAppearance.BorderSize = 0;
             button2.FlatStyle = FlatStyle.Flat;
             button2.ImageAlign = ContentAlignment.MiddleLeft;
-            button2.Location = new Point(8, 94);
+            button2.Location = new Point(8, 148);
             button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(142, 25);
             button2.TabIndex = 2;
             button2.Text = "Salidas / Entradas";
+            button2.TextAlign = ContentAlignment.MiddleLeft;
             button2.TextImageRelation = TextImageRelation.ImageBeforeText;
             button2.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
+            button1.FlatAppearance.BorderSize = 0;
             button1.FlatStyle = FlatStyle.Flat;
             button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(8, 65);
+            button1.Location = new Point(8, 119);
             button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(142, 25);
             button1.TabIndex = 1;
             button1.Text = "Registro Diario";
+            button1.TextAlign = ContentAlignment.MiddleLeft;
             button1.TextImageRelation = TextImageRelation.ImageBeforeText;
             button1.UseVisualStyleBackColor = true;
             // 
@@ -233,7 +303,7 @@ namespace BodegasAburtoWMS.View
             // button8
             // 
             button8.BackColor = Color.FromArgb(245, 130, 32);
-            button8.Location = new Point(417, 12);
+            button8.Location = new Point(718, 9);
             button8.Margin = new Padding(2);
             button8.Name = "button8";
             button8.Size = new Size(106, 22);
@@ -243,7 +313,7 @@ namespace BodegasAburtoWMS.View
             // 
             // dateTimePicker1
             // 
-            dateTimePicker1.Location = new Point(192, 11);
+            dateTimePicker1.Location = new Point(487, 9);
             dateTimePicker1.Margin = new Padding(2);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(211, 23);
@@ -343,6 +413,7 @@ namespace BodegasAburtoWMS.View
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Inicio";
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -379,7 +450,9 @@ namespace BodegasAburtoWMS.View
         private ToolStripMenuItem ayudaToolStripMenuItem;
         private MenuStrip menuStrip1;
         private BodegasAburtoWMS.Components.CustomTitleBar BarraSuperior;
-
-
+        private Button button9;
+        private Label label6;
+        private Label label5;
+        private Label label4;
     }
 }
