@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace BodegasAburtoWMS.View
 {
-    public partial class Agencia : Form
+    public partial class Agencias : Form
     {
-        public Agencia()
+        public Agencias()
         {
             InitializeComponent();
         }

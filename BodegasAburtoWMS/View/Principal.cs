@@ -28,6 +28,7 @@ namespace BodegasAburtoWMS.View
             MessageBoxButtons.OK,
                 MessageBoxIcon.Information
                 );
+            MostrarFormEnCentro(new Dashboard());
         }
 
         private const int WM_NCHITTEST = 0x84;
@@ -57,6 +58,71 @@ namespace BodegasAburtoWMS.View
                 else if (pos.Y <= anchoBorde) m.Result = (IntPtr)HTTOP;
                 else if (pos.Y >= this.ClientSize.Height - anchoBorde) m.Result = (IntPtr)HTBOTTOM;
             }
+        }
+
+        // Método para incrustar cualquier Forms en la zona gris central
+        private void MostrarFormEnCentro(Form formHijo)
+        {
+            // 1. Si ya hay una pantalla cargada en la zona gris, la cerramos para liberar memoria
+            if (this.PanelContenedor.Controls.Count > 0)
+            {
+                // Esto busca el formulario anterior que estaba adentro y lo cierra formalmente
+                if (this.PanelContenedor.Controls[0] is Form formAnterior)
+                {
+                    formAnterior.Close();
+                }
+                this.PanelContenedor.Controls.Clear();
+            }
+
+            // 2. CONFIGURACIÓN CLAVE: Le decimos al formulario que se comporte como un control secundario
+            formHijo.TopLevel = false;            // IMPORTANTE: Le quita la propiedad de ventana independiente
+            formHijo.FormBorderStyle = FormBorderStyle.None; // Le borra los bordes por si las dudas
+            formHijo.Dock = DockStyle.Fill;       // Hace que se estire al tamaño completo del panel gris
+
+            // 3. Lo metemos físicamente en el contenedor y lo encendemos
+            this.PanelContenedor.Controls.Add(formHijo);
+            this.PanelContenedor.Tag = formHijo;  // Guardamos la referencia por si acaso
+            formHijo.Show();                      // Lo hacemos visible adentro del panel
+        }
+
+        private void btnInicio_Click(object sender, EventArgs e)
+        {
+            MostrarFormEnCentro(new Dashboard());
+        }
+
+        private void btnRegistroDiario_Click(object sender, EventArgs e)
+        {
+            MostrarFormEnCentro(new RegistroDiario());
+        }
+
+        private void btnSalidasEntradas_Click(object sender, EventArgs e)
+        {
+            MostrarFormEnCentro(new Entregas_Salidas());
+        }
+
+        private void btnAgencias_Click(object sender, EventArgs e)
+        {
+            MostrarFormEnCentro(new Agencias());
+        }
+
+        private void btnClientes_Click(object sender, EventArgs e)
+        {
+            MostrarFormEnCentro(new Clientes());
+        }
+
+        private void btnMateriales_Click(object sender, EventArgs e)
+        {
+            MostrarFormEnCentro(new Materiales());
+        }
+
+        private void btnLiquidacion_Click(object sender, EventArgs e)
+        {
+            MostrarFormEnCentro(new Liquidacion());
+        }
+
+        private void btnReportes_Click(object sender, EventArgs e)
+        {
+            MostrarFormEnCentro(new Reportes());
         }
     }
 

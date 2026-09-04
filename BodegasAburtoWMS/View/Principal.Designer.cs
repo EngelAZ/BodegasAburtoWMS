@@ -31,17 +31,17 @@ namespace BodegasAburtoWMS.View
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            button9 = new Button();
+            btnInicio = new Button();
             label6 = new Label();
             label5 = new Label();
             label4 = new Label();
-            button7 = new Button();
-            button6 = new Button();
-            button5 = new Button();
-            button4 = new Button();
-            button3 = new Button();
-            button2 = new Button();
-            button1 = new Button();
+            btnAgencias = new Button();
+            btnClientes = new Button();
+            btnReportes = new Button();
+            btnLiquidacion = new Button();
+            btnMateriales = new Button();
+            btnSalidasEntradas = new Button();
+            btnRegistroDiario = new Button();
             panel2 = new Panel();
             label2 = new Label();
             label1 = new Label();
@@ -50,7 +50,7 @@ namespace BodegasAburtoWMS.View
             button8 = new Button();
             dateTimePicker1 = new DateTimePicker();
             label3 = new Label();
-            panel4 = new Panel();
+            PanelContenedor = new Panel();
             archivoToolStripMenuItem = new ToolStripMenuItem();
             editarToolStripMenuItem = new ToolStripMenuItem();
             verToolStripMenuItem = new ToolStripMenuItem();
@@ -68,17 +68,17 @@ namespace BodegasAburtoWMS.View
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(30, 78, 140);
-            panel1.Controls.Add(button9);
+            panel1.Controls.Add(btnInicio);
             panel1.Controls.Add(label6);
             panel1.Controls.Add(label5);
             panel1.Controls.Add(label4);
-            panel1.Controls.Add(button7);
-            panel1.Controls.Add(button6);
-            panel1.Controls.Add(button5);
-            panel1.Controls.Add(button4);
-            panel1.Controls.Add(button3);
-            panel1.Controls.Add(button2);
-            panel1.Controls.Add(button1);
+            panel1.Controls.Add(btnAgencias);
+            panel1.Controls.Add(btnClientes);
+            panel1.Controls.Add(btnReportes);
+            panel1.Controls.Add(btnLiquidacion);
+            panel1.Controls.Add(btnMateriales);
+            panel1.Controls.Add(btnSalidasEntradas);
+            panel1.Controls.Add(btnRegistroDiario);
             panel1.Controls.Add(panel2);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(1, 68);
@@ -87,20 +87,21 @@ namespace BodegasAburtoWMS.View
             panel1.Size = new Size(160, 518);
             panel1.TabIndex = 1;
             // 
-            // button9
+            // btnInicio
             // 
-            button9.FlatAppearance.BorderSize = 0;
-            button9.FlatStyle = FlatStyle.Flat;
-            button9.ImageAlign = ContentAlignment.MiddleLeft;
-            button9.Location = new Point(8, 54);
-            button9.Margin = new Padding(2);
-            button9.Name = "button9";
-            button9.Size = new Size(142, 25);
-            button9.TabIndex = 12;
-            button9.Text = "Inicio";
-            button9.TextAlign = ContentAlignment.MiddleLeft;
-            button9.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button9.UseVisualStyleBackColor = true;
+            btnInicio.FlatAppearance.BorderSize = 0;
+            btnInicio.FlatStyle = FlatStyle.Flat;
+            btnInicio.ImageAlign = ContentAlignment.MiddleLeft;
+            btnInicio.Location = new Point(8, 54);
+            btnInicio.Margin = new Padding(2);
+            btnInicio.Name = "btnInicio";
+            btnInicio.Size = new Size(142, 25);
+            btnInicio.TabIndex = 12;
+            btnInicio.Text = "Inicio";
+            btnInicio.TextAlign = ContentAlignment.MiddleLeft;
+            btnInicio.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnInicio.UseVisualStyleBackColor = true;
+            btnInicio.Click += btnInicio_Click;
             // 
             // label6
             // 
@@ -135,110 +136,117 @@ namespace BodegasAburtoWMS.View
             label4.TabIndex = 1;
             label4.Text = "Operaciones";
             // 
-            // button7
+            // btnAgencias
             // 
-            button7.FlatAppearance.BorderSize = 0;
-            button7.FlatStyle = FlatStyle.Flat;
-            button7.ImageAlign = ContentAlignment.MiddleLeft;
-            button7.Location = new Point(8, 229);
-            button7.Margin = new Padding(2);
-            button7.Name = "button7";
-            button7.Size = new Size(142, 25);
-            button7.TabIndex = 7;
-            button7.Text = "Agencias";
-            button7.TextAlign = ContentAlignment.MiddleLeft;
-            button7.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button7.UseVisualStyleBackColor = true;
+            btnAgencias.FlatAppearance.BorderSize = 0;
+            btnAgencias.FlatStyle = FlatStyle.Flat;
+            btnAgencias.ImageAlign = ContentAlignment.MiddleLeft;
+            btnAgencias.Location = new Point(8, 229);
+            btnAgencias.Margin = new Padding(2);
+            btnAgencias.Name = "btnAgencias";
+            btnAgencias.Size = new Size(142, 25);
+            btnAgencias.TabIndex = 7;
+            btnAgencias.Text = "Agencias";
+            btnAgencias.TextAlign = ContentAlignment.MiddleLeft;
+            btnAgencias.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnAgencias.UseVisualStyleBackColor = true;
+            btnAgencias.Click += btnAgencias_Click;
             // 
-            // button6
+            // btnClientes
             // 
-            button6.FlatAppearance.BorderSize = 0;
-            button6.FlatStyle = FlatStyle.Flat;
-            button6.ImageAlign = ContentAlignment.MiddleLeft;
-            button6.Location = new Point(8, 258);
-            button6.Margin = new Padding(2);
-            button6.Name = "button6";
-            button6.Size = new Size(142, 25);
-            button6.TabIndex = 6;
-            button6.Text = "Clientes";
-            button6.TextAlign = ContentAlignment.MiddleLeft;
-            button6.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button6.UseVisualStyleBackColor = true;
+            btnClientes.FlatAppearance.BorderSize = 0;
+            btnClientes.FlatStyle = FlatStyle.Flat;
+            btnClientes.ImageAlign = ContentAlignment.MiddleLeft;
+            btnClientes.Location = new Point(8, 258);
+            btnClientes.Margin = new Padding(2);
+            btnClientes.Name = "btnClientes";
+            btnClientes.Size = new Size(142, 25);
+            btnClientes.TabIndex = 6;
+            btnClientes.Text = "Clientes";
+            btnClientes.TextAlign = ContentAlignment.MiddleLeft;
+            btnClientes.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnClientes.UseVisualStyleBackColor = true;
+            btnClientes.Click += btnClientes_Click;
             // 
-            // button5
+            // btnReportes
             // 
-            button5.FlatAppearance.BorderSize = 0;
-            button5.FlatStyle = FlatStyle.Flat;
-            button5.ImageAlign = ContentAlignment.MiddleLeft;
-            button5.Location = new Point(8, 396);
-            button5.Margin = new Padding(2);
-            button5.Name = "button5";
-            button5.Size = new Size(142, 25);
-            button5.TabIndex = 5;
-            button5.Text = "Reportes";
-            button5.TextAlign = ContentAlignment.MiddleLeft;
-            button5.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button5.UseVisualStyleBackColor = true;
+            btnReportes.FlatAppearance.BorderSize = 0;
+            btnReportes.FlatStyle = FlatStyle.Flat;
+            btnReportes.ImageAlign = ContentAlignment.MiddleLeft;
+            btnReportes.Location = new Point(8, 396);
+            btnReportes.Margin = new Padding(2);
+            btnReportes.Name = "btnReportes";
+            btnReportes.Size = new Size(142, 25);
+            btnReportes.TabIndex = 5;
+            btnReportes.Text = "Reportes";
+            btnReportes.TextAlign = ContentAlignment.MiddleLeft;
+            btnReportes.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnReportes.UseVisualStyleBackColor = true;
+            btnReportes.Click += btnReportes_Click;
             // 
-            // button4
+            // btnLiquidacion
             // 
-            button4.FlatAppearance.BorderSize = 0;
-            button4.FlatStyle = FlatStyle.Flat;
-            button4.ImageAlign = ContentAlignment.MiddleLeft;
-            button4.Location = new Point(8, 367);
-            button4.Margin = new Padding(2);
-            button4.Name = "button4";
-            button4.Size = new Size(142, 25);
-            button4.TabIndex = 4;
-            button4.Text = "Liquidacion";
-            button4.TextAlign = ContentAlignment.MiddleLeft;
-            button4.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button4.UseVisualStyleBackColor = true;
+            btnLiquidacion.FlatAppearance.BorderSize = 0;
+            btnLiquidacion.FlatStyle = FlatStyle.Flat;
+            btnLiquidacion.ImageAlign = ContentAlignment.MiddleLeft;
+            btnLiquidacion.Location = new Point(8, 367);
+            btnLiquidacion.Margin = new Padding(2);
+            btnLiquidacion.Name = "btnLiquidacion";
+            btnLiquidacion.Size = new Size(142, 25);
+            btnLiquidacion.TabIndex = 4;
+            btnLiquidacion.Text = "Liquidacion";
+            btnLiquidacion.TextAlign = ContentAlignment.MiddleLeft;
+            btnLiquidacion.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnLiquidacion.UseVisualStyleBackColor = true;
+            btnLiquidacion.Click += btnLiquidacion_Click;
             // 
-            // button3
+            // btnMateriales
             // 
-            button3.FlatAppearance.BorderSize = 0;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.ImageAlign = ContentAlignment.MiddleLeft;
-            button3.Location = new Point(8, 287);
-            button3.Margin = new Padding(2);
-            button3.Name = "button3";
-            button3.Size = new Size(142, 25);
-            button3.TabIndex = 3;
-            button3.Text = "Materiales";
-            button3.TextAlign = ContentAlignment.MiddleLeft;
-            button3.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button3.UseVisualStyleBackColor = true;
+            btnMateriales.FlatAppearance.BorderSize = 0;
+            btnMateriales.FlatStyle = FlatStyle.Flat;
+            btnMateriales.ImageAlign = ContentAlignment.MiddleLeft;
+            btnMateriales.Location = new Point(8, 287);
+            btnMateriales.Margin = new Padding(2);
+            btnMateriales.Name = "btnMateriales";
+            btnMateriales.Size = new Size(142, 25);
+            btnMateriales.TabIndex = 3;
+            btnMateriales.Text = "Materiales";
+            btnMateriales.TextAlign = ContentAlignment.MiddleLeft;
+            btnMateriales.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnMateriales.UseVisualStyleBackColor = true;
+            btnMateriales.Click += btnMateriales_Click;
             // 
-            // button2
+            // btnSalidasEntradas
             // 
-            button2.FlatAppearance.BorderSize = 0;
-            button2.FlatStyle = FlatStyle.Flat;
-            button2.ImageAlign = ContentAlignment.MiddleLeft;
-            button2.Location = new Point(8, 148);
-            button2.Margin = new Padding(2);
-            button2.Name = "button2";
-            button2.Size = new Size(142, 25);
-            button2.TabIndex = 2;
-            button2.Text = "Salidas / Entradas";
-            button2.TextAlign = ContentAlignment.MiddleLeft;
-            button2.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button2.UseVisualStyleBackColor = true;
+            btnSalidasEntradas.FlatAppearance.BorderSize = 0;
+            btnSalidasEntradas.FlatStyle = FlatStyle.Flat;
+            btnSalidasEntradas.ImageAlign = ContentAlignment.MiddleLeft;
+            btnSalidasEntradas.Location = new Point(8, 148);
+            btnSalidasEntradas.Margin = new Padding(2);
+            btnSalidasEntradas.Name = "btnSalidasEntradas";
+            btnSalidasEntradas.Size = new Size(142, 25);
+            btnSalidasEntradas.TabIndex = 2;
+            btnSalidasEntradas.Text = "Salidas / Entradas";
+            btnSalidasEntradas.TextAlign = ContentAlignment.MiddleLeft;
+            btnSalidasEntradas.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnSalidasEntradas.UseVisualStyleBackColor = true;
+            btnSalidasEntradas.Click += btnSalidasEntradas_Click;
             // 
-            // button1
+            // btnRegistroDiario
             // 
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.ImageAlign = ContentAlignment.MiddleLeft;
-            button1.Location = new Point(8, 119);
-            button1.Margin = new Padding(2);
-            button1.Name = "button1";
-            button1.Size = new Size(142, 25);
-            button1.TabIndex = 1;
-            button1.Text = "Registro Diario";
-            button1.TextAlign = ContentAlignment.MiddleLeft;
-            button1.TextImageRelation = TextImageRelation.ImageBeforeText;
-            button1.UseVisualStyleBackColor = true;
+            btnRegistroDiario.FlatAppearance.BorderSize = 0;
+            btnRegistroDiario.FlatStyle = FlatStyle.Flat;
+            btnRegistroDiario.ImageAlign = ContentAlignment.MiddleLeft;
+            btnRegistroDiario.Location = new Point(8, 119);
+            btnRegistroDiario.Margin = new Padding(2);
+            btnRegistroDiario.Name = "btnRegistroDiario";
+            btnRegistroDiario.Size = new Size(142, 25);
+            btnRegistroDiario.TabIndex = 1;
+            btnRegistroDiario.Text = "Registro Diario";
+            btnRegistroDiario.TextAlign = ContentAlignment.MiddleLeft;
+            btnRegistroDiario.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRegistroDiario.UseVisualStyleBackColor = true;
+            btnRegistroDiario.Click += btnRegistroDiario_Click;
             // 
             // panel2
             // 
@@ -329,15 +337,15 @@ namespace BodegasAburtoWMS.View
             label3.TabIndex = 0;
             label3.Text = "Dashboard | Resumen Operativo";
             // 
-            // panel4
+            // PanelContenedor
             // 
-            panel4.Dock = DockStyle.Fill;
-            panel4.Location = new Point(161, 109);
-            panel4.Margin = new Padding(2);
-            panel4.Name = "panel4";
-            panel4.Padding = new Padding(10, 9, 10, 9);
-            panel4.Size = new Size(856, 477);
-            panel4.TabIndex = 3;
+            PanelContenedor.Dock = DockStyle.Fill;
+            PanelContenedor.Location = new Point(161, 109);
+            PanelContenedor.Margin = new Padding(2);
+            PanelContenedor.Name = "PanelContenedor";
+            PanelContenedor.Padding = new Padding(10, 9, 10, 9);
+            PanelContenedor.Size = new Size(856, 477);
+            PanelContenedor.TabIndex = 3;
             // 
             // archivoToolStripMenuItem
             // 
@@ -400,7 +408,7 @@ namespace BodegasAburtoWMS.View
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
             ClientSize = new Size(1018, 587);
-            Controls.Add(panel4);
+            Controls.Add(PanelContenedor);
             Controls.Add(panel3);
             Controls.Add(panel1);
             Controls.Add(menuStrip1);
@@ -431,18 +439,18 @@ namespace BodegasAburtoWMS.View
         private Label label2;
         private Label label1;
         private PictureBox pictureBox1;
-        private Button button1;
-        private Button button7;
-        private Button button6;
-        private Button button5;
-        private Button button4;
-        private Button button3;
-        private Button button2;
+        private Button btnRegistroDiario;
+        private Button btnAgencias;
+        private Button btnClientes;
+        private Button btnReportes;
+        private Button btnLiquidacion;
+        private Button btnMateriales;
+        private Button btnSalidasEntradas;
         private Panel panel3;
         private Button button8;
         private DateTimePicker dateTimePicker1;
         private Label label3;
-        private Panel panel4;
+        private Panel PanelContenedor;
         private ToolStripMenuItem archivoToolStripMenuItem;
         private ToolStripMenuItem editarToolStripMenuItem;
         private ToolStripMenuItem verToolStripMenuItem;
@@ -450,7 +458,7 @@ namespace BodegasAburtoWMS.View
         private ToolStripMenuItem ayudaToolStripMenuItem;
         private MenuStrip menuStrip1;
         private BodegasAburtoWMS.Components.CustomTitleBar BarraSuperior;
-        private Button button9;
+        private Button btnInicio;
         private Label label6;
         private Label label5;
         private Label label4;

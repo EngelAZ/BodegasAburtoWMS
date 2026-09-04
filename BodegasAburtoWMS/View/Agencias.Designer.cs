@@ -1,6 +1,6 @@
 ﻿namespace BodegasAburtoWMS.View
 {
-    partial class Agencia
+    partial class Agencias
     {
         /// <summary>
         /// Required designer variable.
@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            textBox1 = new TextBox();
-            comboBox1 = new ComboBox();
             button1 = new Button();
+            comboBox1 = new ComboBox();
+            textBox1 = new TextBox();
             dataGridView1 = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
             Nombre = new DataGridViewTextBoxColumn();
@@ -52,46 +52,51 @@
             panel1.Controls.Add(textBox1);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(2, 2, 2, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(800, 54);
+            panel1.Size = new Size(560, 32);
             panel1.TabIndex = 0;
             // 
-            // textBox1
+            // button1
             // 
-            textBox1.Location = new Point(12, 12);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(150, 31);
-            textBox1.TabIndex = 0;
-            textBox1.Text = "Buscar Agencia";
+            button1.BackColor = Color.FromArgb(255, 128, 0);
+            button1.Location = new Point(416, 6);
+            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Name = "button1";
+            button1.Size = new Size(118, 20);
+            button1.TabIndex = 2;
+            button1.Text = "+ Nueva Agencia";
+            button1.UseVisualStyleBackColor = false;
             // 
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "Todas", "Activa", "Inactiva" });
-            comboBox1.Location = new Point(186, 10);
+            comboBox1.Location = new Point(130, 6);
+            comboBox1.Margin = new Padding(2, 2, 2, 2);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(182, 33);
+            comboBox1.Size = new Size(129, 23);
             comboBox1.TabIndex = 1;
             // 
-            // button1
+            // textBox1
             // 
-            button1.BackColor = Color.FromArgb(255, 128, 0);
-            button1.Location = new Point(595, 10);
-            button1.Name = "button1";
-            button1.Size = new Size(168, 34);
-            button1.TabIndex = 2;
-            button1.Text = "+ Nueva Agencia";
-            button1.UseVisualStyleBackColor = false;
+            textBox1.Location = new Point(8, 7);
+            textBox1.Margin = new Padding(2, 2, 2, 2);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(106, 23);
+            textBox1.TabIndex = 0;
+            textBox1.Text = "Buscar Agencia";
             // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ID, Nombre, Contacto, Telefono, Ciudad, Estado, Fecha_Registro });
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 54);
+            dataGridView1.Location = new Point(0, 32);
+            dataGridView1.Margin = new Padding(2, 2, 2, 2);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.Size = new Size(800, 396);
+            dataGridView1.Size = new Size(560, 238);
             dataGridView1.TabIndex = 1;
             // 
             // ID
@@ -145,11 +150,12 @@
             // 
             // Agencia
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(560, 270);
             Controls.Add(dataGridView1);
             Controls.Add(panel1);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "Agencia";
             Text = "Agencia";
             panel1.ResumeLayout(false);
