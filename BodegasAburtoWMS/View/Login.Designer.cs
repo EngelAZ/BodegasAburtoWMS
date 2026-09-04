@@ -142,9 +142,9 @@
             btnInicioSesion.FlatStyle = FlatStyle.Flat;
             btnInicioSesion.Font = new Font("Lora SemiBold", 14.25F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             btnInicioSesion.ForeColor = Color.White;
-            btnInicioSesion.Location = new Point(129, 424);
+            btnInicioSesion.Location = new Point(61, 424);
             btnInicioSesion.Name = "btnInicioSesion";
-            btnInicioSesion.Size = new Size(216, 43);
+            btnInicioSesion.Size = new Size(378, 43);
             btnInicioSesion.TabIndex = 8;
             btnInicioSesion.Text = "Iniciar Sesión";
             btnInicioSesion.UseVisualStyleBackColor = false;
