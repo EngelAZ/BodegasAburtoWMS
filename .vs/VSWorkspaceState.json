@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\BodegasAburtoWMS",
-    "\\BodegasAburtoWMS\\Model",
+    "\\BodegasAburtoWMS\\Controller",
+    "\\BodegasAburtoWMS\\Service",
     "\\BodegasAburtoWMS\\View"
   ],
-  "SelectedNode": "\\BodegasAburtoWMS\\View\\form2.cs",
+  "SelectedNode": "\\BodegasAburtoWMS\\View\\Agencias.Designer.cs",
   "PreviewInSolutionExplorer": false
 }
