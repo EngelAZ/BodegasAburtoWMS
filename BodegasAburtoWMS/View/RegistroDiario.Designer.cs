@@ -54,33 +54,37 @@
             panel3.Controls.Add(txtBuscar);
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(0, 0);
+            panel3.Margin = new Padding(2, 2, 2, 2);
             panel3.Name = "panel3";
-            panel3.Size = new Size(800, 48);
+            panel3.Size = new Size(560, 29);
             panel3.TabIndex = 2;
             // 
             // comboBox2
             // 
             comboBox2.FormattingEnabled = true;
             comboBox2.Items.AddRange(new object[] { "Todos los Estados" });
-            comboBox2.Location = new Point(564, 7);
+            comboBox2.Location = new Point(395, 4);
+            comboBox2.Margin = new Padding(2, 2, 2, 2);
             comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(183, 33);
+            comboBox2.Size = new Size(129, 23);
             comboBox2.TabIndex = 2;
             // 
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "Todas las Agencias" });
-            comboBox1.Location = new Point(361, 7);
+            comboBox1.Location = new Point(253, 4);
+            comboBox1.Margin = new Padding(2, 2, 2, 2);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(183, 33);
+            comboBox1.Size = new Size(129, 23);
             comboBox1.TabIndex = 1;
             // 
             // txtBuscar
             // 
-            txtBuscar.Location = new Point(21, 7);
+            txtBuscar.Location = new Point(15, 4);
+            txtBuscar.Margin = new Padding(2, 2, 2, 2);
             txtBuscar.Name = "txtBuscar";
-            txtBuscar.Size = new Size(334, 31);
+            txtBuscar.Size = new Size(235, 23);
             txtBuscar.TabIndex = 0;
             txtBuscar.Text = "Buscar por Guia, Remitente o destinatario";
             txtBuscar.TextChanged += txtBuscar_TextChanged;
@@ -90,14 +94,16 @@
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ID, NumeroGuia, Agencia, Remitente, Destinatario, FechaEnvio, FechaEntrega, CostoEnvio, Observaciones });
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 48);
+            dataGridView1.Location = new Point(0, 29);
+            dataGridView1.Margin = new Padding(2, 2, 2, 2);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.Size = new Size(800, 402);
+            dataGridView1.Size = new Size(560, 241);
             dataGridView1.TabIndex = 3;
             // 
             // ID
             // 
+            ID.DataPropertyName = "IdEnvio";
             ID.HeaderText = "ID";
             ID.MinimumWidth = 8;
             ID.Name = "ID";
@@ -105,6 +111,7 @@
             // 
             // NumeroGuia
             // 
+            NumeroGuia.DataPropertyName = "NumeroGuia";
             NumeroGuia.HeaderText = "Numero de Guia";
             NumeroGuia.MinimumWidth = 8;
             NumeroGuia.Name = "NumeroGuia";
@@ -112,6 +119,7 @@
             // 
             // Agencia
             // 
+            Agencia.DataPropertyName = "Agencia";
             Agencia.HeaderText = "Agencia";
             Agencia.MinimumWidth = 8;
             Agencia.Name = "Agencia";
@@ -119,6 +127,7 @@
             // 
             // Remitente
             // 
+            Remitente.DataPropertyName = "Remitente";
             Remitente.HeaderText = "Remitente";
             Remitente.MinimumWidth = 8;
             Remitente.Name = "Remitente";
@@ -126,6 +135,7 @@
             // 
             // Destinatario
             // 
+            Destinatario.DataPropertyName = "Destinatario";
             Destinatario.HeaderText = "Destinatario";
             Destinatario.MinimumWidth = 8;
             Destinatario.Name = "Destinatario";
@@ -133,6 +143,7 @@
             // 
             // FechaEnvio
             // 
+            FechaEnvio.DataPropertyName = "FechaEnvio";
             FechaEnvio.HeaderText = "FechaEnvio";
             FechaEnvio.MinimumWidth = 8;
             FechaEnvio.Name = "FechaEnvio";
@@ -140,6 +151,7 @@
             // 
             // FechaEntrega
             // 
+            FechaEntrega.DataPropertyName = "FechaEntrega";
             FechaEntrega.HeaderText = "Fecha de Entrega";
             FechaEntrega.MinimumWidth = 8;
             FechaEntrega.Name = "FechaEntrega";
@@ -147,6 +159,7 @@
             // 
             // CostoEnvio
             // 
+            CostoEnvio.DataPropertyName = "CostoEnvio";
             CostoEnvio.HeaderText = "Costo de Envio";
             CostoEnvio.MinimumWidth = 8;
             CostoEnvio.Name = "CostoEnvio";
@@ -154,6 +167,7 @@
             // 
             // Observaciones
             // 
+            Observaciones.DataPropertyName = "Observaciones";
             Observaciones.HeaderText = "Observaciones";
             Observaciones.MinimumWidth = 8;
             Observaciones.Name = "Observaciones";
@@ -161,12 +175,13 @@
             // 
             // RegistroDiario
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(560, 270);
             Controls.Add(dataGridView1);
             Controls.Add(panel3);
             FormBorderStyle = FormBorderStyle.None;
+            Margin = new Padding(2, 2, 2, 2);
             Name = "RegistroDiario";
             Text = "RegistroDiario";
             Load += RegistroDiario_Load;
@@ -182,6 +197,7 @@
         private TextBox txt;
         private ComboBox comboBox2;
         private DataGridView dataGridView1;
+        private TextBox txtBuscar;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn NumeroGuia;
         private DataGridViewTextBoxColumn Agencia;
@@ -191,6 +207,5 @@
         private DataGridViewTextBoxColumn FechaEntrega;
         private DataGridViewTextBoxColumn CostoEnvio;
         private DataGridViewTextBoxColumn Observaciones;
-        private TextBox txtBuscar;
     }
 }
