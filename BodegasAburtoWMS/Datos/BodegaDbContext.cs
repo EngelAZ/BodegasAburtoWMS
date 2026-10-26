@@ -29,7 +29,7 @@ namespace BodegasAburtoWMS.Datos
         {
             // Conexión original del repositorio WMS
             optionsBuilder.UseSqlServer(
-                @"Server=DESKTOP-U3UH9Q1\SQLEXPRESS;Database=BodegasAburtoWMSFinal;Trusted_Connection=True;TrustServerCertificate=True;"
+                @"Server=(localdb)\MSSQLLocalDB;Database=BodegasAburtoWMSFinal;Trusted_Connection=True;TrustServerCertificate=True;"
             );
         }
 
