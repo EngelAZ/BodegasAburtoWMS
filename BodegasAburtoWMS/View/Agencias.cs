@@ -1,4 +1,5 @@
-﻿using BodegasAburtoWMS.Repository;
+﻿using BodegasAburtoWMS.Datos;
+using BodegasAburtoWMS.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,14 +13,26 @@ namespace BodegasAburtoWMS.View
     public partial class Agencias : Form
     {
         private readonly IBodegasAburtoWMSRepository _repository;
+        private bool _isProcessing = false; // Bandera para evitar llamadas simultáneas al DbContext
 
-        // Constructor que recibe el repositorio por inyección de dependencias
+        // 1. Constructor que recibe el repositorio por inyección de dependencias
         public Agencias(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
             _repository = repository;
 
             // Suscribir el evento de carga asíncrona
+            this.Load += Agencias_Load;
+        }
+
+        // 2. Constructor seguro y alternativo (crea un contexto aislado para evitar cruce de hilos)
+        public Agencias()
+        {
+            InitializeComponent();
+
+            var contextLocal = new BodegaDbContext();
+            _repository = new BodegasAburtoWMSRepository(contextLocal);
+
             this.Load += Agencias_Load;
         }
 
@@ -30,6 +43,9 @@ namespace BodegasAburtoWMS.View
 
         private async Task CargarDatosAgenciasAsync()
         {
+            if (_isProcessing) return;
+            _isProcessing = true;
+
             try
             {
                 // Llamada asíncrona al repositorio para obtener las agencias
@@ -46,6 +62,10 @@ namespace BodegasAburtoWMS.View
             {
                 MessageBox.Show($"Error al cargar las agencias: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                _isProcessing = false;
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -60,14 +80,30 @@ namespace BodegasAburtoWMS.View
 
         private async void txtBuscarAgencia_TextChanged(object sender, EventArgs e)
         {
-            string filtro = txtBuscarAgencia.Text.Trim();
-            if (string.IsNullOrEmpty(filtro))
+            if (_isProcessing) return;
+            _isProcessing = true;
+
+            try
             {
-                await CargarDatosAgenciasAsync();
+                string filtro = txtBuscarAgencia.Text.Trim();
+                if (string.IsNullOrEmpty(filtro))
+                {
+                    var listaAgencias = await _repository.ObtenerAgenciasAsync();
+                    dataGridView1.DataSource = listaAgencias;
+                }
+                else
+                {
+                    var resultados = await _repository.BuscarAgenciasAsync(filtro);
+                    dataGridView1.DataSource = resultados;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                dataGridView1.DataSource = await _repository.BuscarAgenciasAsync(filtro);
+                MessageBox.Show($"Error en la búsqueda: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                _isProcessing = false;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using BodegasAburtoWMS.Model;
+﻿using BodegasAburtoWMS.Datos;
+using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,23 @@ namespace BodegasAburtoWMS.View
     public partial class DatosEnvios : Form
     {
         private readonly IBodegasAburtoWMSRepository _repository;
+        private bool _isProcessing = false; // Bandera para evitar consultas simultáneas
 
         // Inyección de dependencias del repositorio
         public DatosEnvios(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
             _repository = repository;
+
+            this.Load += DatosEnvios_Load;
+        }
+
+        public DatosEnvios()
+        {
+            InitializeComponent();
+
+            var contextLocal = new BodegaDbContext();
+            _repository = new BodegasAburtoWMSRepository(contextLocal);
 
             this.Load += DatosEnvios_Load;
         }
@@ -73,6 +85,9 @@ namespace BodegasAburtoWMS.View
 
         private async Task CargarCatalogosAsync()
         {
+            if (_isProcessing) return;
+            _isProcessing = true;
+
             try
             {
                 cmbAgencia.DataSource = await _repository.ObtenerAgenciasComboAsync();
@@ -100,6 +115,10 @@ namespace BodegasAburtoWMS.View
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar los catálogos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                _isProcessing = false;
             }
         }
 

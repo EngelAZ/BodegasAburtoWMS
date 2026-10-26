@@ -115,7 +115,7 @@ namespace BodegasAburtoWMS.View
 
         private void Principal_Load(object sender, EventArgs e)
         {
-            string nombreRol = usuarioActual.Rol?.Nombre ?? "Sin Rol Asignado";
+            /*string nombreRol = usuarioActual.Rol?.Nombre ?? "Sin Rol Asignado";
 
             MessageBox.Show(
                 $"Usuario: {usuarioActual.UsuarioNombre}\n" +
@@ -124,7 +124,7 @@ namespace BodegasAburtoWMS.View
                 "Sesión actual",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
-            );
+            );*/
 
             // 2. Cargar el dashboard inicial
             MostrarFormEnCentro(new Dashboard());

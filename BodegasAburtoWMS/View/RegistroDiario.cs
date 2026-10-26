@@ -1,4 +1,5 @@
-﻿using BodegasAburtoWMS.Repository;
+﻿using BodegasAburtoWMS.Model;
+using BodegasAburtoWMS.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +13,7 @@ namespace BodegasAburtoWMS.View
     public partial class RegistroDiario : Form
     {
         private readonly IBodegasAburtoWMSRepository _repository;
+        private bool _isProcessing = false; // Bandera para evitar consultas simultáneas
 
         // Inyección de dependencias del repositorio
         public RegistroDiario(IBodegasAburtoWMSRepository repository)
@@ -72,6 +74,9 @@ namespace BodegasAburtoWMS.View
         }
         private async Task CargarEnviosAsync()
         {
+            if (_isProcessing) return;
+            _isProcessing = true;
+
             try
             {
                 var listaEnvios = await _repository.ObtenerEnviosAsync();
@@ -97,32 +102,56 @@ namespace BodegasAburtoWMS.View
             {
                 MessageBox.Show($"Error al cargar los registros de envíos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                _isProcessing = false;
+            }
         }
 
         private async void txtBuscar_TextChanged(object sender, EventArgs e)
         {
-            string filtro = txtBuscar.Text.Trim();
-            if (string.IsNullOrEmpty(filtro) || filtro.Contains("Buscar"))
-            {
-                await CargarEnviosAsync();
-            }
-            else
-            {
-                var resultados = await _repository.BuscarEnviosAsync(filtro);
+            if (_isProcessing) return;
+            _isProcessing = true;
 
-                dataGridView1.DataSource = resultados.Select(e => new
+
+            try
+            {
+                string filtro = txtBuscar.Text.Trim();
+                if (string.IsNullOrEmpty(filtro) || filtro.Contains("Buscar"))
                 {
-                    e.IdEnvio,
-                    e.NumeroGuia,
-                    Agencia = e.Agencia?.Nombre ?? "N/A",
-                    Remitente = e.ClienteRemitente != null ? $"{e.ClienteRemitente.Nombre} {e.ClienteRemitente.Apellido}" : "N/A",
-                    Destinatario = e.ClienteDestinatario != null ? $"{e.ClienteDestinatario.Nombre} {e.ClienteDestinatario.Apellido}" : "N/A",
-                    e.FechaEnvio,
-                    FechaEntrega = e.FechaEntregaReal ?? e.FechaEntregaEstimada,
-                    e.CostoEnvio,
-                    e.Observaciones
-                }).ToList();
+                    var listaEnvios = await _repository.ObtenerEnviosAsync();
+                    ActualizarGrid(listaEnvios);
+                }
+                else
+                {
+                    var resultados = await _repository.BuscarEnviosAsync(filtro);
+                    ActualizarGrid(resultados);
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error en la búsqueda: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                _isProcessing = false;
+            }
+        }
+
+        private void ActualizarGrid(List<Envio> lista)
+        {
+            dataGridView1.DataSource = lista.Select(e => new
+            {
+                e.IdEnvio,
+                e.NumeroGuia,
+                Agencia = e.Agencia?.Nombre ?? "N/A",
+                Remitente = e.ClienteRemitente != null ? $"{e.ClienteRemitente.Nombre} {e.ClienteRemitente.Apellido}" : "N/A",
+                Destinatario = e.ClienteDestinatario != null ? $"{e.ClienteDestinatario.Nombre} {e.ClienteDestinatario.Apellido}" : "N/A",
+                e.FechaEnvio,
+                FechaEntrega = e.FechaEntregaReal ?? e.FechaEntregaEstimada,
+                e.CostoEnvio,
+                e.Observaciones
+            }).ToList();
         }
     }
 }
