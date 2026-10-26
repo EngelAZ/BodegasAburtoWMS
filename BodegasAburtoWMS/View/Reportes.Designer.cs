@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+<<<<<<< HEAD
             lblReportesConsultas = new Label();
             panel1 = new Panel();
             tlpReportes = new TableLayoutPanel();
@@ -55,10 +56,31 @@
             panel4.SuspendLayout();
             panel5.SuspendLayout();
             panel6.SuspendLayout();
+=======
+            MenuStripWMS = new MenuStrip();
+            archivoToolStripMenuItem = new ToolStripMenuItem();
+            editarToolStripMenuItem = new ToolStripMenuItem();
+            verToolStripMenuItem = new ToolStripMenuItem();
+            herramientasToolStripMenuItem = new ToolStripMenuItem();
+            ayudaToolStripMenuItem = new ToolStripMenuItem();
+            pnl2WMS = new Panel();
+            tablelp1 = new TableLayoutPanel();
+            lbl5 = new Label();
+            lbl3 = new Label();
+            lbl2 = new Label();
+            lbl6 = new Label();
+            lbl4 = new Label();
+            lbl1 = new Label();
+            labelConsultas = new Label();
+            MenuStripWMS.SuspendLayout();
+            pnl2WMS.SuspendLayout();
+            tablelp1.SuspendLayout();
+>>>>>>> 6c411aa (Introduccion de Entity Framework Core al proyecto y migracion)
             SuspendLayout();
             // 
             // lblReportesConsultas
             // 
+<<<<<<< HEAD
             lblReportesConsultas.AutoSize = true;
             lblReportesConsultas.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblReportesConsultas.ForeColor = Color.DarkGray;
@@ -67,9 +89,19 @@
             lblReportesConsultas.Size = new Size(181, 20);
             lblReportesConsultas.TabIndex = 0;
             lblReportesConsultas.Text = "Consultas y Reportes";
+=======
+            MenuStripWMS.BackColor = Color.White;
+            MenuStripWMS.ImageScalingSize = new Size(24, 24);
+            MenuStripWMS.Items.AddRange(new ToolStripItem[] { archivoToolStripMenuItem, editarToolStripMenuItem, verToolStripMenuItem, herramientasToolStripMenuItem, ayudaToolStripMenuItem });
+            MenuStripWMS.Location = new Point(0, 0);
+            MenuStripWMS.Name = "MenuStripWMS";
+            MenuStripWMS.Size = new Size(1028, 33);
+            MenuStripWMS.TabIndex = 0;
+>>>>>>> 6c411aa (Introduccion de Entity Framework Core al proyecto y migracion)
             // 
             // panel1
             // 
+<<<<<<< HEAD
             panel1.BorderStyle = BorderStyle.FixedSingle;
             panel1.Controls.Add(label1);
             panel1.Controls.Add(label2);
@@ -79,9 +111,15 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(207, 99);
             panel1.TabIndex = 1;
+=======
+            archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
+            archivoToolStripMenuItem.Size = new Size(88, 29);
+            archivoToolStripMenuItem.Text = "Archivo";
+>>>>>>> 6c411aa (Introduccion de Entity Framework Core al proyecto y migracion)
             // 
             // tlpReportes
             // 
+<<<<<<< HEAD
             tlpReportes.ColumnCount = 3;
             tlpReportes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
             tlpReportes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333359F));
@@ -99,9 +137,15 @@
             tlpReportes.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tlpReportes.Size = new Size(682, 238);
             tlpReportes.TabIndex = 2;
+=======
+            editarToolStripMenuItem.Name = "editarToolStripMenuItem";
+            editarToolStripMenuItem.Size = new Size(73, 29);
+            editarToolStripMenuItem.Text = "Editar";
+>>>>>>> 6c411aa (Introduccion de Entity Framework Core al proyecto y migracion)
             // 
             // panel2
             // 
+<<<<<<< HEAD
             panel2.Controls.Add(label8);
             panel2.Controls.Add(label3);
             panel2.Dock = DockStyle.Fill;
@@ -110,9 +154,15 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(207, 99);
             panel2.TabIndex = 2;
+=======
+            verToolStripMenuItem.Name = "verToolStripMenuItem";
+            verToolStripMenuItem.Size = new Size(53, 29);
+            verToolStripMenuItem.Text = "Ver";
+>>>>>>> 6c411aa (Introduccion de Entity Framework Core al proyecto y migracion)
             // 
             // panel3
             // 
+<<<<<<< HEAD
             panel3.Controls.Add(label9);
             panel3.Controls.Add(label4);
             panel3.Dock = DockStyle.Fill;
@@ -121,9 +171,15 @@
             panel3.Name = "panel3";
             panel3.Size = new Size(208, 99);
             panel3.TabIndex = 3;
+=======
+            herramientasToolStripMenuItem.Name = "herramientasToolStripMenuItem";
+            herramientasToolStripMenuItem.Size = new Size(133, 29);
+            herramientasToolStripMenuItem.Text = "Herramientas";
+>>>>>>> 6c411aa (Introduccion de Entity Framework Core al proyecto y migracion)
             // 
             // panel4
             // 
+<<<<<<< HEAD
             panel4.Controls.Add(label11);
             panel4.Controls.Add(label6);
             panel4.Dock = DockStyle.Fill;
@@ -303,12 +359,141 @@
             panel5.PerformLayout();
             panel6.ResumeLayout(false);
             panel6.PerformLayout();
+=======
+            ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
+            ayudaToolStripMenuItem.Size = new Size(79, 29);
+            ayudaToolStripMenuItem.Text = "Ayuda";
+            // 
+            // pnl2WMS
+            // 
+            pnl2WMS.BackColor = Color.LightGray;
+            pnl2WMS.Controls.Add(tablelp1);
+            pnl2WMS.Controls.Add(labelConsultas);
+            pnl2WMS.Dock = DockStyle.Fill;
+            pnl2WMS.Location = new Point(0, 33);
+            pnl2WMS.Name = "pnl2WMS";
+            pnl2WMS.Size = new Size(1028, 507);
+            pnl2WMS.TabIndex = 2;
+            // 
+            // tablelp1
+            // 
+            tablelp1.BackColor = Color.White;
+            tablelp1.ColumnCount = 3;
+            tablelp1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tablelp1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tablelp1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.3333321F));
+            tablelp1.Controls.Add(lbl5, 1, 1);
+            tablelp1.Controls.Add(lbl3, 2, 0);
+            tablelp1.Controls.Add(lbl2, 1, 0);
+            tablelp1.Controls.Add(lbl6, 2, 1);
+            tablelp1.Controls.Add(lbl4, 0, 1);
+            tablelp1.Controls.Add(lbl1, 0, 0);
+            tablelp1.Location = new Point(0, 75);
+            tablelp1.Name = "tablelp1";
+            tablelp1.RowCount = 2;
+            tablelp1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tablelp1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tablelp1.Size = new Size(808, 221);
+            tablelp1.TabIndex = 1;
+            // 
+            // lbl5
+            // 
+            lbl5.AutoSize = true;
+            lbl5.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl5.Location = new Point(272, 110);
+            lbl5.Name = "lbl5";
+            lbl5.Size = new Size(231, 22);
+            lbl5.TabIndex = 4;
+            lbl5.Text = "Movimientos por agencia";
+            // 
+            // lbl3
+            // 
+            lbl3.AutoSize = true;
+            lbl3.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl3.Location = new Point(541, 0);
+            lbl3.Name = "lbl3";
+            lbl3.Size = new Size(174, 22);
+            lbl3.TabIndex = 2;
+            lbl3.Text = "Envios pendientes";
+            // 
+            // lbl2
+            // 
+            lbl2.AutoSize = true;
+            lbl2.BackColor = Color.White;
+            lbl2.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl2.Location = new Point(272, 0);
+            lbl2.Name = "lbl2";
+            lbl2.Size = new Size(176, 22);
+            lbl2.TabIndex = 1;
+            lbl2.Text = "Envios entregados";
+            // 
+            // lbl6
+            // 
+            lbl6.AutoSize = true;
+            lbl6.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl6.Location = new Point(541, 110);
+            lbl6.Name = "lbl6";
+            lbl6.Size = new Size(233, 22);
+            lbl6.TabIndex = 5;
+            lbl6.Text = "Liquidaciones generadas";
+            // 
+            // lbl4
+            // 
+            lbl4.AutoSize = true;
+            lbl4.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl4.Location = new Point(3, 110);
+            lbl4.Name = "lbl4";
+            lbl4.Size = new Size(166, 22);
+            lbl4.TabIndex = 3;
+            lbl4.Text = "Bultos de bodega";
+            // 
+            // lbl1
+            // 
+            lbl1.AutoSize = true;
+            lbl1.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lbl1.Location = new Point(3, 0);
+            lbl1.Name = "lbl1";
+            lbl1.Size = new Size(157, 22);
+            lbl1.TabIndex = 0;
+            lbl1.Text = "Envios recibidos";
+            // 
+            // labelConsultas
+            // 
+            labelConsultas.AutoSize = true;
+            labelConsultas.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelConsultas.Location = new Point(36, 25);
+            labelConsultas.Name = "labelConsultas";
+            labelConsultas.Size = new Size(261, 29);
+            labelConsultas.TabIndex = 0;
+            labelConsultas.Text = "Consultas y Reportes";
+            // 
+            // Reportes
+            // 
+            AutoScaleDimensions = new SizeF(14F, 29F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1028, 540);
+            Controls.Add(pnl2WMS);
+            Controls.Add(MenuStripWMS);
+            Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            MainMenuStrip = MenuStripWMS;
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "Reportes";
+            Text = "Reportes y Consultas -- Aburto WMS";
+            Load += Reportes_Load;
+            MenuStripWMS.ResumeLayout(false);
+            MenuStripWMS.PerformLayout();
+            pnl2WMS.ResumeLayout(false);
+            pnl2WMS.PerformLayout();
+            tablelp1.ResumeLayout(false);
+            tablelp1.PerformLayout();
+>>>>>>> 6c411aa (Introduccion de Entity Framework Core al proyecto y migracion)
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
+<<<<<<< HEAD
         private Label lblReportesConsultas;
         private Panel panel1;
         private TableLayoutPanel tlpReportes;
@@ -329,5 +514,22 @@
         private Label label7;
         private Label label10;
         private Label label5;
+=======
+        private MenuStrip MenuStripWMS;
+        private ToolStripMenuItem archivoToolStripMenuItem;
+        private ToolStripMenuItem editarToolStripMenuItem;
+        private ToolStripMenuItem verToolStripMenuItem;
+        private ToolStripMenuItem herramientasToolStripMenuItem;
+        private ToolStripMenuItem ayudaToolStripMenuItem;
+        private Panel pnl2WMS;
+        private Label labelConsultas;
+        private TableLayoutPanel tablelp1;
+        private Label lbl5;
+        private Label lbl4;
+        private Label lbl3;
+        private Label lbl2;
+        private Label lbl1;
+        private Label lbl6;
+>>>>>>> 6c411aa (Introduccion de Entity Framework Core al proyecto y migracion)
     }
 }

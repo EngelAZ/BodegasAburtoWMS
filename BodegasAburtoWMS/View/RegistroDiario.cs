@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BodegasAburtoWMS.Repository;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,59 +11,117 @@ namespace BodegasAburtoWMS.View
 {
     public partial class RegistroDiario : Form
     {
-        public RegistroDiario()
+        private readonly IBodegasAburtoWMSRepository _repository;
+
+        // Inyección de dependencias del repositorio
+        public RegistroDiario(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
+            _repository = repository;
+
+            this.Load += RegistroDiario_Load;
         }
 
-        private void RegistroDiario_Load(object sender, EventArgs e)
+        private async void RegistroDiario_Load(object sender, EventArgs e)
         {
             if (this.ParentForm is Principal formularioPrincipal)
             {
-
                 // 1. Botón "Lista de Envíos" (Pestaña activa)
                 Button btnListaEnvios = new Button
                 {
                     Text = "📋 Lista de Envíos",
                     Size = new Size(130, 30),
-                    Location = new Point(15, 5), // Esquina izquierda de la barra blanca
+                    Location = new Point(15, 5),
                     FlatStyle = FlatStyle.Flat,
                     BackColor = Color.White,
-                    ForeColor = Color.FromArgb(30, 78, 140), // Tu azul corporativo
+                    ForeColor = Color.FromArgb(30, 78, 140),
                     Font = new Font("Segoe UI Semibold", 9f)
                 };
                 btnListaEnvios.FlatAppearance.BorderColor = Color.FromArgb(220, 220, 220);
 
-                // Al darle clic a Lista, simplemente recargamos esta misma vista por si acaso
                 btnListaEnvios.Click += (s, ev) =>
                 {
-                    formularioPrincipal.MostrarFormEnCentro(new RegistroDiario());
+                    formularioPrincipal.MostrarFormEnCentro(new RegistroDiario(_repository));
                 };
 
-                // 2. Botón "+ Nuevo Envío" (Acción para cambiar de panel)
+                // 2. Botón "+ Nuevo Envío"
                 Button btnNuevoEnvio = new Button
                 {
                     Text = "+ Nuevo Envío",
                     Size = new Size(110, 30),
-                    Location = new Point(150, 5), // Al ladito del primer botón
+                    Location = new Point(150, 5),
                     FlatStyle = FlatStyle.Flat,
-                    BackColor = Color.FromArgb(245, 245, 245), // Color gris claro de fondo
+                    BackColor = Color.FromArgb(245, 245, 245),
                     ForeColor = Color.DimGray,
                     Font = new Font("Segoe UI", 9f)
                 };
                 btnNuevoEnvio.FlatAppearance.BorderSize = 0;
 
-                // 3. ¡EL TRUCO DE NAVEGACIÓN!: Cuando hagan clic en + Nuevo Envío, cargamos el formulario correspondiente en el centro
                 btnNuevoEnvio.Click += (s, ev) =>
                 {
-                    // Suponiendo que tu formulario de creación se llama "NuevoEnvioForm"
-                    // Llamamos al método público de la ventana principal para incrustarlo en la zona gris
-                    formularioPrincipal.MostrarFormEnCentro(new DatosEnvios());
+                    // Pasamos el repositorio al formulario de creación de envíos
+                    formularioPrincipal.MostrarFormEnCentro(new DatosEnvios(_repository));
                 };
 
-                // 4. Agregamos ambos botones a la barra blanca superior
                 formularioPrincipal.PanelOpciones.Controls.Add(btnListaEnvios);
                 formularioPrincipal.PanelOpciones.Controls.Add(btnNuevoEnvio);
+            }
+
+            // Cargar los datos de los envíos de forma asíncrona al iniciar la vista
+            await CargarEnviosAsync();
+        }
+        private async Task CargarEnviosAsync()
+        {
+            try
+            {
+                var listaEnvios = await _repository.ObtenerEnviosAsync();
+
+                // Mapeo adaptado para mostrar los nombres de las entidades relacionadas en el DataGridView
+                var dataSource = listaEnvios.Select(e => new
+                {
+                    e.IdEnvio,
+                    e.NumeroGuia,
+                    Agencia = e.Agencia?.Nombre ?? "N/A",
+                    Remitente = e.ClienteRemitente != null ? $"{e.ClienteRemitente.Nombre} {e.ClienteRemitente.Apellido}" : "N/A",
+                    Destinatario = e.ClienteDestinatario != null ? $"{e.ClienteDestinatario.Nombre} {e.ClienteDestinatario.Apellido}" : "N/A",
+                    e.FechaEnvio,
+                    FechaEntrega = e.FechaEntregaReal ?? e.FechaEntregaEstimada,
+                    e.CostoEnvio,
+                    e.Observaciones
+                }).ToList();
+
+                dataGridView1.AutoGenerateColumns = false;
+                dataGridView1.DataSource = dataSource;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar los registros de envíos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void txtBuscar_TextChanged(object sender, EventArgs e)
+        {
+            string filtro = txtBuscar.Text.Trim();
+            if (string.IsNullOrEmpty(filtro) || filtro.Contains("Buscar"))
+            {
+                await CargarEnviosAsync();
+            }
+            else
+            {
+                var resultados = await _repository.BuscarEnviosAsync(filtro);
+
+                dataGridView1.DataSource = resultados.Select(e => new
+                {
+                    e.IdEnvio,
+                    e.NumeroGuia,
+                    Agencia = e.Agencia?.Nombre ?? "N/A",
+                    Remitente = e.ClienteRemitente != null ? $"{e.ClienteRemitente.Nombre} {e.ClienteRemitente.Apellido}" : "N/A",
+                    Destinatario = e.ClienteDestinatario != null ? $"{e.ClienteDestinatario.Nombre} {e.ClienteDestinatario.Apellido}" : "N/A",
+                    e.FechaEnvio,
+                    FechaEntrega = e.FechaEntregaReal ?? e.FechaEntregaEstimada,
+                    e.CostoEnvio,
+                    e.Observaciones
+                }).ToList();
             }
         }
     }

@@ -7,18 +7,19 @@ namespace BodegasAburtoWMS
 {
     public partial class Login : Form
     {
-        private readonly IBodegasAburtoWMSRepository repository;
-        public Login()
+        private readonly IBodegasAburtoWMSRepository _repository;
+
+        // Inyección de dependencias del repositorio
+        public Login(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
+            _repository = repository;
 
-            repository = new BodegasAburtoWMSRepository();
-
+            // Suscripción de eventos para los placeholders de los TextBox
             tbxContrasena.Enter += tbxContrasena_Enter;
             tbxContrasena.Leave += tbxContrasena_Leave;
             tbxUsuario.Enter += tbxUsuario_Enter;
             tbxUsuario.Leave += tbxUsuario_Leave;
-
         }
 
         private void tbxUsuario_TextChanged(object sender, EventArgs e)
@@ -33,7 +34,7 @@ namespace BodegasAburtoWMS
             Contraseña:
             Admin123*
          */
-        private void btnInicioSesion_Click(object sender, EventArgs e)
+        private async void btnInicioSesion_Click(object sender, EventArgs e)
         {
             string nombreUsuario = tbxUsuario.Text.Trim();
             string contraseña = tbxContrasena.Text;
@@ -66,7 +67,8 @@ namespace BodegasAburtoWMS
 
             try
             {
-                Usuario usuario = repository.ObtenerUsuarioPorNombre(nombreUsuario);
+                // 1. Obtener usuario de forma asíncrona mediante EF Core
+                Usuario usuario = await _repository.ObtenerUsuarioPorNombreAsync(nombreUsuario);
 
                 if (usuario == null)
                 {
@@ -81,6 +83,7 @@ namespace BodegasAburtoWMS
                     return;
                 }
 
+                // 2. Verificar el Password Hash y Salt
                 bool contraseñaCorrecta = PasswordHelper.VerificarPassword(
                     contraseña,
                     usuario.PasswordHash,
@@ -100,16 +103,18 @@ namespace BodegasAburtoWMS
                     return;
                 }
 
-                repository.RegistrarUltimoAcceso(usuario.IdUsuario);
+                // 3. Registrar último acceso y auditoría de manera asíncrona en segundo plano
+                await _repository.RegistrarUltimoAccesoAsync(usuario.IdUsuario);
 
-                repository.RegistrarAuditoria(
+                await _repository.RegistrarAuditoriaAsync(
                     usuario.IdUsuario,
                     "Inicio de sesión",
                     usuario.UsuarioNombre,
                     "Inicio de sesión exitoso."
                 );
 
-                Principal principal = new Principal(usuario);
+                // 4. Abrir ventana Principal inyectándole el usuario y el repositorio actual
+                Principal principal = new Principal(usuario, _repository);
 
                 this.Hide();
 
@@ -176,16 +181,13 @@ namespace BodegasAburtoWMS
 
             if (m.Msg == WM_NCHITTEST)
             {
-                // Convierte la posición física del mouse a coordenadas dentro de tu formulario
                 Point pos = this.PointToClient(Cursor.Position);
-                int anchoBorde = 8; // Sensibilidad del mouse
+                int anchoBorde = 8;
 
-                // Esquinas superiores e inferiores
                 if (pos.X <= anchoBorde && pos.Y <= anchoBorde) m.Result = (IntPtr)HTTOPLEFT;
                 else if (pos.X >= this.ClientSize.Width - anchoBorde && pos.Y <= anchoBorde) m.Result = (IntPtr)HTTOPRIGHT;
                 else if (pos.X <= anchoBorde && pos.Y >= this.ClientSize.Height - anchoBorde) m.Result = (IntPtr)HTBOTTOMLEFT;
                 else if (pos.X >= this.ClientSize.Width - anchoBorde && pos.Y >= this.ClientSize.Height - anchoBorde) m.Result = (IntPtr)HTBOTTOMRIGHT;
-                // Bordes rectos
                 else if (pos.X <= anchoBorde) m.Result = (IntPtr)HTLEFT;
                 else if (pos.X >= this.ClientSize.Width - anchoBorde) m.Result = (IntPtr)HTRIGHT;
                 else if (pos.Y <= anchoBorde) m.Result = (IntPtr)HTTOP;
@@ -195,14 +197,12 @@ namespace BodegasAburtoWMS
 
         private void lnklblRegistrarUsuario_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
+            // Pasamos el mismo repositorio ya inyectado al formulario Register
+            Register ventanaRegistro = new Register(_repository);
 
-            Register ventanaRegistro = new Register();
-            this.Hide(); // Escondemos el Login
-
-            ventanaRegistro.ShowDialog(); // Se abre como ventana emergente. El código se detiene aquí hasta que cierres el Registro
-
-            // --- CUANDO EL REGISTRO HAGA 'this.Close()', EL CÓDIGO SIGUE AQUÍ ABAJO: ---
-            this.Show(); // El Login original se vuelve a mostrar solo, limpio y sin duplicar memoria
+            this.Hide();
+            ventanaRegistro.ShowDialog();
+            this.Show();
         }
     }
 }
