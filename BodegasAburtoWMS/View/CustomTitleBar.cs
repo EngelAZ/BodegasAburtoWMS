@@ -178,9 +178,33 @@ namespace BodegasAburtoWMS.Components
             base.OnParentChanged(e);
             if (ParentForm != null)
             {
-                // Solo le quitamos los bordes nativos de Windows, dejando que tus propiedades manden
+                // Quitamos los bordes nativos de Windows
                 ParentForm.FormBorderStyle = FormBorderStyle.None;
+
+                // Intentamos detectar si el formulario tiene una propiedad personalizada llamada "IsLocked" (o "Lock")
+                bool estaBloqueado = false;
+
+                // Buscamos mediante Reflection si el formulario padre tiene una propiedad bool llamada "IsLocked" o "Lock"
+                var propLock = ParentForm.GetType().GetProperty("IsLocked") ?? ParentForm.GetType().GetProperty("Lock");
+                if (propLock != null && propLock.PropertyType == typeof(bool))
+                {
+                    estaBloqueado = (bool)(propLock.GetValue(ParentForm) ?? false);
+                }
+
+                // SI ESTÁ BLOQUEADO (Lock == true), OCULTAMOS MINIMIZAR Y MAXIMIZAR
+                if (estaBloqueado)
+                {
+                    btnMaximizar.Visible = false;
+                    btnMinimizar.Visible = false;
+                }
+                else
+                {
+                    // Si no está bloqueado, respetamos lo que diga el formulario normalmente
+                    btnMaximizar.Visible = ParentForm.MaximizeBox;
+                    btnMinimizar.Visible = ParentForm.MinimizeBox;
+                }
             }
+
         }
 
         private void Bar_MouseDown(object sender, MouseEventArgs e)

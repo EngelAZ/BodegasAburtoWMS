@@ -2,11 +2,15 @@ using BodegasAburtoWMS.Helpers;
 using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
 using BodegasAburtoWMS.View;
+using System.ComponentModel;
 
 namespace BodegasAburtoWMS
 {
     public partial class Login : Form
     {
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool IsLocked { get; set; } = true;
         private readonly IBodegasAburtoWMSRepository _repository;
 
         // Inyección de dependencias del repositorio

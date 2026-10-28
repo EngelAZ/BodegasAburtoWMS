@@ -40,5 +40,8 @@ namespace BodegasAburtoWMS.Repository
         Task<bool> RegistrarEntregaEnvioAsync(int idEnvio, int idUsuarioAuditoria);
         Task<List<Envio>> ObtenerEnviosHistorialAsync();
         Task<bool> RevertirEntregaEnvioAsync(int idEnvio, int idUsuarioAuditoria);
+
+        Task<List<Envio>> ObtenerEnviosPorEstadoAsync(int idEstado);
+        Task<bool> CambiarEstadoEnvioAsync(int idEnvio, int nuevoIdEstado, int idUsuarioAuditoria);
     }
 }

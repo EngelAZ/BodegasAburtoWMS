@@ -234,6 +234,51 @@ namespace BodegasAburtoWMS.Repository
         // MÓDULO DE ENVÍOS ENTRADAS Y SALIDAS
         // ==========================================
 
+        public async Task<List<Envio>> ObtenerEnviosPorEstadoAsync(int idEstado)
+        {
+            return await _context.Envios
+                .Include(e => e.Agencia)
+                .Include(e => e.ClienteRemitente)
+                .Include(e => e.ClienteDestinatario)
+                .Include(e => e.TipoEnvio)
+                .Include(e => e.Estado)
+                .Where(e => e.IdEstado == idEstado)
+                .OrderByDescending(e => e.FechaEnvio)
+                .ToListAsync();
+        }
+
+        // Método universal para cambiar el estado de un envío de forma controlada
+        public async Task<bool> CambiarEstadoEnvioAsync(int idEnvio, int nuevoIdEstado, int idUsuarioAuditoria)
+        {
+            var envio = await _context.Envios.FindAsync(idEnvio);
+            if (envio == null) return false;
+
+            int estadoAnterior = (int)envio.IdEstado;
+            envio.IdEstado = nuevoIdEstado;
+
+            // Si el nuevo estado es 5 (Entregado), marcamos la fecha de entrega real
+            if (nuevoIdEstado == 5)
+            {
+                envio.FechaEntregaReal = DateTime.Now;
+            }
+            else
+            {
+                envio.FechaEntregaReal = null; // Por si se revierte
+            }
+
+            var auditoria = new AuditoriaUsuario
+            {
+                IdUsuario = idUsuarioAuditoria,
+                Accion = $"AVANZAR_ESTADO_{nuevoIdEstado}",
+                UsuarioSistema = "Entregas / Salidas",
+                Detalle = $"Se movió el envío {envio.NumeroGuia} del estado {estadoAnterior} al estado {nuevoIdEstado}",
+                FechaRegistro = DateTime.Now
+            };
+
+            await _context.AuditoriaUsuarios.AddAsync(auditoria);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
         public async Task<List<Envio>> ObtenerEnviosPendientesAsync()
         {
             return await _context.Envios
@@ -253,7 +298,7 @@ namespace BodegasAburtoWMS.Repository
             if (envio == null) return false;
 
             envio.FechaEntregaReal = DateTime.Now;
-            envio.IdEstado = 2; // Estado Entregado (ajustar según tu catálogo)
+            envio.IdEstado = 5; // Estado Entregado (ajustar según tu catálogo)
 
             // Registro de auditoría adaptado a las propiedades reales de tu modelo
             var auditoria = new AuditoriaUsuario
