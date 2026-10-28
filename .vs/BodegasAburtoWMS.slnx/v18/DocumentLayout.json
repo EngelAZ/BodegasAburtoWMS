@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\dell\\desktop\\bodegasaburtowms\\bodegasaburtowms\\bodegasaburtowms\\view\\entregas_salidas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\entregas_salidas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\bodegasaburtowms\\view\\entregas_salidas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\entregas_salidas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\dell\\desktop\\bodegasaburtowms\\bodegasaburtowms\\bodegasaburtowms\\view\\registrodiario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\registrodiario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
@@ -15,16 +23,8 @@
       "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\repository\\bodegasaburtowmsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\dell\\desktop\\bodegasaburtowms\\bodegasaburtowms\\bodegasaburtowms\\view\\entregas_salidas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\entregas_salidas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\dell\\desktop\\bodegasaburtowms\\bodegasaburtowms\\bodegasaburtowms\\repository\\ibodegasaburtowmsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\repository\\ibodegasaburtowmsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\dell\\desktop\\bodegasaburtowms\\bodegasaburtowms\\bodegasaburtowms\\view\\entregas_salidas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|solutionrelative:bodegasaburtowms\\view\\entregas_salidas.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7849F2A9-2DBB-FCE0-FC82-4A439D32027C}|BodegasAburtoWMS\\BodegasAburtoWMS.csproj|c:\\users\\dell\\desktop\\bodegasaburtowms\\bodegasaburtowms\\bodegasaburtowms\\view\\agencias.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -58,7 +58,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -78,7 +78,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "RegistroDiario.cs [Dise\u00F1o]",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\RegistroDiario.cs",
               "RelativeDocumentMoniker": "BodegasAburtoWMS\\View\\RegistroDiario.cs",
@@ -90,7 +90,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "BodegasAburtoWMSRepository.cs",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\Repository\\BodegasAburtoWMSRepository.cs",
               "RelativeDocumentMoniker": "BodegasAburtoWMS\\Repository\\BodegasAburtoWMSRepository.cs",
@@ -98,38 +98,37 @@
               "RelativeToolTip": "BodegasAburtoWMS\\Repository\\BodegasAburtoWMSRepository.cs",
               "ViewState": "AgIAAMMAAAAAAAAAAADwv9YAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-28T01:13:58.692Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-28T01:13:58.692Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Entregas_Salidas.cs",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Entregas_Salidas.cs",
               "RelativeDocumentMoniker": "BodegasAburtoWMS\\View\\Entregas_Salidas.cs",
               "ToolTip": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Entregas_Salidas.cs",
               "RelativeToolTip": "BodegasAburtoWMS\\View\\Entregas_Salidas.cs",
-              "ViewState": "AgIAAMsAAAAAAAAAAAAiwCQBAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAB0BAAAAAAAAAAAqwCQBAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-10-28T01:16:57.716Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "RegistroDiario.cs",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\RegistroDiario.cs",
               "RelativeDocumentMoniker": "BodegasAburtoWMS\\View\\RegistroDiario.cs",
               "ToolTip": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\RegistroDiario.cs",
               "RelativeToolTip": "BodegasAburtoWMS\\View\\RegistroDiario.cs",
-              "ViewState": "AgIAAEEAAAAAAAAAAAAUwFwAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAFIAAAAAAAAAAAAcwFwAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-10-28T01:49:33.906Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "IBodegasAburtoWMSRepository.cs",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\Repository\\IBodegasAburtoWMSRepository.cs",
               "RelativeDocumentMoniker": "BodegasAburtoWMS\\Repository\\IBodegasAburtoWMSRepository.cs",
@@ -137,12 +136,11 @@
               "RelativeToolTip": "BodegasAburtoWMS\\Repository\\IBodegasAburtoWMSRepository.cs",
               "ViewState": "AgIAABYAAAAAAAAAAAAgwCgAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-28T01:30:51.325Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-28T01:30:51.325Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "Entregas_Salidas.cs [Dise\u00F1o]",
               "DocumentMoniker": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Entregas_Salidas.cs",
               "RelativeDocumentMoniker": "BodegasAburtoWMS\\View\\Entregas_Salidas.cs",
@@ -161,8 +159,7 @@
               "ToolTip": "C:\\Users\\DELL\\Desktop\\BodegasAburtoWMS\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Agencias.cs [Design]",
               "RelativeToolTip": "BodegasAburtoWMS\\View\\Agencias.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-26T03:51:58.694Z",
-              "EditorCaption": " [Design]"
+              "WhenOpened": "2026-10-26T03:51:58.694Z"
             },
             {
               "$type": "Document",
@@ -198,8 +195,7 @@
               "RelativeToolTip": "BodegasAburtoWMS\\View\\Agencias.cs",
               "ViewState": "AgIAABcAAAAAAAAAAAAYwFIAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-24T21:11:17.679Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-24T21:11:17.679Z"
             },
             {
               "$type": "Document",
