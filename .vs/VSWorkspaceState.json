@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\BodegasAburtoWMS\\View"
+    "\\BodegasAburtoWMS",
+    "\\BodegasAburtoWMS\\BodegasAburtoWMS",
+    "\\BodegasAburtoWMS\\BodegasAburtoWMS\\View"
   ],
-  "SelectedNode": "\\BodegasAburtoWMS.slnx",
+  "SelectedNode": "\\BodegasAburtoWMS\\BodegasAburtoWMS\\View\\Agencias.cs",
   "PreviewInSolutionExplorer": false
 }
