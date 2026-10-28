@@ -28,12 +28,64 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Materiales";
+            dgvMateriales = new DataGridView();
+            lblControl = new Label();
+            btnNuevo = new Button();
+            ((System.ComponentModel.ISupportInitialize)dgvMateriales).BeginInit();
+            SuspendLayout();
+            // 
+            // dgvMateriales
+            // 
+            dgvMateriales.BackgroundColor = Color.LightGray;
+            dgvMateriales.BorderStyle = BorderStyle.None;
+            dgvMateriales.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvMateriales.Location = new Point(46, 125);
+            dgvMateriales.Name = "dgvMateriales";
+            dgvMateriales.Size = new Size(705, 240);
+            dgvMateriales.TabIndex = 0;
+            // 
+            // lblControl
+            // 
+            lblControl.AutoSize = true;
+            lblControl.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblControl.Location = new Point(46, 33);
+            lblControl.Name = "lblControl";
+            lblControl.Size = new Size(155, 16);
+            lblControl.TabIndex = 1;
+            lblControl.Text = "Control de Materiales";
+            // 
+            // btnNuevo
+            // 
+            btnNuevo.BackColor = Color.FromArgb(255, 128, 0);
+            btnNuevo.FlatStyle = FlatStyle.Flat;
+            btnNuevo.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnNuevo.ForeColor = Color.White;
+            btnNuevo.Location = new Point(619, 22);
+            btnNuevo.Name = "btnNuevo";
+            btnNuevo.Size = new Size(132, 27);
+            btnNuevo.TabIndex = 2;
+            btnNuevo.Text = "+ Nuevo Material";
+            btnNuevo.UseVisualStyleBackColor = false;
+            // 
+            // Materiales
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(btnNuevo);
+            Controls.Add(lblControl);
+            Controls.Add(dgvMateriales);
+            Name = "Materiales";
+            Text = "Materiales";
+            ((System.ComponentModel.ISupportInitialize)dgvMateriales).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private DataGridView dgvMateriales;
+        private Label lblControl;
+        private Button btnNuevo;
     }
 }
