@@ -51,16 +51,24 @@
             panel1.Controls.Add(txtBuscarCliente);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(2, 2, 2, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(800, 79);
+            panel1.Size = new Size(1362, 47);
             panel1.TabIndex = 0;
             // 
             // btnNuevoCliente
             // 
             btnNuevoCliente.BackColor = Color.FromArgb(255, 128, 0);
+<<<<<<< HEAD
             btnNuevoCliente.Location = new Point(594, 23);
             btnNuevoCliente.Name = "btnNuevoCliente";
             btnNuevoCliente.Size = new Size(161, 34);
+=======
+            btnNuevoCliente.Location = new Point(416, 14);
+            btnNuevoCliente.Margin = new Padding(2, 2, 2, 2);
+            btnNuevoCliente.Name = "btnNuevoCliente";
+            btnNuevoCliente.Size = new Size(113, 20);
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             btnNuevoCliente.TabIndex = 1;
             btnNuevoCliente.Text = "+ Nuevo Cliente";
             btnNuevoCliente.UseVisualStyleBackColor = false;
@@ -68,9 +76,16 @@
             // 
             // txtBuscarCliente
             // 
+<<<<<<< HEAD
             txtBuscarCliente.Location = new Point(12, 24);
             txtBuscarCliente.Name = "txtBuscarCliente";
             txtBuscarCliente.Size = new Size(173, 31);
+=======
+            txtBuscarCliente.Location = new Point(8, 14);
+            txtBuscarCliente.Margin = new Padding(2, 2, 2, 2);
+            txtBuscarCliente.Name = "txtBuscarCliente";
+            txtBuscarCliente.Size = new Size(122, 23);
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtBuscarCliente.TabIndex = 0;
             txtBuscarCliente.Text = "Buscar por Nombre";
             txtBuscarCliente.TextChanged += txtBuscarCliente_TextChanged;
@@ -80,10 +95,11 @@
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ID, Nombre, Apellido, Telefono, Correo, Direccion, NumeroCedula, FechaRegistro });
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 79);
+            dataGridView1.Location = new Point(0, 47);
+            dataGridView1.Margin = new Padding(2, 2, 2, 2);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.Size = new Size(800, 371);
+            dataGridView1.Size = new Size(1362, 303);
             dataGridView1.TabIndex = 1;
             // 
             // ID
@@ -152,11 +168,12 @@
             // 
             // Clientes
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1362, 350);
             Controls.Add(dataGridView1);
             Controls.Add(panel1);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "Clientes";
             Text = "Clientes";
             Load += Clientes_Load;

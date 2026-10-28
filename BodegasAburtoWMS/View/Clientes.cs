@@ -15,11 +15,18 @@ namespace BodegasAburtoWMS.View
         private readonly IBodegasAburtoWMSRepository _repository;
         private bool _isProcessing = false; // Bandera para evitar llamadas simultáneas
 
+<<<<<<< HEAD
         // 1. Constructor normal con inyección de dependencias
+=======
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
         public Clientes(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
             _repository = repository;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             this.Load += Clientes_Load;
         }
 
@@ -36,10 +43,17 @@ namespace BodegasAburtoWMS.View
 
         private async void Clientes_Load(object sender, EventArgs e)
         {
+<<<<<<< HEAD
             await CargarClientesAsync();
         }
 
         private async Task CargarClientesAsync()
+=======
+            await CargarDatosClientesAsync();
+        }
+
+        private async Task CargarDatosClientesAsync()
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
         {
             if (_isProcessing) return;
             _isProcessing = true;
@@ -66,7 +80,11 @@ namespace BodegasAburtoWMS.View
             using var formDatos = new DatosCliente(_repository);
             if (formDatos.ShowDialog() == DialogResult.OK)
             {
+<<<<<<< HEAD
                 await CargarClientesAsync();
+=======
+                await CargarDatosClientesAsync();
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             }
         }
 
@@ -78,7 +96,11 @@ namespace BodegasAburtoWMS.View
             try
             {
                 string filtro = txtBuscarCliente.Text.Trim();
+<<<<<<< HEAD
                 if (string.IsNullOrEmpty(filtro))
+=======
+                if (string.IsNullOrEmpty(filtro) || filtro == "Buscar por Nombre") // Ajusta si usas placeholder
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
                 {
                     var listaClientes = await _repository.ObtenerClientesAsync();
                     dataGridView1.DataSource = listaClientes;

@@ -55,6 +55,10 @@
             panel3.Controls.Add(txtBuscar);
             panel3.Dock = DockStyle.Top;
             panel3.Location = new Point(0, 0);
+<<<<<<< HEAD
+=======
+            panel3.Margin = new Padding(2, 2, 2, 2);
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             panel3.Name = "panel3";
             panel3.Size = new Size(800, 48);
             panel3.TabIndex = 2;
@@ -63,7 +67,12 @@
             // 
             comboBox2.FormattingEnabled = true;
             comboBox2.Items.AddRange(new object[] { "Todos los Estados" });
+<<<<<<< HEAD
             comboBox2.Location = new Point(564, 7);
+=======
+            comboBox2.Location = new Point(395, 4);
+            comboBox2.Margin = new Padding(2, 2, 2, 2);
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             comboBox2.Name = "comboBox2";
             comboBox2.Size = new Size(183, 33);
             comboBox2.TabIndex = 2;
@@ -72,16 +81,28 @@
             // 
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "Todas las Agencias" });
+<<<<<<< HEAD
             comboBox1.Location = new Point(361, 7);
+=======
+            comboBox1.Location = new Point(253, 4);
+            comboBox1.Margin = new Padding(2, 2, 2, 2);
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(183, 33);
             comboBox1.TabIndex = 1;
             // 
             // txtBuscar
             // 
+<<<<<<< HEAD
             txtBuscar.Location = new Point(21, 7);
             txtBuscar.Name = "txtBuscar";
             txtBuscar.Size = new Size(334, 31);
+=======
+            txtBuscar.Location = new Point(15, 4);
+            txtBuscar.Margin = new Padding(2, 2, 2, 2);
+            txtBuscar.Name = "txtBuscar";
+            txtBuscar.Size = new Size(235, 23);
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtBuscar.TabIndex = 0;
             txtBuscar.Text = "Buscar por Guia, Remitente o destinatario";
             txtBuscar.TextChanged += txtBuscar_TextChanged;
@@ -91,7 +112,12 @@
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { IdEnvio, Estado, NumeroGuia, Agencia, Remitente, Destinatario, FechaEnvio, FechaEntregaEstimada, CostoEnvio, Observaciones });
             dataGridView1.Dock = DockStyle.Fill;
+<<<<<<< HEAD
             dataGridView1.Location = new Point(0, 48);
+=======
+            dataGridView1.Location = new Point(0, 29);
+            dataGridView1.Margin = new Padding(2, 2, 2, 2);
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 62;
             dataGridView1.Size = new Size(800, 402);
@@ -99,6 +125,7 @@
             // 
             // IdEnvio
             // 
+<<<<<<< HEAD
             IdEnvio.DataPropertyName = "IdEnvio";
             IdEnvio.HeaderText = "ID";
             IdEnvio.MinimumWidth = 8;
@@ -112,6 +139,13 @@
             Estado.MinimumWidth = 8;
             Estado.Name = "Estado";
             Estado.Width = 150;
+=======
+            ID.DataPropertyName = "IdEnvio";
+            ID.HeaderText = "ID";
+            ID.MinimumWidth = 8;
+            ID.Name = "ID";
+            ID.Width = 150;
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             // 
             // NumeroGuia
             // 
@@ -155,11 +189,19 @@
             // 
             // FechaEntregaEstimada
             // 
+<<<<<<< HEAD
             FechaEntregaEstimada.DataPropertyName = "FechaEntrega";
             FechaEntregaEstimada.HeaderText = "Fecha de Entrega";
             FechaEntregaEstimada.MinimumWidth = 8;
             FechaEntregaEstimada.Name = "FechaEntregaEstimada";
             FechaEntregaEstimada.Width = 150;
+=======
+            FechaEntrega.DataPropertyName = "FechaEntrega";
+            FechaEntrega.HeaderText = "Fecha de Entrega";
+            FechaEntrega.MinimumWidth = 8;
+            FechaEntrega.Name = "FechaEntrega";
+            FechaEntrega.Width = 150;
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             // 
             // CostoEnvio
             // 
@@ -185,6 +227,10 @@
             Controls.Add(dataGridView1);
             Controls.Add(panel3);
             FormBorderStyle = FormBorderStyle.None;
+<<<<<<< HEAD
+=======
+            Margin = new Padding(2, 2, 2, 2);
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             Name = "RegistroDiario";
             Text = "RegistroDiario";
             Load += RegistroDiario_Load;
@@ -201,8 +247,12 @@
         private ComboBox comboBox2;
         private DataGridView dataGridView1;
         private TextBox txtBuscar;
+<<<<<<< HEAD
         private DataGridViewTextBoxColumn IdEnvio;
         private DataGridViewTextBoxColumn Estado;
+=======
+        private DataGridViewTextBoxColumn ID;
+>>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
         private DataGridViewTextBoxColumn NumeroGuia;
         private DataGridViewTextBoxColumn Agencia;
         private DataGridViewTextBoxColumn Remitente;
