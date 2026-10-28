@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            textBox1 = new TextBox();
-            button1 = new Button();
+            btnNuevoCliente = new Button();
+            txtBuscarCliente = new TextBox();
             dataGridView1 = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
             Nombre = new DataGridViewTextBoxColumn();
@@ -47,31 +47,33 @@
             // panel1
             // 
             panel1.BackColor = SystemColors.ControlDark;
-            panel1.Controls.Add(button1);
-            panel1.Controls.Add(textBox1);
+            panel1.Controls.Add(btnNuevoCliente);
+            panel1.Controls.Add(txtBuscarCliente);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(800, 79);
             panel1.TabIndex = 0;
             // 
-            // textBox1
+            // btnNuevoCliente
             // 
-            textBox1.Location = new Point(12, 24);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(173, 31);
-            textBox1.TabIndex = 0;
-            textBox1.Text = "Buscar por Nombre";
+            btnNuevoCliente.BackColor = Color.FromArgb(255, 128, 0);
+            btnNuevoCliente.Location = new Point(594, 23);
+            btnNuevoCliente.Name = "btnNuevoCliente";
+            btnNuevoCliente.Size = new Size(161, 34);
+            btnNuevoCliente.TabIndex = 1;
+            btnNuevoCliente.Text = "+ Nuevo Cliente";
+            btnNuevoCliente.UseVisualStyleBackColor = false;
+            btnNuevoCliente.Click += btnNuevoCliente_Click;
             // 
-            // button1
+            // txtBuscarCliente
             // 
-            button1.BackColor = Color.FromArgb(255, 128, 0);
-            button1.Location = new Point(594, 23);
-            button1.Name = "button1";
-            button1.Size = new Size(161, 34);
-            button1.TabIndex = 1;
-            button1.Text = "+ Nuevo Cliente";
-            button1.UseVisualStyleBackColor = false;
+            txtBuscarCliente.Location = new Point(12, 24);
+            txtBuscarCliente.Name = "txtBuscarCliente";
+            txtBuscarCliente.Size = new Size(173, 31);
+            txtBuscarCliente.TabIndex = 0;
+            txtBuscarCliente.Text = "Buscar por Nombre";
+            txtBuscarCliente.TextChanged += txtBuscarCliente_TextChanged;
             // 
             // dataGridView1
             // 
@@ -86,6 +88,7 @@
             // 
             // ID
             // 
+            ID.DataPropertyName = "IdCliente";
             ID.HeaderText = "ID";
             ID.MinimumWidth = 8;
             ID.Name = "ID";
@@ -93,6 +96,7 @@
             // 
             // Nombre
             // 
+            Nombre.DataPropertyName = "Nombre";
             Nombre.HeaderText = "Nombre";
             Nombre.MinimumWidth = 8;
             Nombre.Name = "Nombre";
@@ -100,6 +104,7 @@
             // 
             // Apellido
             // 
+            Apellido.DataPropertyName = "Apellido";
             Apellido.HeaderText = "Apellido";
             Apellido.MinimumWidth = 8;
             Apellido.Name = "Apellido";
@@ -107,6 +112,7 @@
             // 
             // Telefono
             // 
+            Telefono.DataPropertyName = "Telefono";
             Telefono.HeaderText = "Telefono";
             Telefono.MinimumWidth = 8;
             Telefono.Name = "Telefono";
@@ -114,6 +120,7 @@
             // 
             // Correo
             // 
+            Correo.DataPropertyName = "Correo";
             Correo.HeaderText = "Correo";
             Correo.MinimumWidth = 8;
             Correo.Name = "Correo";
@@ -121,6 +128,7 @@
             // 
             // Direccion
             // 
+            Direccion.DataPropertyName = "Direccion";
             Direccion.HeaderText = "Direccion";
             Direccion.MinimumWidth = 8;
             Direccion.Name = "Direccion";
@@ -128,6 +136,7 @@
             // 
             // NumeroCedula
             // 
+            NumeroCedula.DataPropertyName = "NumeroCedula";
             NumeroCedula.HeaderText = "Numero de Cedula";
             NumeroCedula.MinimumWidth = 8;
             NumeroCedula.Name = "NumeroCedula";
@@ -135,6 +144,7 @@
             // 
             // FechaRegistro
             // 
+            FechaRegistro.DataPropertyName = "FechaRegistro";
             FechaRegistro.HeaderText = "Fecha de Registro";
             FechaRegistro.MinimumWidth = 8;
             FechaRegistro.Name = "FechaRegistro";
@@ -149,6 +159,7 @@
             Controls.Add(panel1);
             Name = "Clientes";
             Text = "Clientes";
+            Load += Clientes_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -158,8 +169,8 @@
         #endregion
 
         private Panel panel1;
-        private Button button1;
-        private TextBox textBox1;
+        private Button btnNuevoCliente;
+        private TextBox txtBuscarCliente;
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn Nombre;

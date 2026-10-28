@@ -31,7 +31,7 @@
             panel1 = new Panel();
             button1 = new Button();
             comboBox1 = new ComboBox();
-            textBox1 = new TextBox();
+            txtBuscarAgencia = new TextBox();
             dataGridView1 = new DataGridView();
             ID = new DataGridViewTextBoxColumn();
             Nombre = new DataGridViewTextBoxColumn();
@@ -49,58 +49,56 @@
             panel1.BackColor = SystemColors.ControlDark;
             panel1.Controls.Add(button1);
             panel1.Controls.Add(comboBox1);
-            panel1.Controls.Add(textBox1);
+            panel1.Controls.Add(txtBuscarAgencia);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
-            panel1.Margin = new Padding(2, 2, 2, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(560, 32);
+            panel1.Size = new Size(800, 53);
             panel1.TabIndex = 0;
             // 
             // button1
             // 
             button1.BackColor = Color.FromArgb(255, 128, 0);
-            button1.Location = new Point(416, 6);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Location = new Point(594, 10);
             button1.Name = "button1";
-            button1.Size = new Size(118, 20);
+            button1.Size = new Size(169, 33);
             button1.TabIndex = 2;
             button1.Text = "+ Nueva Agencia";
             button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
             // 
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "Todas", "Activa", "Inactiva" });
-            comboBox1.Location = new Point(130, 6);
-            comboBox1.Margin = new Padding(2, 2, 2, 2);
+            comboBox1.Location = new Point(186, 10);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(129, 23);
+            comboBox1.Size = new Size(183, 33);
             comboBox1.TabIndex = 1;
             // 
-            // textBox1
+            // txtBuscarAgencia
             // 
-            textBox1.Location = new Point(8, 7);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(106, 23);
-            textBox1.TabIndex = 0;
-            textBox1.Text = "Buscar Agencia";
+            txtBuscarAgencia.Location = new Point(11, 12);
+            txtBuscarAgencia.Name = "txtBuscarAgencia";
+            txtBuscarAgencia.Size = new Size(150, 31);
+            txtBuscarAgencia.TabIndex = 0;
+            txtBuscarAgencia.Text = "Buscar Agencia";
+            txtBuscarAgencia.TextChanged += txtBuscarAgencia_TextChanged;
             // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ID, Nombre, Contacto, Telefono, Ciudad, Estado, Fecha_Registro });
             dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 32);
-            dataGridView1.Margin = new Padding(2, 2, 2, 2);
+            dataGridView1.Location = new Point(0, 53);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 62;
-            dataGridView1.Size = new Size(560, 238);
+            dataGridView1.Size = new Size(800, 397);
             dataGridView1.TabIndex = 1;
             // 
             // ID
             // 
+            ID.DataPropertyName = "IdAgencia";
             ID.HeaderText = "ID";
             ID.MinimumWidth = 8;
             ID.Name = "ID";
@@ -108,6 +106,7 @@
             // 
             // Nombre
             // 
+            Nombre.DataPropertyName = "Nombre";
             Nombre.HeaderText = "Nombre";
             Nombre.MinimumWidth = 8;
             Nombre.Name = "Nombre";
@@ -115,6 +114,7 @@
             // 
             // Contacto
             // 
+            Contacto.DataPropertyName = "Contacto";
             Contacto.HeaderText = "Contacto";
             Contacto.MinimumWidth = 8;
             Contacto.Name = "Contacto";
@@ -122,6 +122,7 @@
             // 
             // Telefono
             // 
+            Telefono.DataPropertyName = "Telefono";
             Telefono.HeaderText = "Telefono";
             Telefono.MinimumWidth = 8;
             Telefono.Name = "Telefono";
@@ -129,6 +130,7 @@
             // 
             // Ciudad
             // 
+            Ciudad.DataPropertyName = "Ciudad";
             Ciudad.HeaderText = "Ciudad";
             Ciudad.MinimumWidth = 8;
             Ciudad.Name = "Ciudad";
@@ -136,6 +138,7 @@
             // 
             // Estado
             // 
+            Estado.DataPropertyName = "Estado";
             Estado.HeaderText = "Estado";
             Estado.MinimumWidth = 8;
             Estado.Name = "Estado";
@@ -143,21 +146,22 @@
             // 
             // Fecha_Registro
             // 
+            Fecha_Registro.DataPropertyName = "FechaRegistro";
             Fecha_Registro.HeaderText = "Fecha de Registro";
             Fecha_Registro.MinimumWidth = 8;
             Fecha_Registro.Name = "Fecha_Registro";
             Fecha_Registro.Width = 150;
             // 
-            // Agencia
+            // Agencias
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(560, 270);
+            ClientSize = new Size(800, 450);
             Controls.Add(dataGridView1);
             Controls.Add(panel1);
-            Margin = new Padding(2, 2, 2, 2);
-            Name = "Agencia";
-            Text = "Agencia";
+            Name = "Agencias";
+            Text = "Agencias";
+            Load += Agencias_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
@@ -169,7 +173,7 @@
         private Panel panel1;
         private Button button1;
         private ComboBox comboBox1;
-        private TextBox textBox1;
+        private TextBox txtBuscarAgencia;
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn ID;
         private DataGridViewTextBoxColumn Nombre;

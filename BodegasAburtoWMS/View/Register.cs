@@ -13,18 +13,37 @@ namespace BodegasAburtoWMS.View
 {
     public partial class Register : Form
     {
-        private readonly IBodegasAburtoWMSRepository repository = new BodegasAburtoWMSRepository();
-        public Register()
+        private readonly IBodegasAburtoWMSRepository _repository;
+
+        // Inyección de dependencias del repositorio
+        public Register(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
+            _repository = repository;
+
+            this.Load += Register_Load;
+        }
+        private async void Register_Load(object sender, EventArgs e)
+        {
+            await CargarRolesAsync();
         }
 
-        private void Register_Load(object sender, EventArgs e)
+        private async Task CargarRolesAsync()
         {
             try
             {
-                // Cargamos los roles disponibles (Administrador, Operador, etc.) al abrir la pantalla
-                cmbRol.DataSource = repository.ObtenerRolesCombo();
+                var roles = await _repository.ObtenerRolesComboAsync();
+
+                if (roles == null || roles.Count == 0)
+                {
+                    MessageBox.Show("La tabla de Roles en la base de datos está vacía. Por favor, inserte roles antes de registrar usuarios.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                cmbRol.DataSource = roles;
+                cmbRol.DisplayMember = "Text";
+                cmbRol.ValueMember = "Value";
+                cmbRol.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -32,18 +51,24 @@ namespace BodegasAburtoWMS.View
             }
         }
 
-        private void btnRegistrar_Click(object sender, EventArgs e)
+        private async void btnRegistrar_Click(object sender, EventArgs e)
         {
-            // 1. Validaciones básicas de campos vacíos
             if (string.IsNullOrWhiteSpace(txtUsuario.Text) ||
-                string.IsNullOrWhiteSpace(txtContrasena.Text) ||
-                cmbRol.SelectedItem == null)
+                 string.IsNullOrWhiteSpace(txtContrasena.Text) ||
+                 string.IsNullOrWhiteSpace(txtConfirmarContrasena.Text))
             {
-                MessageBox.Show("Por favor, rellene los campos obligatorios (Usuario, Contraseña y Rol).", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Por favor, rellene los campos obligatorios (Usuario y Contraseñas).", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // 2. Validar que las contraseñas coincidan
+            // 2. Validar que se haya seleccionado un rol válido en el ComboBox
+            if (cmbRol.SelectedIndex == -1 || cmbRol.SelectedValue == null)
+            {
+                MessageBox.Show("Por favor, seleccione un Rol válido para el usuario.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 3. Validar que las contraseñas coincidan
             if (txtContrasena.Text != txtConfirmarContrasena.Text)
             {
                 MessageBox.Show("Las contraseñas no coinciden. Verifíquelas.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -52,13 +77,13 @@ namespace BodegasAburtoWMS.View
 
             try
             {
-                // 3. OBTENER EL HASH Y SALT USANDO TU PASSWORDHELPER
-                // Las variables out se llenarán automáticamente con bytes encriptados
+                // 4. Obtener Hash y Salt con PasswordHelper
                 PasswordHelper.CrearHash(txtContrasena.Text.Trim(), out byte[] hashGenerado, out byte[] saltGenerado);
 
-                // 4. Mapeamos los datos al modelo Usuario
-                int idRolSeleccionado = ((ComboboxItem)cmbRol.SelectedItem).Value;
+                // 5. Obtener de manera segura el ID del rol seleccionado mediante SelectedValue
+                int idRolSeleccionado = Convert.ToInt32(cmbRol.SelectedValue);
 
+                // 6. Mapear datos al modelo Usuario
                 Usuario nuevoUsuario = new Usuario
                 {
                     UsuarioNombre = txtUsuario.Text.Trim(),
@@ -66,22 +91,22 @@ namespace BodegasAburtoWMS.View
                     Apellido = txtApellido.Text.Trim(),
                     Correo = string.IsNullOrWhiteSpace(txtCorreo.Text) ? null : txtCorreo.Text.Trim(),
                     IdRol = idRolSeleccionado,
-                    PasswordHash = hashGenerado, // Guardamos los bytes encriptados
-                    PasswordSalt = saltGenerado, // Guardamos la llave de salado
-                    Activo = true // El usuario entra al sistema habilitado por defecto
+                    PasswordHash = hashGenerado,
+                    PasswordSalt = saltGenerado,
+                    Activo = true
                 };
 
-                // 5. Mandar a guardar a la base de datos a través de tu repositorio
-                bool guardado = repository.RegistrarUsuario(nuevoUsuario);
+                // 7. Guardar de forma asíncrona mediante el repositorio EF Core
+                bool guardado = await _repository.RegistrarUsuarioAsync(nuevoUsuario);
 
                 if (guardado)
                 {
                     MessageBox.Show("¡Usuario registrado con éxito en el sistema WMS!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close(); // Cerramos la ventana de registro
+                    this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("No se pudo registrar el usuario. El nombre de usuario podría estar duplicado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("No se pudo registrar el usuario. El nombre de usuario ya se encuentra registrado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch (Exception ex)

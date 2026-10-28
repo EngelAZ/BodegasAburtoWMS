@@ -35,17 +35,17 @@
             label5 = new Label();
             label6 = new Label();
             label7 = new Label();
-            textBox1 = new TextBox();
-            textBox4 = new TextBox();
-            textBox5 = new TextBox();
-            textBox6 = new TextBox();
-            textBox7 = new TextBox();
-            textBox8 = new TextBox();
+            txtNombre = new TextBox();
+            txtCedula = new TextBox();
+            txtDireccion = new TextBox();
+            txtCorreo = new TextBox();
+            txtTelefono = new TextBox();
+            txtApellido = new TextBox();
             label8 = new Label();
-            dateTimePicker1 = new DateTimePicker();
-            button1 = new Button();
-            button2 = new Button();
-            button3 = new Button();
+            dtpFechaRegistro = new DateTimePicker();
+            btnAgregar = new Button();
+            btnLimpiar = new Button();
+            btnSalir = new Button();
             SuspendLayout();
             // 
             // label1
@@ -111,47 +111,47 @@
             label7.TabIndex = 6;
             label7.Text = "Fecha de Regsitro";
             // 
-            // textBox1
+            // txtNombre
             // 
-            textBox1.Location = new Point(232, 52);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(150, 31);
-            textBox1.TabIndex = 8;
+            txtNombre.Location = new Point(232, 52);
+            txtNombre.Name = "txtNombre";
+            txtNombre.Size = new Size(150, 31);
+            txtNombre.TabIndex = 8;
             // 
-            // textBox4
+            // txtCedula
             // 
-            textBox4.Location = new Point(232, 246);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(150, 31);
-            textBox4.TabIndex = 11;
+            txtCedula.Location = new Point(232, 246);
+            txtCedula.Name = "txtCedula";
+            txtCedula.Size = new Size(150, 31);
+            txtCedula.TabIndex = 11;
             // 
-            // textBox5
+            // txtDireccion
             // 
-            textBox5.Location = new Point(232, 200);
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(150, 31);
-            textBox5.TabIndex = 12;
+            txtDireccion.Location = new Point(232, 200);
+            txtDireccion.Name = "txtDireccion";
+            txtDireccion.Size = new Size(150, 31);
+            txtDireccion.TabIndex = 12;
             // 
-            // textBox6
+            // txtCorreo
             // 
-            textBox6.Location = new Point(232, 157);
-            textBox6.Name = "textBox6";
-            textBox6.Size = new Size(150, 31);
-            textBox6.TabIndex = 13;
+            txtCorreo.Location = new Point(232, 157);
+            txtCorreo.Name = "txtCorreo";
+            txtCorreo.Size = new Size(150, 31);
+            txtCorreo.TabIndex = 13;
             // 
-            // textBox7
+            // txtTelefono
             // 
-            textBox7.Location = new Point(232, 120);
-            textBox7.Name = "textBox7";
-            textBox7.Size = new Size(150, 31);
-            textBox7.TabIndex = 14;
+            txtTelefono.Location = new Point(232, 120);
+            txtTelefono.Name = "txtTelefono";
+            txtTelefono.Size = new Size(150, 31);
+            txtTelefono.TabIndex = 14;
             // 
-            // textBox8
+            // txtApellido
             // 
-            textBox8.Location = new Point(232, 89);
-            textBox8.Name = "textBox8";
-            textBox8.Size = new Size(150, 31);
-            textBox8.TabIndex = 15;
+            txtApellido.Location = new Point(232, 89);
+            txtApellido.Name = "txtApellido";
+            txtApellido.Size = new Size(150, 31);
+            txtApellido.TabIndex = 15;
             // 
             // label8
             // 
@@ -162,56 +162,59 @@
             label8.TabIndex = 16;
             label8.Text = "Informacion de Nuevo Cliente";
             // 
-            // dateTimePicker1
+            // dtpFechaRegistro
             // 
-            dateTimePicker1.Location = new Point(232, 286);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(338, 31);
-            dateTimePicker1.TabIndex = 17;
+            dtpFechaRegistro.Location = new Point(232, 286);
+            dtpFechaRegistro.Name = "dtpFechaRegistro";
+            dtpFechaRegistro.Size = new Size(338, 31);
+            dtpFechaRegistro.TabIndex = 17;
             // 
-            // button1
+            // btnAgregar
             // 
-            button1.Location = new Point(47, 380);
-            button1.Name = "button1";
-            button1.Size = new Size(103, 34);
-            button1.TabIndex = 18;
-            button1.Text = "Agregar";
-            button1.UseVisualStyleBackColor = true;
+            btnAgregar.Location = new Point(47, 380);
+            btnAgregar.Name = "btnAgregar";
+            btnAgregar.Size = new Size(103, 34);
+            btnAgregar.TabIndex = 18;
+            btnAgregar.Text = "Agregar";
+            btnAgregar.UseVisualStyleBackColor = true;
+            btnAgregar.Click += btnAgregar_Click;
             // 
-            // button2
+            // btnLimpiar
             // 
-            button2.Location = new Point(192, 380);
-            button2.Name = "button2";
-            button2.Size = new Size(103, 34);
-            button2.TabIndex = 19;
-            button2.Text = "Limpiar";
-            button2.UseVisualStyleBackColor = true;
+            btnLimpiar.Location = new Point(192, 380);
+            btnLimpiar.Name = "btnLimpiar";
+            btnLimpiar.Size = new Size(103, 34);
+            btnLimpiar.TabIndex = 19;
+            btnLimpiar.Text = "Limpiar";
+            btnLimpiar.UseVisualStyleBackColor = true;
+            btnLimpiar.Click += btnLimpiar_Click;
             // 
-            // button3
+            // btnSalir
             // 
-            button3.Location = new Point(341, 380);
-            button3.Name = "button3";
-            button3.Size = new Size(103, 34);
-            button3.TabIndex = 20;
-            button3.Text = "Salir";
-            button3.UseVisualStyleBackColor = true;
+            btnSalir.Location = new Point(341, 380);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(103, 34);
+            btnSalir.TabIndex = 20;
+            btnSalir.Text = "Salir";
+            btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.Click += btnSalir_Click;
             // 
             // DatosCliente
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(button3);
-            Controls.Add(button2);
-            Controls.Add(button1);
-            Controls.Add(dateTimePicker1);
+            Controls.Add(btnSalir);
+            Controls.Add(btnLimpiar);
+            Controls.Add(btnAgregar);
+            Controls.Add(dtpFechaRegistro);
             Controls.Add(label8);
-            Controls.Add(textBox8);
-            Controls.Add(textBox7);
-            Controls.Add(textBox6);
-            Controls.Add(textBox5);
-            Controls.Add(textBox4);
-            Controls.Add(textBox1);
+            Controls.Add(txtApellido);
+            Controls.Add(txtTelefono);
+            Controls.Add(txtCorreo);
+            Controls.Add(txtDireccion);
+            Controls.Add(txtCedula);
+            Controls.Add(txtNombre);
             Controls.Add(label7);
             Controls.Add(label6);
             Controls.Add(label5);
@@ -221,6 +224,7 @@
             Controls.Add(label1);
             Name = "DatosCliente";
             Text = "DatosCliente";
+            Load += DatosCliente_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -234,16 +238,16 @@
         private Label label5;
         private Label label6;
         private Label label7;
-        private TextBox textBox1;
-        private TextBox textBox4;
-        private TextBox textBox5;
-        private TextBox textBox6;
-        private TextBox textBox7;
-        private TextBox textBox8;
+        private TextBox txtNombre;
+        private TextBox txtCedula;
+        private TextBox txtDireccion;
+        private TextBox txtCorreo;
+        private TextBox txtTelefono;
+        private TextBox txtApellido;
         private Label label8;
-        private DateTimePicker dateTimePicker1;
-        private Button button1;
-        private Button button2;
-        private Button button3;
+        private DateTimePicker dtpFechaRegistro;
+        private Button btnAgregar;
+        private Button btnLimpiar;
+        private Button btnSalir;
     }
 }

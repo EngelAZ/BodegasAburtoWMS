@@ -1,412 +1,307 @@
-﻿using BodegasAburtoWMS.Helpers;
-using BodegasAburtoWMS.Model;
-using Microsoft.Data.SqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BodegasAburtoWMS.Datos;
+using BodegasAburtoWMS.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace BodegasAburtoWMS.Repository
 {
     public class BodegasAburtoWMSRepository : IBodegasAburtoWMSRepository
     {
-        private readonly string connectionString =
-            @"Server=(localdb)\MSSQLLocalDB;Database=BodegasAburtoWMS;Trusted_Connection=True;TrustServerCertificate=True;";
+        private readonly BodegaDbContext _context;
 
-        public Usuario ObtenerUsuarioPorNombre(string usuario)
+        // Inyección de dependencias única del DbContext
+        public BodegasAburtoWMSRepository(BodegaDbContext context)
         {
-            Usuario usuarioEncontrado = null;
-
-            string query = @"
-        SELECT 
-            u.IdUsuario,
-            u.Usuario,
-            u.Nombre,
-            u.Apellido,
-            u.Correo,
-            u.IdRol,
-            r.Nombre AS Rol,
-            u.PasswordHash,
-            u.PasswordSalt,
-            u.Activo
-        FROM Usuarios u
-        INNER JOIN Roles r 
-            ON u.IdRol = r.IdRol
-        WHERE u.Usuario = @Usuario
-          AND u.Activo = 1;";
-
-            using (SqlConnection conexion = new SqlConnection(connectionString))
-            {
-                using (SqlCommand comando = new SqlCommand(query, conexion))
-                {
-                    comando.Parameters.AddWithValue("@Usuario", usuario);
-
-                    conexion.Open();
-
-                    using (SqlDataReader reader = comando.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            usuarioEncontrado = new Usuario
-                            {
-                                IdUsuario = Convert.ToInt32(reader["IdUsuario"]),
-                                UsuarioNombre = reader["Usuario"].ToString(),
-                                Nombre = reader["Nombre"].ToString(),
-                                Apellido = reader["Apellido"].ToString(),
-                                Correo = reader["Correo"] == DBNull.Value
-                                    ? null
-                                    : reader["Correo"].ToString(),
-                                IdRol = Convert.ToInt32(reader["IdRol"]),
-                                Rol = reader["Rol"].ToString(),
-                                PasswordHash = (byte[])reader["PasswordHash"],
-                                PasswordSalt = (byte[])reader["PasswordSalt"],
-                                Activo = Convert.ToBoolean(reader["Activo"])
-                            };
-                        }
-                    }
-                }
-            }
-
-            return usuarioEncontrado;
+            _context = context;
         }
 
-        public List<Usuario> ObtenerUsuarios()
+        // ==========================================
+        // MÓDULO DE USUARIOS Y AUTENTICACIÓN
+        // ==========================================
+
+        public async Task<List<Usuario>> ObtenerUsuariosAsync()
         {
-            List<Usuario> usuarios = new List<Usuario>();
-
-            string query = @"
-                SELECT 
-                    u.IdUsuario,
-                    u.Usuario,
-                    u.Nombre,
-                    u.Apellido,
-                    u.Correo,
-                    u.IdRol,
-                    r.Nombre AS Rol,
-                    u.PasswordHash,
-                    u.PasswordSalt,
-                    u.Activo
-                FROM Usuarios u
-                INNER JOIN Roles r 
-                    ON u.IdRol = r.IdRol
-                ORDER BY u.IdUsuario;";
-
-            using (SqlConnection conexion = new SqlConnection(connectionString))
-            {
-                using (SqlCommand comando = new SqlCommand(query, conexion))
-                {
-                    conexion.Open();
-
-                    using (SqlDataReader reader = comando.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Usuario usuario = new Usuario
-                            {
-                                IdUsuario = Convert.ToInt32(reader["IdUsuario"]),
-                                UsuarioNombre = reader["Usuario"].ToString(),
-                                Nombre = reader["Nombre"].ToString(),
-                                Apellido = reader["Apellido"].ToString(),
-                                Correo = reader["Correo"] == DBNull.Value
-                                    ? null
-                                    : reader["Correo"].ToString(),
-                                IdRol = Convert.ToInt32(reader["IdRol"]),
-                                Rol = reader["Rol"].ToString(),
-                                PasswordHash = (byte[])reader["PasswordHash"],
-                                PasswordSalt = (byte[])reader["PasswordSalt"],
-                                Activo = Convert.ToBoolean(reader["Activo"])
-                            };
-
-                            usuarios.Add(usuario);
-                        }
-                    }
-                }
-            }
-
-            return usuarios;
+            return await _context.Usuarios
+                .Include(u => u.Rol)
+                .OrderBy(u => u.IdUsuario)
+                .ToListAsync();
         }
 
-        public bool RegistrarUsuario(Usuario usuario)
+        public async Task<Usuario?> ObtenerUsuarioPorNombreAsync(string usuario)
         {
-            string query = @"
-        INSERT INTO Usuarios
-        (
-            Usuario,
-            Nombre,
-            Apellido,
-            Correo,
-            IdRol,
-            PasswordHash,
-            PasswordSalt,
-            Activo
-        )
-        VALUES
-        (
-            @Usuario,
-            @Nombre,
-            @Apellido,
-            @Correo,
-            @IdRol,
-            @PasswordHash,
-            @PasswordSalt,
-            @Activo
-        );";
+            return await _context.Usuarios
+                .Include(u => u.Rol) // Equivalente al INNER JOIN con Roles
+                .FirstOrDefaultAsync(u => u.UsuarioNombre == usuario && u.Activo);
+        }
 
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+        public async Task<bool> RegistrarUsuarioAsync(Usuario usuario)
+        {
+            // Validar si el nombre de usuario ya existe
+            bool existe = await _context.Usuarios.AnyAsync(u => u.UsuarioNombre == usuario.UsuarioNombre);
+            if (existe) return false; // Usuario duplicado
+
+            await _context.Usuarios.AddAsync(usuario);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> ActualizarUsuarioAsync(Usuario usuario)
+        {
+            _context.Usuarios.Update(usuario);
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<bool> DesactivarUsuarioAsync(int idUsuario)
+        {
+            var usuario = await _context.Usuarios.FindAsync(idUsuario);
+            if (usuario == null) return false;
+
+            usuario.Activo = false;
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task RegistrarUltimoAccesoAsync(int idUsuario)
+        {
+            var usuario = await _context.Usuarios.FindAsync(idUsuario);
+            if (usuario != null)
             {
-                using (SqlCommand comando = new SqlCommand(query, conexion))
-                {
-                    comando.Parameters.Add("@Usuario", System.Data.SqlDbType.NVarChar, 50)
-                        .Value = usuario.UsuarioNombre;
-
-                    comando.Parameters.Add("@Nombre", System.Data.SqlDbType.NVarChar, 100)
-                        .Value = usuario.Nombre;
-
-                    comando.Parameters.Add("@Apellido", System.Data.SqlDbType.NVarChar, 100)
-                        .Value = usuario.Apellido;
-
-                    comando.Parameters.Add("@Correo", System.Data.SqlDbType.NVarChar, 150)
-                        .Value = (object)usuario.Correo ?? DBNull.Value;
-
-                    comando.Parameters.Add("@IdRol", System.Data.SqlDbType.Int)
-                        .Value = usuario.IdRol;
-
-                    comando.Parameters.Add("@PasswordHash", System.Data.SqlDbType.VarBinary, 64)
-                        .Value = usuario.PasswordHash;
-
-                    comando.Parameters.Add("@PasswordSalt", System.Data.SqlDbType.VarBinary, 32)
-                        .Value = usuario.PasswordSalt;
-
-                    comando.Parameters.Add("@Activo", System.Data.SqlDbType.Bit)
-                        .Value = usuario.Activo;
-
-                    conexion.Open();
-
-                    return comando.ExecuteNonQuery() > 0;
-                }
+                usuario.UltimoAcceso = DateTime.Now;
+                await _context.SaveChangesAsync();
             }
         }
 
-        public bool ActualizarUsuario(Usuario usuario)
+        public async Task RegistrarAuditoriaAsync(int idUsuario, string accion, string usuarioSistema, string detalle)
         {
-            string query = @"
-                UPDATE Usuarios
-                SET
-                    Usuario = @Usuario,
-                    Nombre = @Nombre,
-                    Apellido = @Apellido,
-                    Correo = @Correo,
-                    IdRol = @IdRol,
-                    Activo = @Activo
-                WHERE IdUsuario = @IdUsuario;";
-
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+            var auditoria = new AuditoriaUsuario
             {
-                using (SqlCommand comando = new SqlCommand(query, conexion))
-                {
-                    comando.Parameters.AddWithValue("@IdUsuario", usuario.IdUsuario);
-                    comando.Parameters.AddWithValue("@Usuario", usuario.UsuarioNombre);
-                    comando.Parameters.AddWithValue("@Nombre", usuario.Nombre);
-                    comando.Parameters.AddWithValue("@Apellido", usuario.Apellido);
-                    comando.Parameters.AddWithValue(
-                        "@Correo",
-                        (object)usuario.Correo ?? DBNull.Value
-                    );
-                    comando.Parameters.AddWithValue("@IdRol", usuario.IdRol);
-                    comando.Parameters.AddWithValue("@Activo", usuario.Activo);
+                IdUsuario = idUsuario,
+                Accion = accion,
+                UsuarioSistema = usuarioSistema,
+                Detalle = detalle,
+                FechaRegistro = DateTime.Now
+            };
 
-                    conexion.Open();
-
-                    return comando.ExecuteNonQuery() > 0;
-                }
-            }
+            await _context.AuditoriaUsuarios.AddAsync(auditoria);
+            await _context.SaveChangesAsync();
         }
 
-        public bool DesactivarUsuario(int idUsuario)
-        {
-            string query = @"
-                UPDATE Usuarios
-                SET Activo = 0
-                WHERE IdUsuario = @IdUsuario;";
+        // ==========================================
+        // MÓDULO DE CATÁLOGOS (COMBOBOXES)
+        // ==========================================
 
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+        public async Task<List<ComboboxItem>> ObtenerAgenciasComboAsync()
+        {
+            return await _context.Agencias
+                .Select(a => new ComboboxItem { Value = a.IdAgencia, Text = a.Nombre })
+                .ToListAsync();
+        }
+
+        public async Task<List<ComboboxItem>> ObtenerTiposEnvioComboAsync()
+        {
+            return await _context.TiposEnvio
+                .Select(t => new ComboboxItem { Value = t.IdTipoEnvio, Text = t.Nombre })
+                .ToListAsync();
+        }
+
+        public async Task<List<ComboboxItem>> ObtenerEstadosEnvioComboAsync()
+        {
+            return await _context.EstadosEnvio
+                .Select(e => new ComboboxItem { Value = e.IdEstado, Text = e.Nombre })
+                .ToListAsync();
+        }
+
+        public async Task<List<ComboboxItem>> ObtenerClientesComboAsync()
+        {
+            return await _context.Clientes
+                .Select(c => new ComboboxItem
+                {
+                    Value = c.IdCliente,
+                    Text = (c.Nombre + " " + c.Apellido).Trim()
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<ComboboxItem>> ObtenerRolesComboAsync()
+        {
+            return await _context.Roles
+                .Select(r => new ComboboxItem { Value = r.IdRol, Text = r.Nombre })
+                .ToListAsync();
+        }
+
+        // ==========================================
+        // MÓDULO DE AGENCIAS
+        // ==========================================
+
+        public async Task<List<Agencia>> ObtenerAgenciasAsync()
+        {
+            return await _context.Agencias
+                .OrderByDescending(a => a.FechaRegistro)
+                .ToListAsync();
+        }
+
+        public async Task<List<Agencia>> BuscarAgenciasAsync(string filtro)
+        {
+            return await _context.Agencias
+                .Where(a => a.Nombre.Contains(filtro) || (a.Ciudad != null && a.Ciudad.Contains(filtro)))
+                .ToListAsync();
+        }
+
+        public async Task<bool> GuardarAgenciaAsync(Agencia agencia)
+        {
+            if (agencia.IdAgencia == 0)
             {
-                using (SqlCommand comando = new SqlCommand(query, conexion))
-                {
-                    comando.Parameters.AddWithValue("@IdUsuario", idUsuario);
-
-                    conexion.Open();
-
-                    return comando.ExecuteNonQuery() > 0;
-                }
+                await _context.Agencias.AddAsync(agencia);
             }
-        }
-
-        public void RegistrarUltimoAcceso(int idUsuario)
-        {
-            string query = @"
-        UPDATE Usuarios
-        SET UltimoAcceso = GETDATE()
-        WHERE IdUsuario = @IdUsuario;";
-
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+            else
             {
-                using (SqlCommand comando = new SqlCommand(query, conexion))
-                {
-                    comando.Parameters.Add("@IdUsuario", System.Data.SqlDbType.Int)
-                        .Value = idUsuario;
-
-                    conexion.Open();
-
-                    comando.ExecuteNonQuery();
-                }
+                _context.Agencias.Update(agencia);
             }
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public void RegistrarAuditoria(
-            int idUsuario,
-            string accion,
-            string usuarioSistema,
-            string detalle)
-        {
-            string query = @"
-        INSERT INTO AuditoriaUsuarios
-        (
-            IdUsuario,
-            Accion,
-            UsuarioSistema,
-            Detalle
-        )
-        VALUES
-        (
-            @IdUsuario,
-            @Accion,
-            @UsuarioSistema,
-            @Detalle
-        );";
+        // ==========================================
+        // MÓDULO DE CLIENTES
+        // ==========================================
 
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+        public async Task<List<Cliente>> ObtenerClientesAsync()
+        {
+            return await _context.Clientes
+                .OrderByDescending(c => c.FechaRegistro)
+                .ToListAsync();
+        }
+
+        public async Task<List<Cliente>> BuscarClientesAsync(string filtro)
+        {
+            return await _context.Clientes
+                .Where(c => c.Nombre.Contains(filtro) || c.Apellido.Contains(filtro) || (c.NumeroCedula != null && c.NumeroCedula.Contains(filtro)))
+                .ToListAsync();
+        }
+
+        public async Task<bool> GuardarClienteAsync(Cliente cliente)
+        {
+            if (cliente.IdCliente == 0)
             {
-                using (SqlCommand comando = new SqlCommand(query, conexion))
-                {
-                    comando.Parameters.Add("@IdUsuario", System.Data.SqlDbType.Int)
-                        .Value = idUsuario;
-
-                    comando.Parameters.Add("@Accion", System.Data.SqlDbType.NVarChar, 50)
-                        .Value = accion;
-
-                    comando.Parameters.Add("@UsuarioSistema", System.Data.SqlDbType.NVarChar, 100)
-                        .Value = usuarioSistema;
-
-                    comando.Parameters.Add("@Detalle", System.Data.SqlDbType.NVarChar, 500)
-                        .Value = detalle;
-
-                    conexion.Open();
-
-                    comando.ExecuteNonQuery();
-                }
+                await _context.Clientes.AddAsync(cliente);
             }
-        }
-
-        public bool RegistrarEnvio(Envio envio)
-        {
-            string query = @"
-        INSERT INTO Envios 
-        (
-            NumeroGuia, IdAgencia, IdClienteRemitente, IdClienteDestinatario, 
-            IdTipoEnvio, IdEstado, Origen, Destino, FechaEnvio, 
-            FechaEntregaEstimada, FechaEntregaReal, CostoEnvio, Observaciones
-        )
-        VALUES 
-        (
-            @NumeroGuia, @IdAgencia, @IdClienteRemitente, @IdClienteDestinatario, 
-            @IdTipoEnvio, @IdEstado, @Origen, @Destino, @FechaEnvio, 
-            @FechaEntregaEstimada, @FechaEntregaReal, @CostoEnvio, @Observaciones
-        );";
-
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+            else
             {
-                using (SqlCommand comando = new SqlCommand(query, conexion))
-                {
-                    comando.Parameters.AddWithValue("@NumeroGuia", envio.NumeroGuia);
-                    comando.Parameters.AddWithValue("@IdAgencia", envio.IdAgencia);
-                    comando.Parameters.AddWithValue("@IdClienteRemitente", envio.IdClienteRemitente);
-                    comando.Parameters.AddWithValue("@IdClienteDestinatario", envio.IdClienteDestinatario);
-
-                    // Campos que aceptan valores nulos en tu base de datos
-                    comando.Parameters.AddWithValue("@IdTipoEnvio", (object)envio.IdTipoEnvio ?? DBNull.Value);
-                    comando.Parameters.AddWithValue("@IdEstado", (object)envio.IdEstado ?? DBNull.Value);
-                    comando.Parameters.AddWithValue("@Origen", (object)envio.Origen ?? DBNull.Value);
-                    comando.Parameters.AddWithValue("@Destino", (object)envio.Destino ?? DBNull.Value);
-                    comando.Parameters.AddWithValue("@FechaEnvio", envio.FechaEnvio);
-                    comando.Parameters.AddWithValue("@FechaEntregaEstimada", (object)envio.FechaEntregaEstimada ?? DBNull.Value);
-                    comando.Parameters.AddWithValue("@FechaEntregaReal", (object)envio.FechaEntregaReal ?? DBNull.Value);
-                    comando.Parameters.AddWithValue("@CostoEnvio", envio.CostoEnvio);
-                    comando.Parameters.AddWithValue("@Observaciones", (object)envio.Observaciones ?? DBNull.Value);
-
-                    conexion.Open();
-                    return comando.ExecuteNonQuery() > 0;
-                }
+                _context.Clientes.Update(cliente);
             }
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        public List<ComboboxItem> ObtenerAgenciasCombo() => ObtenerItemsGenerico("SELECT IdAgencia AS Id, Nombre FROM Agencias;");
-        public List<ComboboxItem> ObtenerTiposEnvioCombo() => ObtenerItemsGenerico("SELECT IdTipoEnvio AS Id, Nombre FROM TiposEnvio;");
-        public List<ComboboxItem> ObtenerEstadosEnvioCombo() => ObtenerItemsGenerico("SELECT IdEstado AS Id, Nombre FROM EstadosEnvio;");
+        // ==========================================
+        // MÓDULO DE ENVÍOS Y REGISTRO DIARIO
+        // ==========================================
 
-        public List<ComboboxItem> ObtenerClientesCombo()
+        public async Task<bool> RegistrarEnvioAsync(Envio envio)
         {
-            // Para los clientes unimos Nombre y Apellido para que sea fácil identificarlos en el diseño
-            return ObtenerItemsGenerico("SELECT IdCliente AS Id, CONCAT(Nombre, ' ', Apellido) AS Nombre FROM Clientes;");
+            await _context.Envios.AddAsync(envio);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-        // Método interno reutilizable para ahorrar líneas de código
-        private List<ComboboxItem> ObtenerItemsGenerico(string sqlQuery)
+        public async Task<List<Envio>> ObtenerEnviosAsync()
         {
-            List<ComboboxItem> lista = new List<ComboboxItem>();
-            using (SqlConnection conexion = new SqlConnection(connectionString))
+            return await _context.Envios
+                .Include(e => e.Agencia)
+                .Include(e => e.ClienteRemitente)
+                .Include(e => e.ClienteDestinatario)
+                .Include(e => e.TipoEnvio)
+                .Include(e => e.Estado) // <-- Clave para traer el estado
+                .OrderByDescending(e => e.FechaEnvio)
+                .ToListAsync();
+        }
+
+        public async Task<List<Envio>> BuscarEnviosAsync(string filtro)
+        {
+            return await _context.Envios
+                .Include(e => e.Agencia)
+                .Include(e => e.ClienteRemitente)
+                .Include(e => e.ClienteDestinatario)
+                .Include(e => e.TipoEnvio)
+                .Include(e => e.Estado)
+                .Where(e => e.NumeroGuia.Contains(filtro) ||
+                            e.ClienteRemitente.Nombre.Contains(filtro) ||
+                            e.ClienteRemitente.Apellido.Contains(filtro) ||
+                            e.ClienteDestinatario.Nombre.Contains(filtro) ||
+                            e.ClienteDestinatario.Apellido.Contains(filtro))
+                .ToListAsync();
+        }
+
+        // ==========================================
+        // MÓDULO DE ENVÍOS ENTRADAS Y SALIDAS
+        // ==========================================
+
+        public async Task<List<Envio>> ObtenerEnviosPendientesAsync()
+        {
+            return await _context.Envios
+                .Include(e => e.Agencia)
+                .Include(e => e.ClienteRemitente)
+                .Include(e => e.ClienteDestinatario)
+                .Include(e => e.TipoEnvio)
+                .Include(e => e.Estado)
+                .Where(e => e.Estado == null || e.Estado.Nombre != "Entregado") // Trae todo lo que NO esté entregado por nombre de estado
+                .OrderByDescending(e => e.FechaEnvio)
+                .ToListAsync();
+        }
+        // Registrar la salida/entrega de un envío corregido con IdEstado y las propiedades de AuditoriaUsuario
+        public async Task<bool> RegistrarEntregaEnvioAsync(int idEnvio, int idUsuarioAuditoria)
+        {
+            var envio = await _context.Envios.FindAsync(idEnvio);
+            if (envio == null) return false;
+
+            envio.FechaEntregaReal = DateTime.Now;
+            envio.IdEstado = 2; // Estado Entregado (ajustar según tu catálogo)
+
+            // Registro de auditoría adaptado a las propiedades reales de tu modelo
+            var auditoria = new AuditoriaUsuario
             {
-                using (SqlCommand comando = new SqlCommand(sqlQuery, conexion))
-                {
-                    conexion.Open();
-                    using (SqlDataReader reader = comando.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            lista.Add(new ComboboxItem
-                            {
-                                Value = Convert.ToInt32(reader["Id"]),
-                                Text = reader["Nombre"].ToString() ?? ""
-                            });
-                        }
-                    }
-                }
-            }
-            return lista;
+                IdUsuario = idUsuarioAuditoria,
+                Accion = "ENTREGAR_ENVIO",
+                UsuarioSistema = "Entregas / Salidas", // Propiedad correcta en tu modelo de auditoría
+                Detalle = $"Se entregó el envío con guía {envio.NumeroGuia}",
+                FechaRegistro = DateTime.Now
+            };
+
+            await _context.AuditoriaUsuarios.AddAsync(auditoria);
+            return await _context.SaveChangesAsync() > 0;
         }
 
-
-        public List<ComboboxItem> ObtenerRolesCombo()
+        public async Task<List<Envio>> ObtenerEnviosHistorialAsync()
         {
-            List<ComboboxItem> lista = new List<ComboboxItem>();
-            using (SqlConnection conexion = new SqlConnection(connectionString))
-            {
-                using (SqlCommand comando = new SqlCommand("SELECT IdRol AS Id, Nombre FROM Roles;", conexion))
-                {
-                    conexion.Open();
-                    using (SqlDataReader reader = comando.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            lista.Add(new ComboboxItem
-                            {
-                                Value = Convert.ToInt32(reader["Id"]),
-                                Text = reader["Nombre"].ToString() ?? ""
-                            });
-                        }
-                    }
-                }
-            }
-            return lista;
+            return await _context.Envios
+                .Include(e => e.Agencia)
+                .Include(e => e.ClienteRemitente)
+                .Include(e => e.ClienteDestinatario)
+                .Include(e => e.TipoEnvio)
+                .Include(e => e.Estado)
+                .Where(e => e.IdEstado == 5 || e.FechaEntregaReal != null) // Asumiendo ID 5 o con fecha real de entrega
+                .OrderByDescending(e => e.FechaEnvio)
+                .ToListAsync();
         }
 
+        public async Task<bool> RevertirEntregaEnvioAsync(int idEnvio, int idUsuarioAuditoria)
+        {
+            var envio = await _context.Envios.FindAsync(idEnvio);
+            if (envio == null) return false;
+
+            // Revertir valores de entrega
+            envio.FechaEntregaReal = null;
+            envio.IdEstado = 1; // Regresa al estado inicial pendiente (ej. Registrado o En Bodega)
+
+            var auditoria = new AuditoriaUsuario
+            {
+                IdUsuario = idUsuarioAuditoria,
+                Accion = "REVERTIR_ENTREGA",
+                UsuarioSistema = "Entregas / Salidas",
+                Detalle = $"Se revirtió la entrega del envío con guía {envio.NumeroGuia}",
+                FechaRegistro = DateTime.Now
+            };
+
+            await _context.AuditoriaUsuarios.AddAsync(auditoria);
+            return await _context.SaveChangesAsync() > 0;
+        }
     }
 }
