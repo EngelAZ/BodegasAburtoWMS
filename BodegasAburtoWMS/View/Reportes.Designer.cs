@@ -28,12 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            MenuStripWMS = new MenuStrip();
-            archivoToolStripMenuItem = new ToolStripMenuItem();
-            editarToolStripMenuItem = new ToolStripMenuItem();
-            verToolStripMenuItem = new ToolStripMenuItem();
-            herramientasToolStripMenuItem = new ToolStripMenuItem();
-            ayudaToolStripMenuItem = new ToolStripMenuItem();
             pnl2WMS = new Panel();
             tablelp1 = new TableLayoutPanel();
             lbl5 = new Label();
@@ -43,50 +37,9 @@
             lbl4 = new Label();
             lbl1 = new Label();
             labelConsultas = new Label();
-            MenuStripWMS.SuspendLayout();
             pnl2WMS.SuspendLayout();
             tablelp1.SuspendLayout();
             SuspendLayout();
-            // 
-            // MenuStripWMS
-            // 
-            MenuStripWMS.BackColor = Color.White;
-            MenuStripWMS.ImageScalingSize = new Size(24, 24);
-            MenuStripWMS.Items.AddRange(new ToolStripItem[] { archivoToolStripMenuItem, editarToolStripMenuItem, verToolStripMenuItem, herramientasToolStripMenuItem, ayudaToolStripMenuItem });
-            MenuStripWMS.Location = new Point(0, 0);
-            MenuStripWMS.Name = "MenuStripWMS";
-            MenuStripWMS.Size = new Size(1028, 33);
-            MenuStripWMS.TabIndex = 0;
-            // 
-            // archivoToolStripMenuItem
-            // 
-            archivoToolStripMenuItem.Name = "archivoToolStripMenuItem";
-            archivoToolStripMenuItem.Size = new Size(88, 29);
-            archivoToolStripMenuItem.Text = "Archivo";
-            // 
-            // editarToolStripMenuItem
-            // 
-            editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            editarToolStripMenuItem.Size = new Size(73, 29);
-            editarToolStripMenuItem.Text = "Editar";
-            // 
-            // verToolStripMenuItem
-            // 
-            verToolStripMenuItem.Name = "verToolStripMenuItem";
-            verToolStripMenuItem.Size = new Size(53, 29);
-            verToolStripMenuItem.Text = "Ver";
-            // 
-            // herramientasToolStripMenuItem
-            // 
-            herramientasToolStripMenuItem.Name = "herramientasToolStripMenuItem";
-            herramientasToolStripMenuItem.Size = new Size(133, 29);
-            herramientasToolStripMenuItem.Text = "Herramientas";
-            // 
-            // ayudaToolStripMenuItem
-            // 
-            ayudaToolStripMenuItem.Name = "ayudaToolStripMenuItem";
-            ayudaToolStripMenuItem.Size = new Size(79, 29);
-            ayudaToolStripMenuItem.Text = "Ayuda";
             // 
             // pnl2WMS
             // 
@@ -94,9 +47,9 @@
             pnl2WMS.Controls.Add(tablelp1);
             pnl2WMS.Controls.Add(labelConsultas);
             pnl2WMS.Dock = DockStyle.Fill;
-            pnl2WMS.Location = new Point(0, 33);
+            pnl2WMS.Location = new Point(0, 0);
             pnl2WMS.Name = "pnl2WMS";
-            pnl2WMS.Size = new Size(1028, 507);
+            pnl2WMS.Size = new Size(1028, 540);
             pnl2WMS.TabIndex = 2;
             // 
             // tablelp1
@@ -126,7 +79,7 @@
             lbl5.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl5.Location = new Point(272, 110);
             lbl5.Name = "lbl5";
-            lbl5.Size = new Size(231, 22);
+            lbl5.Size = new Size(168, 15);
             lbl5.TabIndex = 4;
             lbl5.Text = "Movimientos por agencia";
             // 
@@ -136,7 +89,7 @@
             lbl3.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl3.Location = new Point(541, 0);
             lbl3.Name = "lbl3";
-            lbl3.Size = new Size(174, 22);
+            lbl3.Size = new Size(124, 15);
             lbl3.TabIndex = 2;
             lbl3.Text = "Envios pendientes";
             // 
@@ -147,7 +100,7 @@
             lbl2.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl2.Location = new Point(272, 0);
             lbl2.Name = "lbl2";
-            lbl2.Size = new Size(176, 22);
+            lbl2.Size = new Size(125, 15);
             lbl2.TabIndex = 1;
             lbl2.Text = "Envios entregados";
             // 
@@ -157,7 +110,7 @@
             lbl6.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl6.Location = new Point(541, 110);
             lbl6.Name = "lbl6";
-            lbl6.Size = new Size(233, 22);
+            lbl6.Size = new Size(169, 15);
             lbl6.TabIndex = 5;
             lbl6.Text = "Liquidaciones generadas";
             // 
@@ -167,7 +120,7 @@
             lbl4.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl4.Location = new Point(3, 110);
             lbl4.Name = "lbl4";
-            lbl4.Size = new Size(166, 22);
+            lbl4.Size = new Size(119, 15);
             lbl4.TabIndex = 3;
             lbl4.Text = "Bultos de bodega";
             // 
@@ -177,7 +130,7 @@
             lbl1.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lbl1.Location = new Point(3, 0);
             lbl1.Name = "lbl1";
-            lbl1.Size = new Size(157, 22);
+            lbl1.Size = new Size(112, 15);
             lbl1.TabIndex = 0;
             lbl1.Text = "Envios recibidos";
             // 
@@ -187,41 +140,29 @@
             labelConsultas.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             labelConsultas.Location = new Point(36, 25);
             labelConsultas.Name = "labelConsultas";
-            labelConsultas.Size = new Size(261, 29);
+            labelConsultas.Size = new Size(181, 20);
             labelConsultas.TabIndex = 0;
             labelConsultas.Text = "Consultas y Reportes";
             // 
             // Reportes
             // 
-            AutoScaleDimensions = new SizeF(14F, 29F);
+            AutoScaleDimensions = new SizeF(9F, 18F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1028, 540);
             Controls.Add(pnl2WMS);
-            Controls.Add(MenuStripWMS);
             Font = new Font("Microsoft Sans Serif", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            MainMenuStrip = MenuStripWMS;
             Margin = new Padding(3, 4, 3, 4);
             Name = "Reportes";
             Text = "Reportes y Consultas -- Aburto WMS";
             Load += Reportes_Load;
-            MenuStripWMS.ResumeLayout(false);
-            MenuStripWMS.PerformLayout();
             pnl2WMS.ResumeLayout(false);
             pnl2WMS.PerformLayout();
             tablelp1.ResumeLayout(false);
             tablelp1.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
-        private MenuStrip MenuStripWMS;
-        private ToolStripMenuItem archivoToolStripMenuItem;
-        private ToolStripMenuItem editarToolStripMenuItem;
-        private ToolStripMenuItem verToolStripMenuItem;
-        private ToolStripMenuItem herramientasToolStripMenuItem;
-        private ToolStripMenuItem ayudaToolStripMenuItem;
         private Panel pnl2WMS;
         private Label labelConsultas;
         private TableLayoutPanel tablelp1;
