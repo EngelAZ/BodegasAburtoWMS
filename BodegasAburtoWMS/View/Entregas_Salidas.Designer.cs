@@ -43,15 +43,17 @@
             panelTopMenu.Controls.Add(btnPendientes);
             panelTopMenu.Dock = DockStyle.Top;
             panelTopMenu.Location = new Point(0, 0);
+            panelTopMenu.Margin = new Padding(2, 2, 2, 2);
             panelTopMenu.Name = "panelTopMenu";
-            panelTopMenu.Size = new Size(838, 49);
+            panelTopMenu.Size = new Size(587, 29);
             panelTopMenu.TabIndex = 0;
             // 
             // btnHistorial
             // 
-            btnHistorial.Location = new Point(415, 0);
+            btnHistorial.Location = new Point(290, 5);
+            btnHistorial.Margin = new Padding(2, 2, 2, 2);
             btnHistorial.Name = "btnHistorial";
-            btnHistorial.Size = new Size(146, 34);
+            btnHistorial.Size = new Size(102, 20);
             btnHistorial.TabIndex = 2;
             btnHistorial.Text = "📁 Historial";
             btnHistorial.UseVisualStyleBackColor = true;
@@ -59,9 +61,10 @@
             // 
             // btnRegistrarEntrega
             // 
-            btnRegistrarEntrega.Location = new Point(199, 0);
+            btnRegistrarEntrega.Location = new Point(137, 5);
+            btnRegistrarEntrega.Margin = new Padding(2, 2, 2, 2);
             btnRegistrarEntrega.Name = "btnRegistrarEntrega";
-            btnRegistrarEntrega.Size = new Size(192, 34);
+            btnRegistrarEntrega.Size = new Size(134, 20);
             btnRegistrarEntrega.TabIndex = 1;
             btnRegistrarEntrega.Text = "✏️ Registrar Entrega";
             btnRegistrarEntrega.UseVisualStyleBackColor = true;
@@ -69,9 +72,10 @@
             // 
             // btnPendientes
             // 
-            btnPendientes.Location = new Point(0, 0);
+            btnPendientes.Location = new Point(11, 5);
+            btnPendientes.Margin = new Padding(2, 2, 2, 2);
             btnPendientes.Name = "btnPendientes";
-            btnPendientes.Size = new Size(175, 34);
+            btnPendientes.Size = new Size(122, 20);
             btnPendientes.TabIndex = 0;
             btnPendientes.Text = "📋 Pendientes";
             btnPendientes.UseVisualStyleBackColor = true;
@@ -83,19 +87,21 @@
             flowPanelTarjetas.BackColor = Color.FromArgb(245, 247, 250);
             flowPanelTarjetas.Dock = DockStyle.Fill;
             flowPanelTarjetas.FlowDirection = FlowDirection.TopDown;
-            flowPanelTarjetas.Location = new Point(0, 49);
+            flowPanelTarjetas.Location = new Point(0, 29);
+            flowPanelTarjetas.Margin = new Padding(2, 2, 2, 2);
             flowPanelTarjetas.Name = "flowPanelTarjetas";
-            flowPanelTarjetas.Size = new Size(838, 545);
+            flowPanelTarjetas.Size = new Size(587, 327);
             flowPanelTarjetas.TabIndex = 1;
             flowPanelTarjetas.WrapContents = false;
             // 
             // Entregas_Salidas
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(838, 594);
+            ClientSize = new Size(587, 356);
             Controls.Add(flowPanelTarjetas);
             Controls.Add(panelTopMenu);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "Entregas_Salidas";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Entregas_Salidas";

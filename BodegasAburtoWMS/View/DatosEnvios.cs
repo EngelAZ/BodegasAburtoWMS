@@ -14,33 +14,12 @@ namespace BodegasAburtoWMS.View
     public partial class DatosEnvios : Form
     {
         private readonly IBodegasAburtoWMSRepository _repository;
-<<<<<<< HEAD
 
         // Inyección de dependencias del repositorio
         public DatosEnvios(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
             _repository = repository;
-=======
-        private bool _isProcessing = false; // Bandera para evitar consultas simultáneas
-
-        // Inyección de dependencias del repositorio
-        public DatosEnvios(IBodegasAburtoWMSRepository repository)
-        {
-            InitializeComponent();
-            _repository = repository;
-
-            this.Load += DatosEnvios_Load;
-        }
-
-        public DatosEnvios()
-        {
-            InitializeComponent();
-
-            var contextLocal = new BodegaDbContext();
-            _repository = new BodegasAburtoWMSRepository(contextLocal);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
-
             this.Load += DatosEnvios_Load;
         }
 
@@ -94,12 +73,6 @@ namespace BodegasAburtoWMS.View
 
         private async Task CargarCatalogosAsync()
         {
-<<<<<<< HEAD
-=======
-            if (_isProcessing) return;
-            _isProcessing = true;
-
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             try
             {
                 cmbAgencia.DataSource = await _repository.ObtenerAgenciasComboAsync();
@@ -127,13 +100,6 @@ namespace BodegasAburtoWMS.View
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar los catálogos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-<<<<<<< HEAD
-=======
-            }
-            finally
-            {
-                _isProcessing = false;
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             }
         }
 

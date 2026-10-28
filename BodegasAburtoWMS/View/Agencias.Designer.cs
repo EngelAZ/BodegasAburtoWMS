@@ -78,16 +78,9 @@
             // 
             // txtBuscarAgencia
             // 
-<<<<<<< HEAD
             txtBuscarAgencia.Location = new Point(11, 12);
             txtBuscarAgencia.Name = "txtBuscarAgencia";
             txtBuscarAgencia.Size = new Size(150, 31);
-=======
-            txtBuscarAgencia.Location = new Point(8, 7);
-            txtBuscarAgencia.Margin = new Padding(2, 2, 2, 2);
-            txtBuscarAgencia.Name = "txtBuscarAgencia";
-            txtBuscarAgencia.Size = new Size(106, 23);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtBuscarAgencia.TabIndex = 0;
             txtBuscarAgencia.Text = "Buscar Agencia";
             txtBuscarAgencia.TextChanged += txtBuscarAgencia_TextChanged;
@@ -166,10 +159,6 @@
             ClientSize = new Size(800, 450);
             Controls.Add(dataGridView1);
             Controls.Add(panel1);
-<<<<<<< HEAD
-=======
-            Margin = new Padding(2, 2, 2, 2);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             Name = "Agencias";
             Text = "Agencias";
             Load += Agencias_Load;

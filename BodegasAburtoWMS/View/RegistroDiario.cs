@@ -15,10 +15,6 @@ namespace BodegasAburtoWMS.View
         private readonly IBodegasAburtoWMSRepository _repository;
         private bool _isProcessing = false; // Bandera para evitar consultas simultáneas
 
-<<<<<<< HEAD
-=======
-        // Inyección de dependencias del repositorio
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
         public RegistroDiario(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
@@ -31,11 +27,7 @@ namespace BodegasAburtoWMS.View
         {
             if (this.ParentForm is Principal formularioPrincipal)
             {
-<<<<<<< HEAD
                 // Botón "Lista de Envíos"
-=======
-                // 1. Botón "Lista de Envíos" (Pestaña activa)
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
                 Button btnListaEnvios = new Button
                 {
                     Text = "📋 Lista de Envíos",
@@ -47,20 +39,12 @@ namespace BodegasAburtoWMS.View
                     Font = new Font("Segoe UI Semibold", 9f)
                 };
                 btnListaEnvios.FlatAppearance.BorderColor = Color.FromArgb(220, 220, 220);
-<<<<<<< HEAD
-=======
-
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
                 btnListaEnvios.Click += (s, ev) =>
                 {
                     formularioPrincipal.MostrarFormEnCentro(new RegistroDiario(_repository));
                 };
 
-<<<<<<< HEAD
                 // Botón "+ Nuevo Envío"
-=======
-                // 2. Botón "+ Nuevo Envío"
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
                 Button btnNuevoEnvio = new Button
                 {
                     Text = "+ Nuevo Envío",
@@ -72,15 +56,8 @@ namespace BodegasAburtoWMS.View
                     Font = new Font("Segoe UI", 9f)
                 };
                 btnNuevoEnvio.FlatAppearance.BorderSize = 0;
-<<<<<<< HEAD
                 btnNuevoEnvio.Click += (s, ev) =>
                 {
-=======
-
-                btnNuevoEnvio.Click += (s, ev) =>
-                {
-                    // Pasamos el repositorio al formulario de creación de envíos
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
                     formularioPrincipal.MostrarFormEnCentro(new DatosEnvios(_repository));
                 };
 
@@ -88,10 +65,6 @@ namespace BodegasAburtoWMS.View
                 formularioPrincipal.PanelOpciones.Controls.Add(btnNuevoEnvio);
             }
 
-<<<<<<< HEAD
-=======
-            // Cargar los datos de los envíos de forma asíncrona al iniciar la vista
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             await CargarEnviosAsync();
         }
         private async Task CargarEnviosAsync()
@@ -103,10 +76,6 @@ namespace BodegasAburtoWMS.View
             {
                 var listaEnvios = await _repository.ObtenerEnviosAsync();
 
-<<<<<<< HEAD
-=======
-                // Mapeo adaptado para mostrar los nombres de las entidades relacionadas en el DataGridView
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
                 var dataSource = listaEnvios.Select(e => new
                 {
                     e.IdEnvio,
@@ -117,11 +86,7 @@ namespace BodegasAburtoWMS.View
                     e.FechaEnvio,
                     FechaEntrega = e.FechaEntregaReal ?? e.FechaEntregaEstimada,
                     e.CostoEnvio,
-<<<<<<< HEAD
                     Estado = e.Estado?.Nombre ?? "Registrado" // <-- Mostramos el estado aquí
-=======
-                    e.Observaciones
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
                 }).ToList();
 
                 dataGridView1.AutoGenerateColumns = false;
@@ -129,11 +94,7 @@ namespace BodegasAburtoWMS.View
             }
             catch (Exception ex)
             {
-<<<<<<< HEAD
                 MessageBox.Show($"Error al cargar los registros: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-=======
-                MessageBox.Show($"Error al cargar los registros de envíos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             }
             finally
             {
@@ -146,10 +107,6 @@ namespace BodegasAburtoWMS.View
             if (_isProcessing) return;
             _isProcessing = true;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             try
             {
                 string filtro = txtBuscar.Text.Trim();

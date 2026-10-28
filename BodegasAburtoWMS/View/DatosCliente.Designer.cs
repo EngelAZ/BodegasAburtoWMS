@@ -120,86 +120,44 @@
             // 
             // txtNombre
             // 
-<<<<<<< HEAD
             txtNombre.Location = new Point(232, 52);
             txtNombre.Name = "txtNombre";
             txtNombre.Size = new Size(150, 31);
-=======
-            txtNombre.Location = new Point(162, 31);
-            txtNombre.Margin = new Padding(2);
-            txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(106, 23);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtNombre.TabIndex = 8;
             // 
             // txtCedula
             // 
-<<<<<<< HEAD
             txtCedula.Location = new Point(232, 246);
             txtCedula.Name = "txtCedula";
             txtCedula.Size = new Size(150, 31);
-=======
-            txtCedula.Location = new Point(162, 148);
-            txtCedula.Margin = new Padding(2);
-            txtCedula.Name = "txtCedula";
-            txtCedula.Size = new Size(106, 23);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtCedula.TabIndex = 11;
             // 
             // txtDireccion
             // 
-<<<<<<< HEAD
             txtDireccion.Location = new Point(232, 200);
             txtDireccion.Name = "txtDireccion";
             txtDireccion.Size = new Size(150, 31);
-=======
-            txtDireccion.Location = new Point(162, 120);
-            txtDireccion.Margin = new Padding(2);
-            txtDireccion.Name = "txtDireccion";
-            txtDireccion.Size = new Size(106, 23);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtDireccion.TabIndex = 12;
             // 
             // txtCorreo
             // 
-<<<<<<< HEAD
             txtCorreo.Location = new Point(232, 157);
             txtCorreo.Name = "txtCorreo";
             txtCorreo.Size = new Size(150, 31);
-=======
-            txtCorreo.Location = new Point(162, 94);
-            txtCorreo.Margin = new Padding(2);
-            txtCorreo.Name = "txtCorreo";
-            txtCorreo.Size = new Size(106, 23);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtCorreo.TabIndex = 13;
             // 
             // txtTelefono
             // 
-<<<<<<< HEAD
             txtTelefono.Location = new Point(232, 120);
             txtTelefono.Name = "txtTelefono";
             txtTelefono.Size = new Size(150, 31);
-=======
-            txtTelefono.Location = new Point(162, 72);
-            txtTelefono.Margin = new Padding(2);
-            txtTelefono.Name = "txtTelefono";
-            txtTelefono.Size = new Size(106, 23);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtTelefono.TabIndex = 14;
             // 
             // txtApellido
             // 
-<<<<<<< HEAD
             txtApellido.Location = new Point(232, 89);
             txtApellido.Name = "txtApellido";
             txtApellido.Size = new Size(150, 31);
-=======
-            txtApellido.Location = new Point(162, 53);
-            txtApellido.Margin = new Padding(2);
-            txtApellido.Name = "txtApellido";
-            txtApellido.Size = new Size(106, 23);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtApellido.TabIndex = 15;
             // 
             // label8
@@ -214,30 +172,16 @@
             // 
             // dtpFechaRegistro
             // 
-<<<<<<< HEAD
             dtpFechaRegistro.Location = new Point(232, 286);
             dtpFechaRegistro.Name = "dtpFechaRegistro";
             dtpFechaRegistro.Size = new Size(338, 31);
-=======
-            dtpFechaRegistro.Location = new Point(162, 172);
-            dtpFechaRegistro.Margin = new Padding(2);
-            dtpFechaRegistro.Name = "dtpFechaRegistro";
-            dtpFechaRegistro.Size = new Size(238, 23);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             dtpFechaRegistro.TabIndex = 17;
             // 
             // btnAgregar
             // 
-<<<<<<< HEAD
             btnAgregar.Location = new Point(47, 380);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(103, 34);
-=======
-            btnAgregar.Location = new Point(33, 228);
-            btnAgregar.Margin = new Padding(2);
-            btnAgregar.Name = "btnAgregar";
-            btnAgregar.Size = new Size(72, 20);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             btnAgregar.TabIndex = 18;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
@@ -245,16 +189,9 @@
             // 
             // btnLimpiar
             // 
-<<<<<<< HEAD
             btnLimpiar.Location = new Point(192, 380);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(103, 34);
-=======
-            btnLimpiar.Location = new Point(134, 228);
-            btnLimpiar.Margin = new Padding(2);
-            btnLimpiar.Name = "btnLimpiar";
-            btnLimpiar.Size = new Size(72, 20);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             btnLimpiar.TabIndex = 19;
             btnLimpiar.Text = "Limpiar";
             btnLimpiar.UseVisualStyleBackColor = true;
@@ -262,16 +199,9 @@
             // 
             // btnSalir
             // 
-<<<<<<< HEAD
             btnSalir.Location = new Point(341, 380);
             btnSalir.Name = "btnSalir";
             btnSalir.Size = new Size(103, 34);
-=======
-            btnSalir.Location = new Point(239, 228);
-            btnSalir.Margin = new Padding(2);
-            btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(72, 20);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             btnSalir.TabIndex = 20;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
@@ -281,11 +211,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-<<<<<<< HEAD
             ClientSize = new Size(800, 450);
-=======
-            ClientSize = new Size(560, 270);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             Controls.Add(btnSalir);
             Controls.Add(btnLimpiar);
             Controls.Add(btnAgregar);

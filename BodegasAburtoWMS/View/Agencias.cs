@@ -15,20 +15,11 @@ namespace BodegasAburtoWMS.View
         private readonly IBodegasAburtoWMSRepository _repository;
         private bool _isProcessing = false; // Bandera para evitar llamadas simultáneas al DbContext
 
-<<<<<<< HEAD
         // 1. Constructor con inyección de dependencias estándar
-=======
-        // 1. Constructor que recibe el repositorio por inyección de dependencias
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
         public Agencias(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
             _repository = repository;
-<<<<<<< HEAD
-=======
-
-            // Suscribir el evento de carga asíncrona
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             this.Load += Agencias_Load;
         }
 
@@ -55,22 +46,10 @@ namespace BodegasAburtoWMS.View
 
             try
             {
-<<<<<<< HEAD
                 var listaAgencias = await _repository.ObtenerAgenciasAsync();
 
                 dataGridView1.AutoGenerateColumns = false;
                 dataGridView1.DataSource = listaAgencias;
-=======
-                // Llamada asíncrona al repositorio para obtener las agencias
-                var listaAgencias = await _repository.ObtenerAgenciasAsync();
-
-                // Enlazar los datos al DataGridView respetando el mapeo de columnas de la imagen
-                dataGridView1.AutoGenerateColumns = false;
-                dataGridView1.DataSource = listaAgencias;
-
-                // Mapear DataPropertyName asegurando que coincidan con las propiedades de la clase Agencia
-                // ID -> IdAgencia, Nombre -> Nombre, Contacto -> Contacto, Telefono -> Telefono, Ciudad -> Ciudad, Estado -> Estado, Fecha de Registro -> FechaRegistro
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             }
             catch (Exception ex)
             {

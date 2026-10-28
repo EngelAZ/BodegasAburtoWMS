@@ -59,16 +59,9 @@
             // btnNuevoCliente
             // 
             btnNuevoCliente.BackColor = Color.FromArgb(255, 128, 0);
-<<<<<<< HEAD
             btnNuevoCliente.Location = new Point(594, 23);
             btnNuevoCliente.Name = "btnNuevoCliente";
             btnNuevoCliente.Size = new Size(161, 34);
-=======
-            btnNuevoCliente.Location = new Point(416, 14);
-            btnNuevoCliente.Margin = new Padding(2, 2, 2, 2);
-            btnNuevoCliente.Name = "btnNuevoCliente";
-            btnNuevoCliente.Size = new Size(113, 20);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             btnNuevoCliente.TabIndex = 1;
             btnNuevoCliente.Text = "+ Nuevo Cliente";
             btnNuevoCliente.UseVisualStyleBackColor = false;
@@ -76,16 +69,9 @@
             // 
             // txtBuscarCliente
             // 
-<<<<<<< HEAD
             txtBuscarCliente.Location = new Point(12, 24);
             txtBuscarCliente.Name = "txtBuscarCliente";
             txtBuscarCliente.Size = new Size(173, 31);
-=======
-            txtBuscarCliente.Location = new Point(8, 14);
-            txtBuscarCliente.Margin = new Padding(2, 2, 2, 2);
-            txtBuscarCliente.Name = "txtBuscarCliente";
-            txtBuscarCliente.Size = new Size(122, 23);
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             txtBuscarCliente.TabIndex = 0;
             txtBuscarCliente.Text = "Buscar por Nombre";
             txtBuscarCliente.TextChanged += txtBuscarCliente_TextChanged;

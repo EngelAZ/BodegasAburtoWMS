@@ -2,6 +2,8 @@ using BodegasAburtoWMS.Datos;
 using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
 using BodegasAburtoWMS.View;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BodegasAburtoWMS
@@ -16,13 +18,22 @@ namespace BodegasAburtoWMS
         {
             ApplicationConfiguration.Initialize();
 
+            // 0. Construir la configuración para leer Secretos de Usuario y/o appsettings.json
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddUserSecrets(typeof(Program).Assembly)// <--- Esto lee los secretos de usuario de tu PC
+                .Build();
+
             // 1. Crear el contenedor de servicios para la Inyección de Dependencias
             var services = new ServiceCollection();
 
-            // 2. Registrar el DbContext como Transient para aislar las instancias y evitar conflictos de hilos
+            // 2. Registrar el DbContext como Transient para aislar las instancias y evitar conflictos de hilos, usando la cadena de conexión leída de los secretos
             services.AddDbContext<BodegaDbContext>(options =>
             {
                 // Asegúrate de que aquí esté tu cadena de conexión o usa la configuración del DbContext
+                // Aquí leemos la cadena usando la configuración que acabamos de construir
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             }, ServiceLifetime.Transient);
 
             // 3. Registrar el Repositorio como Transient
@@ -39,6 +50,20 @@ namespace BodegasAburtoWMS
 
             // 5. Construir el proveedor de servicios
             using var serviceProvider = services.BuildServiceProvider();
+
+            // Aplicar migraciones pendientes automáticamente al arrancar
+            try
+            {
+                using (var scope = serviceProvider.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<BodegaDbContext>();
+                    dbContext.Database.Migrate(); // Aplica cualquier migración nueva que haya bajado de Git
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al aplicar las migraciones a la base de datos: {ex.Message}", "Error de Base de Datos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             // 6. Iniciar la aplicación ejecutando primero el formulario de Login
             var loginForm = serviceProvider.GetRequiredService<Login>();

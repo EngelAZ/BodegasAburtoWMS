@@ -71,6 +71,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[10.0.13, )"
+            },
+            "Microsoft.Extensions.Configuration.UserSecrets": {
+              "target": "Package",
+              "version": "[10.0.14, )"
             }
           },
           "imports": [

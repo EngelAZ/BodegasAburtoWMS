@@ -83,7 +83,7 @@ namespace BodegasAburtoWMS.View
                 Size = new Size(800, 110),
                 BackColor = Color.White,
                 BorderStyle = BorderStyle.FixedSingle,
-                Margin = new Padding(10, 5, 10, 5)
+                Margin = new Padding(10, 5, 10, 5),
             };
 
             // Si supera los 30 días, se resalta con un fondo rojizo de alerta
@@ -210,7 +210,7 @@ namespace BodegasAburtoWMS.View
             string numeroGuia = Microsoft.VisualBasic.Interaction.InputBox(
                 "Ingrese o escanee el número de guía a entregar:",
                 "Registro Rápido de Entrega",
-                "GU-");
+                "GU-"); // modificar luego cuando se tome en cuenta la delimitacion por agencia
 
             if (string.IsNullOrWhiteSpace(numeroGuia)) return;
 

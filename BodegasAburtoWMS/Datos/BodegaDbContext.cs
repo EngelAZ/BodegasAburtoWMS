@@ -25,17 +25,13 @@ namespace BodegasAburtoWMS.Datos
         public DbSet<EstadoEnvio> EstadosEnvio => Set<EstadoEnvio>();
         public DbSet<Cliente> Clientes => Set<Cliente>();
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Conexión original del repositorio WMS
             optionsBuilder.UseSqlServer(
-<<<<<<< HEAD
-                @"Server=DESKTOP-U3UH9Q1\SQLEXPRESS;Database=BodegasAburtoWMSFinal;Trusted_Connection=True;TrustServerCertificate=True;"
-=======
                 @"Server=(localdb)\MSSQLLocalDB;Database=BodegasAburtoWMSFinal;Trusted_Connection=True;TrustServerCertificate=True;"
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
             );
-        }
+        }*/
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

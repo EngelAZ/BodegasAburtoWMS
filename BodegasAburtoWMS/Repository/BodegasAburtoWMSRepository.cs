@@ -209,7 +209,6 @@ namespace BodegasAburtoWMS.Repository
                 .Include(e => e.ClienteRemitente)
                 .Include(e => e.ClienteDestinatario)
                 .Include(e => e.TipoEnvio)
-<<<<<<< HEAD
                 .Include(e => e.Estado) // <-- Clave para traer el estado
                 .OrderByDescending(e => e.FechaEnvio)
                 .ToListAsync();
@@ -271,14 +270,6 @@ namespace BodegasAburtoWMS.Repository
         }
 
         public async Task<List<Envio>> ObtenerEnviosHistorialAsync()
-=======
-                .Include(e => e.Estado)
-                .OrderByDescending(e => e.FechaEnvio)
-                .ToListAsync();
-        }
-
-        public async Task<List<Envio>> BuscarEnviosAsync(string filtro)
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
         {
             return await _context.Envios
                 .Include(e => e.Agencia)
@@ -286,7 +277,6 @@ namespace BodegasAburtoWMS.Repository
                 .Include(e => e.ClienteDestinatario)
                 .Include(e => e.TipoEnvio)
                 .Include(e => e.Estado)
-<<<<<<< HEAD
                 .Where(e => e.IdEstado == 5 || e.FechaEntregaReal != null) // Asumiendo ID 5 o con fecha real de entrega
                 .OrderByDescending(e => e.FechaEnvio)
                 .ToListAsync();
@@ -313,14 +303,5 @@ namespace BodegasAburtoWMS.Repository
             await _context.AuditoriaUsuarios.AddAsync(auditoria);
             return await _context.SaveChangesAsync() > 0;
         }
-=======
-                .Where(e => e.NumeroGuia.Contains(filtro) ||
-                            e.ClienteRemitente.Nombre.Contains(filtro) ||
-                            e.ClienteRemitente.Apellido.Contains(filtro) ||
-                            e.ClienteDestinatario.Nombre.Contains(filtro) ||
-                            e.ClienteDestinatario.Apellido.Contains(filtro))
-                .ToListAsync();
-        }
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
     }
 }

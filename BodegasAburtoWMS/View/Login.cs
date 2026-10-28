@@ -106,16 +106,12 @@ namespace BodegasAburtoWMS
                 // 3. Registrar último acceso y auditoría de manera asíncrona en segundo plano
                 await _repository.RegistrarUltimoAccesoAsync(usuario.IdUsuario);
 
-<<<<<<< HEAD
                 await _repository.RegistrarAuditoriaAsync(
-=======
-                /*await _repository.RegistrarAuditoriaAsync(
->>>>>>> 8ab2d7ad2998ff951d10edd89790beb4ec479ed8
                     usuario.IdUsuario,
                     "Inicio de sesión",
                     usuario.UsuarioNombre,
                     "Inicio de sesión exitoso."
-                );*/
+                );
 
                 // 4. Abrir ventana Principal inyectándole el usuario y el repositorio actual
                 Principal principal = new Principal(usuario, _repository);
