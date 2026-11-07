@@ -59,6 +59,7 @@ namespace BodegasAburtoWMS.View
             ayudaToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1 = new MenuStrip();
             BarraSuperior = new BodegasAburtoWMS.Components.CustomTitleBar();
+            btnGestion = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -69,6 +70,7 @@ namespace BodegasAburtoWMS.View
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(30, 78, 140);
+            panel1.Controls.Add(btnGestion);
             panel1.Controls.Add(btnInicio);
             panel1.Controls.Add(label6);
             panel1.Controls.Add(label5);
@@ -167,7 +169,7 @@ namespace BodegasAburtoWMS.View
             btnReportes.FlatAppearance.BorderSize = 0;
             btnReportes.FlatStyle = FlatStyle.Flat;
             btnReportes.ImageAlign = ContentAlignment.MiddleLeft;
-            btnReportes.Location = new Point(11, 660);
+            btnReportes.Location = new Point(11, 722);
             btnReportes.Name = "btnReportes";
             btnReportes.Size = new Size(203, 42);
             btnReportes.TabIndex = 5;
@@ -382,6 +384,21 @@ namespace BodegasAburtoWMS.View
             BarraSuperior.TitleIcon = Properties.Resources.IconoVentana;
             BarraSuperior.TitleText = "Inicio";
             // 
+            // btnGestion
+            // 
+            btnGestion.FlatAppearance.BorderSize = 0;
+            btnGestion.FlatStyle = FlatStyle.Flat;
+            btnGestion.ImageAlign = ContentAlignment.MiddleLeft;
+            btnGestion.Location = new Point(11, 660);
+            btnGestion.Name = "btnGestion";
+            btnGestion.Size = new Size(203, 42);
+            btnGestion.TabIndex = 13;
+            btnGestion.Text = "Gestion";
+            btnGestion.TextAlign = ContentAlignment.MiddleLeft;
+            btnGestion.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnGestion.UseVisualStyleBackColor = true;
+            btnGestion.Click += btnGestion_Click;
+            // 
             // Principal
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -443,5 +460,6 @@ namespace BodegasAburtoWMS.View
         private Label label5;
         private Label label4;
         public Panel PanelOpciones;
+        private Button btnGestion;
     }
 }

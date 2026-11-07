@@ -147,6 +147,11 @@ namespace BodegasAburtoWMS.View
                 });
             }
         }
+
+        private void btnGestion_Click(object sender, EventArgs e)
+        {
+            MostrarFormEnCentro(new Gestion(_repository));
+        }
     }
 
 }

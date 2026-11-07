@@ -348,5 +348,36 @@ namespace BodegasAburtoWMS.Repository
             await _context.AuditoriaUsuarios.AddAsync(auditoria);
             return await _context.SaveChangesAsync() > 0;
         }
+
+        // Balance General
+        public async Task<List<CuentaBalance>> ObtenerCuentasBalanceAsync()
+        {
+            return await _context.CuentaBalances
+                .OrderBy(c => c.Tipo)
+                .ThenBy(c => c.NombreCuenta)
+                .ToListAsync();
+        }
+
+        public async Task<bool> GuardarCuentaBalanceAsync(CuentaBalance cuenta)
+        {
+            if (cuenta.IdCuenta == 0)
+            {
+                await _context.CuentaBalances.AddAsync(cuenta);
+            }
+            else
+            {
+                _context.CuentaBalances.Update(cuenta);
+            }
+            return await _context.SaveChangesAsync() > 0;
+        }
+        public async Task<bool> EliminarCuentaBalanceAsync(int idCuenta)
+        {
+            var cuenta = await _context.CuentaBalances.FindAsync(idCuenta);
+            if (cuenta == null) return false;
+
+            _context.CuentaBalances.Remove(cuenta);
+            int filasAfectadas = await _context.SaveChangesAsync();
+            return filasAfectadas > 0;
+        }
     }
 }
