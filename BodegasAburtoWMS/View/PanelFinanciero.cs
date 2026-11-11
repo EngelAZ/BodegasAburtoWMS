@@ -20,13 +20,8 @@ namespace BodegasAburtoWMS.View
         private readonly Usuario usuarioActual;
         private readonly IBodegasAburtoWMSRepository _repository;
 
-<<<<<<< HEAD
         // Constructor que recibe el usuario y opcionalmente el repositorio para tareas en segundo plano
         public PanelFinanciero(Usuario usuario, IServiceProvider serviceProvider, IBodegasAburtoWMSRepository? repository = null)
-=======
-        // Constructor que recibe el usuario y el repositorio
-        public PanelFinanciero(Usuario usuario, IBodegasAburtoWMSRepository? repository = null)
->>>>>>> 20ff628be66b085614fec40c670d42f638b80bf6
         {
             InitializeComponent();
             usuarioActual = usuario;
