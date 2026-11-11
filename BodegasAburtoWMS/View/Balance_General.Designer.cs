@@ -29,11 +29,15 @@
         private void InitializeComponent()
         {
             panel2 = new Panel();
+            label1 = new Label();
+            cmbAnioBase = new ComboBox();
+            btnAnalisiHorizontal = new Button();
             btnNuevoAnio = new Button();
             cmbAnios = new ComboBox();
             btnEliminarCuenta = new Button();
             btnEditarCuenta = new Button();
             btnAgregarCuenta = new Button();
+            btnAnalisisVertical = new Button();
             lblDiferencia = new Label();
             lblTotalPatrimonio = new Label();
             lblTotalPasivos = new Label();
@@ -44,7 +48,6 @@
             lblPasivosCorrientes = new Label();
             lblPasivosFijos = new Label();
             dataGridViewBalance = new DataGridView();
-            btnAnalisisVertical = new Button();
             panel2.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewBalance).BeginInit();
@@ -52,16 +55,47 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(label1);
+            panel2.Controls.Add(cmbAnioBase);
+            panel2.Controls.Add(btnAnalisiHorizontal);
             panel2.Controls.Add(btnNuevoAnio);
             panel2.Controls.Add(cmbAnios);
             panel2.Controls.Add(btnEliminarCuenta);
             panel2.Controls.Add(btnEditarCuenta);
             panel2.Controls.Add(btnAgregarCuenta);
+            panel2.Controls.Add(btnAnalisisVertical);
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(0, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(878, 45);
+            panel2.Size = new Size(878, 85);
             panel2.TabIndex = 3;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(68, 49);
+            label1.Name = "label1";
+            label1.Size = new Size(86, 25);
+            label1.TabIndex = 11;
+            label1.Text = "Año Base";
+            // 
+            // cmbAnioBase
+            // 
+            cmbAnioBase.FormattingEnabled = true;
+            cmbAnioBase.Location = new Point(154, 44);
+            cmbAnioBase.Name = "cmbAnioBase";
+            cmbAnioBase.Size = new Size(182, 33);
+            cmbAnioBase.TabIndex = 10;
+            // 
+            // btnAnalisiHorizontal
+            // 
+            btnAnalisiHorizontal.Location = new Point(691, 44);
+            btnAnalisiHorizontal.Name = "btnAnalisiHorizontal";
+            btnAnalisiHorizontal.Size = new Size(175, 34);
+            btnAnalisiHorizontal.TabIndex = 9;
+            btnAnalisiHorizontal.Text = "Analisis Horizontal";
+            btnAnalisiHorizontal.UseVisualStyleBackColor = true;
+            btnAnalisiHorizontal.Click += btnAnalisiHorizontal_Click;
             // 
             // btnNuevoAnio
             // 
@@ -115,6 +149,16 @@
             btnAgregarCuenta.UseVisualStyleBackColor = false;
             btnAgregarCuenta.Click += btnAgregarCuenta_Click;
             // 
+            // btnAnalisisVertical
+            // 
+            btnAnalisisVertical.Location = new Point(522, 43);
+            btnAnalisisVertical.Name = "btnAnalisisVertical";
+            btnAnalisisVertical.Size = new Size(152, 34);
+            btnAnalisisVertical.TabIndex = 8;
+            btnAnalisisVertical.Text = "Analisis Vertical";
+            btnAnalisisVertical.UseVisualStyleBackColor = true;
+            btnAnalisisVertical.Click += btnAnalisisVertical_Click;
+            // 
             // lblDiferencia
             // 
             lblDiferencia.AutoSize = true;
@@ -161,7 +205,6 @@
             flowLayoutPanel1.Controls.Add(lblTotalPasivos);
             flowLayoutPanel1.Controls.Add(lblTotalPatrimonio);
             flowLayoutPanel1.Controls.Add(lblDiferencia);
-            flowLayoutPanel1.Controls.Add(btnAnalisisVertical);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.Location = new Point(0, 457);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -208,21 +251,11 @@
             // 
             dataGridViewBalance.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewBalance.Dock = DockStyle.Fill;
-            dataGridViewBalance.Location = new Point(0, 45);
+            dataGridViewBalance.Location = new Point(0, 85);
             dataGridViewBalance.Name = "dataGridViewBalance";
             dataGridViewBalance.RowHeadersWidth = 62;
-            dataGridViewBalance.Size = new Size(878, 412);
+            dataGridViewBalance.Size = new Size(878, 372);
             dataGridViewBalance.TabIndex = 4;
-            // 
-            // btnAnalisisVertical
-            // 
-            btnAnalisisVertical.Location = new Point(303, 3);
-            btnAnalisisVertical.Name = "btnAnalisisVertical";
-            btnAnalisisVertical.Size = new Size(152, 34);
-            btnAnalisisVertical.TabIndex = 8;
-            btnAnalisisVertical.Text = "Analisis Vertical";
-            btnAnalisisVertical.UseVisualStyleBackColor = true;
-            btnAnalisisVertical.Click += btnAnalisisVertical_Click;
             // 
             // Balance_General
             // 
@@ -236,6 +269,7 @@
             Text = "Balance_General";
             Load += Balance_General_Load;
             panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewBalance).EndInit();
@@ -260,5 +294,8 @@
         private ComboBox cmbAnios;
         private Button btnNuevoAnio;
         private Button btnAnalisisVertical;
+        private Button btnAnalisiHorizontal;
+        private Label label1;
+        private ComboBox cmbAnioBase;
     }
 }

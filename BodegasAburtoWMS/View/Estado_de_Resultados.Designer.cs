@@ -34,12 +34,15 @@
             btnEditarCuenta = new Button();
             btnAgregarCuenta = new Button();
             panel2 = new Panel();
+            btnAnalisisVerticalResultados = new Button();
             lblTotalCostos = new Label();
             lblTotalGastos = new Label();
             lblUtilidadNeta = new Label();
             lblTotalIngresos = new Label();
             dataGridViewResultados = new DataGridView();
-            btnAnalisisVerticalResultados = new Button();
+            btnAnalisiHorizontalResultados = new Button();
+            cmbAnioBaseResultados = new ComboBox();
+            label1 = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewResultados).BeginInit();
@@ -47,6 +50,10 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(cmbAnioBaseResultados);
+            panel1.Controls.Add(btnAnalisiHorizontalResultados);
+            panel1.Controls.Add(btnAnalisisVerticalResultados);
             panel1.Controls.Add(cboAniosResultados);
             panel1.Controls.Add(btnEliminarCuenta);
             panel1.Controls.Add(btnEditarCuenta);
@@ -54,7 +61,7 @@
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(878, 50);
+            panel1.Size = new Size(878, 83);
             panel1.TabIndex = 0;
             // 
             // cboAniosResultados
@@ -101,7 +108,6 @@
             // 
             // panel2
             // 
-            panel2.Controls.Add(btnAnalisisVerticalResultados);
             panel2.Controls.Add(lblTotalCostos);
             panel2.Controls.Add(lblTotalGastos);
             panel2.Controls.Add(lblUtilidadNeta);
@@ -111,6 +117,16 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(878, 44);
             panel2.TabIndex = 1;
+            // 
+            // btnAnalisisVerticalResultados
+            // 
+            btnAnalisisVerticalResultados.Location = new Point(464, 43);
+            btnAnalisisVerticalResultados.Name = "btnAnalisisVerticalResultados";
+            btnAnalisisVerticalResultados.Size = new Size(141, 34);
+            btnAnalisisVerticalResultados.TabIndex = 4;
+            btnAnalisisVerticalResultados.Text = "Analisis Vertical";
+            btnAnalisisVerticalResultados.UseVisualStyleBackColor = true;
+            btnAnalisisVerticalResultados.Click += btnAnalisisVerticalResultados_Click;
             // 
             // lblTotalCostos
             // 
@@ -152,21 +168,38 @@
             // 
             dataGridViewResultados.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewResultados.Dock = DockStyle.Fill;
-            dataGridViewResultados.Location = new Point(0, 50);
+            dataGridViewResultados.Location = new Point(0, 83);
             dataGridViewResultados.Name = "dataGridViewResultados";
             dataGridViewResultados.RowHeadersWidth = 62;
-            dataGridViewResultados.Size = new Size(878, 450);
+            dataGridViewResultados.Size = new Size(878, 417);
             dataGridViewResultados.TabIndex = 2;
             // 
-            // btnAnalisisVerticalResultados
+            // btnAnalisiHorizontalResultados
             // 
-            btnAnalisisVerticalResultados.Location = new Point(336, 1);
-            btnAnalisisVerticalResultados.Name = "btnAnalisisVerticalResultados";
-            btnAnalisisVerticalResultados.Size = new Size(141, 34);
-            btnAnalisisVerticalResultados.TabIndex = 4;
-            btnAnalisisVerticalResultados.Text = "Analisis Vertical";
-            btnAnalisisVerticalResultados.UseVisualStyleBackColor = true;
-            btnAnalisisVerticalResultados.Click += btnAnalisisVerticalResultados_Click;
+            btnAnalisiHorizontalResultados.Location = new Point(638, 46);
+            btnAnalisiHorizontalResultados.Name = "btnAnalisiHorizontalResultados";
+            btnAnalisiHorizontalResultados.Size = new Size(167, 34);
+            btnAnalisiHorizontalResultados.TabIndex = 5;
+            btnAnalisiHorizontalResultados.Text = "Analisis Horizontal";
+            btnAnalisiHorizontalResultados.UseVisualStyleBackColor = true;
+            btnAnalisiHorizontalResultados.Click += btnAnalisiHorizontalResultados_Click;
+            // 
+            // cmbAnioBaseResultados
+            // 
+            cmbAnioBaseResultados.FormattingEnabled = true;
+            cmbAnioBaseResultados.Location = new Point(146, 43);
+            cmbAnioBaseResultados.Name = "cmbAnioBaseResultados";
+            cmbAnioBaseResultados.Size = new Size(182, 33);
+            cmbAnioBaseResultados.TabIndex = 6;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(81, 48);
+            label1.Name = "label1";
+            label1.Size = new Size(86, 25);
+            label1.TabIndex = 7;
+            label1.Text = "Año Base";
             // 
             // Estado_de_Resultados
             // 
@@ -180,6 +213,7 @@
             Text = "Estado_de_Resultados";
             Load += Estado_de_Resultados_Load;
             panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewResultados).EndInit();
@@ -200,5 +234,8 @@
         private Label lblUtilidadNeta;
         private Label lblTotalIngresos;
         private Button btnAnalisisVerticalResultados;
+        private Label label1;
+        private ComboBox cmbAnioBaseResultados;
+        private Button btnAnalisiHorizontalResultados;
     }
 }
