@@ -100,7 +100,7 @@ namespace BodegasAburtoWMS.View
 
         private void btnEstadosFinancieros_Click(object sender, EventArgs e)
         {
-
+            MostrarFormEnCentro(new ModuloEstadosFinacieros(_repository));
         }
 
         private void btnAnalisisFinanciero_Click(object sender, EventArgs e)
@@ -140,6 +140,17 @@ namespace BodegasAburtoWMS.View
 
         private void btnControlBasicoInventario_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void btnRegresarPrincipal_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+
+            Principal P = new Principal(usuarioActual, _repository, 1);
+            P.ShowDialog();
+
+            this.Close();
 
         }
     }

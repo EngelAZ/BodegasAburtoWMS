@@ -1,6 +1,6 @@
 ﻿namespace BodegasAburtoWMS.View
 {
-    partial class Gestion
+    partial class ModuloEstadosFinacieros
     {
         /// <summary>
         /// Required designer variable.

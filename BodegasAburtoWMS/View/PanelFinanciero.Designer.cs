@@ -32,6 +32,8 @@ namespace BodegasAburtoWMS.View
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PanelFinanciero));
             panel1 = new Panel();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            btnRegresarPrincipal = new Button();
             btnPresupuestoPersonal = new Button();
             btnPuntoEquilibrioCVU = new Button();
             label4 = new Label();
@@ -56,6 +58,7 @@ namespace BodegasAburtoWMS.View
             menuStrip1 = new MenuStrip();
             BarraSuperior = new BodegasAburtoWMS.Components.CustomTitleBar();
             panel1.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip1.SuspendLayout();
@@ -64,6 +67,7 @@ namespace BodegasAburtoWMS.View
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(30, 78, 140);
+            panel1.Controls.Add(tableLayoutPanel1);
             panel1.Controls.Add(btnPresupuestoPersonal);
             panel1.Controls.Add(btnPuntoEquilibrioCVU);
             panel1.Controls.Add(label4);
@@ -79,8 +83,38 @@ namespace BodegasAburtoWMS.View
             panel1.Location = new Point(1, 68);
             panel1.Margin = new Padding(2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(160, 518);
+            panel1.Size = new Size(160, 582);
             panel1.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Controls.Add(btnRegresarPrincipal, 0, 0);
+            tableLayoutPanel1.Dock = DockStyle.Bottom;
+            tableLayoutPanel1.Location = new Point(0, 521);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 1;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel1.Size = new Size(160, 61);
+            tableLayoutPanel1.TabIndex = 14;
+            // 
+            // btnRegresarPrincipal
+            // 
+            btnRegresarPrincipal.Dock = DockStyle.Fill;
+            btnRegresarPrincipal.FlatAppearance.BorderSize = 0;
+            btnRegresarPrincipal.FlatStyle = FlatStyle.Flat;
+            btnRegresarPrincipal.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnRegresarPrincipal.Location = new Point(3, 3);
+            btnRegresarPrincipal.Name = "btnRegresarPrincipal";
+            btnRegresarPrincipal.Size = new Size(154, 55);
+            btnRegresarPrincipal.TabIndex = 0;
+            btnRegresarPrincipal.Text = "⬅";
+            btnRegresarPrincipal.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnRegresarPrincipal.UseVisualStyleBackColor = true;
+            btnRegresarPrincipal.Click += btnRegresarPrincipal_Click;
             // 
             // btnPresupuestoPersonal
             // 
@@ -301,7 +335,7 @@ namespace BodegasAburtoWMS.View
             PanelContenedor.Margin = new Padding(2);
             PanelContenedor.Name = "PanelContenedor";
             PanelContenedor.Padding = new Padding(10, 9, 10, 9);
-            PanelContenedor.Size = new Size(856, 481);
+            PanelContenedor.Size = new Size(856, 545);
             PanelContenedor.TabIndex = 3;
             // 
             // archivoToolStripMenuItem
@@ -364,7 +398,7 @@ namespace BodegasAburtoWMS.View
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Silver;
-            ClientSize = new Size(1018, 587);
+            ClientSize = new Size(1018, 651);
             Controls.Add(PanelContenedor);
             Controls.Add(PanelOpciones);
             Controls.Add(panel1);
@@ -381,6 +415,7 @@ namespace BodegasAburtoWMS.View
             Load += Principal_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -415,5 +450,7 @@ namespace BodegasAburtoWMS.View
         private Label label4;
         public Panel PanelOpciones;
         private Button btnPresupuestoPersonal;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Button btnRegresarPrincipal;
     }
 }

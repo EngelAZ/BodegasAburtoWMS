@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Windows.Forms;
 
@@ -15,7 +16,7 @@ namespace BodegasAburtoWMS.View
     {
         private readonly Usuario usuarioActual;
         private readonly IBodegasAburtoWMSRepository _repository; // Opcional si usas repositorio con DI
-
+        private readonly int InicioSesion;
         // Constructor que recibe el usuario y opcionalmente el repositorio para tareas en segundo plano
         public Principal(Usuario usuario, IBodegasAburtoWMSRepository? repository = null)
         {
@@ -26,7 +27,16 @@ namespace BodegasAburtoWMS.View
             // Suscribirse al evento Load para tareas asíncronas de inicio
             this.Load += Principal_Load;
         }
+        public Principal(Usuario usuario, IBodegasAburtoWMSRepository? repository = null, int inicioSesion = 0)
+        {
+            InitializeComponent();
+            usuarioActual = usuario;
+            _repository = repository;
 
+            // Suscribirse al evento Load para tareas asíncronas de inicio
+            this.Load += Principal_Load;
+            InicioSesion = inicioSesion;
+        }
         private const int WM_NCHITTEST = 0x84;
         private const int HTLEFT = 10; private const int HTRIGHT = 11;
         private const int HTTOP = 12; private const int HTTOPLEFT = 13; private const int HTTOPRIGHT = 14;
@@ -115,16 +125,20 @@ namespace BodegasAburtoWMS.View
 
         private void Principal_Load(object sender, EventArgs e)
         {
-            string nombreRol = usuarioActual.Rol?.Nombre ?? "Sin Rol Asignado";
+            if(InicioSesion == 0 || InicioSesion == null)
+            {
+                string nombreRol = usuarioActual.Rol?.Nombre ?? "Sin Rol Asignado";
 
-            MessageBox.Show(
-                $"Usuario: {usuarioActual.UsuarioNombre}\n" +
-                $"Nombre: {usuarioActual.Nombre} {usuarioActual.Apellido}\n" +
-                $"Rol: {nombreRol}",
-                "Sesión actual",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+                MessageBox.Show(
+                    $"Usuario: {usuarioActual.UsuarioNombre}\n" +
+                    $"Nombre: {usuarioActual.Nombre} {usuarioActual.Apellido}\n" +
+                    $"Rol: {nombreRol}",
+                    "Sesión actual",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+
 
             // 2. Cargar el dashboard inicial
             MostrarFormEnCentro(new Dashboard());
@@ -150,7 +164,12 @@ namespace BodegasAburtoWMS.View
 
         private void btnGestion_Click(object sender, EventArgs e)
         {
-            MostrarFormEnCentro(new Gestion(_repository));
+            this.Hide();
+
+            PanelFinanciero P = new PanelFinanciero(usuarioActual, _repository);
+            P.ShowDialog();
+
+            this.Close();
         }
     }
 

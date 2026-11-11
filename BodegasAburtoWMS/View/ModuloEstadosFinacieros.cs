@@ -6,11 +6,11 @@ using System.Windows.Forms;
 
 namespace BodegasAburtoWMS.View
 {
-    public partial class Gestion : Form
+    public partial class ModuloEstadosFinacieros : Form
     {
         private readonly IBodegasAburtoWMSRepository _repository;
 
-        public Gestion(IBodegasAburtoWMSRepository repository)
+        public ModuloEstadosFinacieros(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
             _repository = repository;

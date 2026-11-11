@@ -37,7 +37,7 @@
     <Compile Update="View\FormularioCuenta.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="View\Gestion.cs">
+    <Compile Update="View\ModuloEstadosFinacieros.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="View\Liquidacion.cs">
