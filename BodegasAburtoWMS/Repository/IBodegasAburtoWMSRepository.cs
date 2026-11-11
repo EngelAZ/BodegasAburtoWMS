@@ -48,5 +48,12 @@ namespace BodegasAburtoWMS.Repository
         Task<List<CuentaBalance>> ObtenerCuentasBalanceAsync();
         Task<bool> GuardarCuentaBalanceAsync(CuentaBalance cuenta);
         Task<bool> EliminarCuentaBalanceAsync(int idCuenta);
+        Task<List<CuentaBalance>> ObtenerCuentasBalancePorAnioAsync(int anio);
+        // Task<List<int>> ObtenerAniosDisponiblesAsync();
+        List<int> ObtenerAniosBalance();
+        List<int> ObtenerAniosResultados();
+        List<CuentaBalance> ObtenerCuentasBalancePorAnio(int anio);
+        List<CuentaBalance> ObtenerCuentasResultadosPorAnio(int anio);
     }
+
 }

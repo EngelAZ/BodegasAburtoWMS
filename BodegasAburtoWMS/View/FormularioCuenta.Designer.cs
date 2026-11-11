@@ -36,6 +36,9 @@
             txtSaldo = new TextBox();
             btnGuardar = new Button();
             btnCancelar = new Button();
+            numAnio = new NumericUpDown();
+            label4 = new Label();
+            ((System.ComponentModel.ISupportInitialize)numAnio).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -107,11 +110,29 @@
             btnCancelar.UseVisualStyleBackColor = true;
             btnCancelar.Click += btnCancelar_Click;
             // 
+            // numAnio
+            // 
+            numAnio.Location = new Point(258, 233);
+            numAnio.Name = "numAnio";
+            numAnio.Size = new Size(180, 31);
+            numAnio.TabIndex = 9;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(26, 239);
+            label4.Name = "label4";
+            label4.Size = new Size(45, 25);
+            label4.TabIndex = 10;
+            label4.Text = "Año";
+            // 
             // FormularioCuenta
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label4);
+            Controls.Add(numAnio);
             Controls.Add(btnCancelar);
             Controls.Add(btnGuardar);
             Controls.Add(txtSaldo);
@@ -122,6 +143,7 @@
             Controls.Add(label1);
             Name = "FormularioCuenta";
             Text = "FormularioCuenta";
+            ((System.ComponentModel.ISupportInitialize)numAnio).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -136,5 +158,7 @@
         private TextBox txtSaldo;
         private Button btnGuardar;
         private Button btnCancelar;
+        private NumericUpDown numAnio;
+        private Label label4;
     }
 }

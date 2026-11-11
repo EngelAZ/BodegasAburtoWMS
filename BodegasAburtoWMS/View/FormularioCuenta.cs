@@ -19,31 +19,41 @@ namespace BodegasAburtoWMS.View
             InitializeComponent();
             Cuenta = new CuentaBalance();
             CargarTiposCuenta();
-            cmbTipo.SelectedIndex = 0;
+
+            // Configurar límites seguros para el NumericUpDown del año
+            numAnio.Minimum = 2000;
+            numAnio.Maximum = 2100;
+            numAnio.Value = DateTime.Now.Year; // Por defecto el año actual
         }
 
-        // Constructor para EDITAR una cuenta existente
         public FormularioCuenta(CuentaBalance cuentaExistente)
         {
             InitializeComponent();
             Cuenta = cuentaExistente;
             CargarTiposCuenta();
 
-            // Rellenar los controles con los datos actuales
-            txtNombreCuenta.Text = Cuenta.NombreCuenta;
+            // Configurar límites seguros para el NumericUpDown del año
+            numAnio.Minimum = 2000;
+            numAnio.Maximum = 2100;
 
-            if (!string.IsNullOrEmpty(Cuenta.Tipo))
+            txtNombreCuenta.Text = Cuenta.NombreCuenta;
+            cmbTipo.SelectedItem = Cuenta.Tipo;
+            txtSaldo.Text = Cuenta.Saldo.ToString("N2");
+
+            int anioObjetivo = Cuenta.Anio > 0 ? Cuenta.Anio : DateTime.Now.Year;
+            if (anioObjetivo >= numAnio.Minimum && anioObjetivo <= numAnio.Maximum)
             {
-                cmbTipo.SelectedItem = Cuenta.Tipo;
-                if (cmbTipo.SelectedIndex == -1 && cmbTipo.Items.Count > 0)
-                {
-                    cmbTipo.SelectedIndex = 0; // Fallback por seguridad
-                }
+                numAnio.Value = anioObjetivo;
+            }
+            else
+            {
+                numAnio.Value = DateTime.Now.Year;
             }
 
-            txtSaldo.Text = Cuenta.Saldo.ToString("N2");
             this.Text = "Editar Cuenta Contable";
         }
+
+        // En el botón Guardar:
 
         private void CargarTiposCuenta()
         {
@@ -53,6 +63,10 @@ namespace BodegasAburtoWMS.View
             cmbTipo.Items.Add("Pasivos Corrientes");
             cmbTipo.Items.Add("Pasivos fijos");
             cmbTipo.Items.Add("Patrimonio");
+
+            cmbTipo.Items.Add("Ingresos");
+            cmbTipo.Items.Add("Costos");
+            cmbTipo.Items.Add("Gastos");
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -74,7 +88,9 @@ namespace BodegasAburtoWMS.View
             Cuenta.NombreCuenta = txtNombreCuenta.Text.Trim();
             Cuenta.Tipo = cmbTipo.SelectedItem?.ToString() ?? "Activo";
             Cuenta.Saldo = saldo;
+            Cuenta.Anio = (int)numAnio.Value;
             Cuenta.FechaActualizacion = DateTime.Now;
+
 
             this.DialogResult = DialogResult.OK;
             this.Close();

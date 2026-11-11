@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BodegasAburtoWMS.Model
 {
@@ -9,14 +10,20 @@ namespace BodegasAburtoWMS.Model
 
         [Required]
         [StringLength(100)]
-        public string NombreCuenta { get; set; } // Ej: "Efectivo y Equivalentes", "Cuentas por Pagar"
+        public string NombreCuenta { get; set; }
 
         [Required]
-        [StringLength(20)]
-        public string Tipo { get; set; } // "Activo", "Pasivo", "Patrimonio"
+        [StringLength(50)]
+        public string Tipo { get; set; } // "Activos corrientes", "Activos fijos", etc.
 
         public decimal Saldo { get; set; }
 
+        [Required]
+        public int Anio { get; set; } // <-- Nuevo campo para el año fiscal (Ej: 2024, 2025, 2026)
+
         public DateTime FechaActualizacion { get; set; } = DateTime.Now;
+
+        [NotMapped]
+        public decimal PorcentajeVertical { get; set; }
     }
 }

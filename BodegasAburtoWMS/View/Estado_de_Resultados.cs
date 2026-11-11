@@ -1,4 +1,5 @@
 ﻿using BodegasAburtoWMS.Datos;
+using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,9 @@ namespace BodegasAburtoWMS.View
     {
         private readonly IBodegasAburtoWMSRepository _repository;
         private bool _isProcessing = false;
+        private bool _isInitializing = true;
+        private int _anioSeleccionado = DateTime.Now.Year;
 
-        // 1. Constructor con inyección de dependencias estándar
         public Estado_de_Resultados(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
@@ -23,7 +25,6 @@ namespace BodegasAburtoWMS.View
             this.Load += Estado_de_Resultados_Load;
         }
 
-        // 2. Constructor seguro y alternativo
         public Estado_de_Resultados()
         {
             InitializeComponent();
@@ -34,17 +35,81 @@ namespace BodegasAburtoWMS.View
 
         private async void Estado_de_Resultados_Load(object sender, EventArgs e)
         {
-            await CargarEstadoResultadosAsync();
+            _isInitializing = true;
+
+            // Cargamos los años y los datos de forma síncrona en el arranque para evitar choques de hilos
+            CargarAniosDisponiblesComboBox();
+            CargarDatosEstadoResultados();
+
+            _isInitializing = false;
         }
-        private async Task CargarEstadoResultadosAsync()
+        private void CargarAniosDisponiblesComboBox()
+        {
+            // Usamos un método síncrono para prevenir concurrencia
+            var aniosBD = _repository.ObtenerAniosResultados(); // Asegúrate de tener este método síncrono o usa .ToList() en el repositorio
+
+            var aniosList = new List<int>();
+            for (int i = DateTime.Now.Year - 2; i <= DateTime.Now.Year + 3; i++)
+            {
+                aniosList.Add(i);
+            }
+
+            foreach (var anio in aniosBD)
+            {
+                if (anio > 0 && !aniosList.Contains(anio))
+                {
+                    aniosList.Add(anio);
+                }
+            }
+
+            aniosList = aniosList.OrderByDescending(a => a).ToList();
+
+            cboAniosResultados.DataSource = null;
+            cboAniosResultados.DataSource = aniosList;
+
+            if (aniosList.Contains(DateTime.Now.Year))
+            {
+                cboAniosResultados.SelectedItem = DateTime.Now.Year;
+            }
+        }
+
+        private void CargarDatosEstadoResultados()
         {
             if (_isProcessing) return;
             _isProcessing = true;
 
             try
             {
-                // Aquí puedes consultar ingresos, costos y gastos operativos.
-                // Ejemplo: var datos = await _repository.ObtenerEstadoResultadosAsync();
+                // Versión síncrona para evitar solapamientos al abrir la pestaña
+                var cuentas = _repository.ObtenerCuentasResultadosPorAnio(_anioSeleccionado);
+
+                var cuentasResultados = cuentas.Where(c =>
+                    c.Tipo != null && (
+                        c.Tipo.Equals("Ingresos", StringComparison.OrdinalIgnoreCase) ||
+                        c.Tipo.Equals("Costos", StringComparison.OrdinalIgnoreCase) ||
+                        c.Tipo.Equals("Gastos", StringComparison.OrdinalIgnoreCase)
+                    )).ToList();
+
+                dataGridViewResultados.AutoGenerateColumns = true;
+                dataGridViewResultados.DataSource = cuentasResultados;
+
+                if (dataGridViewResultados.Columns["IdCuenta"] != null)
+                    dataGridViewResultados.Columns["IdCuenta"].Visible = false;
+
+                dataGridViewResultados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+                decimal totalIngresos = cuentasResultados.Where(c => c.Tipo.Equals("Ingresos", StringComparison.OrdinalIgnoreCase)).Sum(c => c.Saldo);
+                decimal totalCostos = cuentasResultados.Where(c => c.Tipo.Equals("Costos", StringComparison.OrdinalIgnoreCase)).Sum(c => c.Saldo);
+                decimal totalGastos = cuentasResultados.Where(c => c.Tipo.Equals("Gastos", StringComparison.OrdinalIgnoreCase)).Sum(c => c.Saldo);
+
+                decimal utilidadNeta = totalIngresos - (totalCostos + totalGastos);
+
+                lblTotalIngresos.Text = $"TOTAL INGRESOS: $ {totalIngresos:N2}";
+                lblTotalCostos.Text = $"TOTAL COSTOS: $ {totalCostos:N2}";
+                lblTotalGastos.Text = $"TOTAL GASTOS: $ {totalGastos:N2}";
+
+                lblUtilidadNeta.Text = $"UTILIDAD NETA ({_anioSeleccionado}): $ {utilidadNeta:N2}";
+                lblUtilidadNeta.ForeColor = utilidadNeta >= 0 ? Color.Green : Color.Red;
             }
             catch (Exception ex)
             {
@@ -54,6 +119,115 @@ namespace BodegasAburtoWMS.View
             {
                 _isProcessing = false;
             }
+        }
+
+        private async void btnAgregarCuenta_Click(object sender, EventArgs e)
+        {
+            using (var form = new FormularioCuenta())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    bool guardado = await _repository.GuardarCuentaBalanceAsync(form.Cuenta);
+                    if (guardado)
+                    {
+                        MessageBox.Show("Cuenta registrada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CargarDatosEstadoResultados();
+                    }
+                }
+            }
+        }
+
+        private async void btnEditarCuenta_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewResultados.CurrentRow?.DataBoundItem is CuentaBalance cuentaSeleccionada)
+            {
+                using (var form = new FormularioCuenta(cuentaSeleccionada))
+                {
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        bool actualizado = await _repository.GuardarCuentaBalanceAsync(form.Cuenta);
+                        if (actualizado)
+                        {
+                            MessageBox.Show("Cuenta actualizada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            CargarDatosEstadoResultados();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor, seleccione una cuenta para editar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private async void btnEliminarCuenta_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewResultados.CurrentRow?.DataBoundItem is CuentaBalance cuentaSeleccionada)
+            {
+                var confirm = MessageBox.Show($"¿Está seguro de eliminar la cuenta '{cuentaSeleccionada.NombreCuenta}'?", "Confirmar Eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (confirm == DialogResult.Yes)
+                {
+                    bool eliminado = await _repository.EliminarCuentaBalanceAsync(cuentaSeleccionada.IdCuenta);
+                    if (eliminado)
+                    {
+                        MessageBox.Show("Cuenta eliminada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        CargarDatosEstadoResultados();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor, seleccione una cuenta para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private async void cboAniosResultados_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_isInitializing) return;
+
+            if (cboAniosResultados.SelectedItem != null)
+            {
+                _anioSeleccionado = Convert.ToInt32(cboAniosResultados.SelectedItem);
+                CargarDatosEstadoResultados();
+            }
+        }
+
+        private void btnAnalisisVerticalResultados_Click(object sender, EventArgs e)
+        {
+            var cuentas = dataGridViewResultados.DataSource as List<CuentaBalance>;
+            if (cuentas == null || cuentas.Count == 0)
+            {
+                MessageBox.Show("No hay datos para calcular el análisis vertical.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 1. Calcular el Total de Ingresos (Base del análisis vertical en Resultados = 100%)
+            decimal totalIngresos = cuentas.Where(c => c.Tipo != null && c.Tipo.Equals("Ingresos", StringComparison.OrdinalIgnoreCase)).Sum(c => c.Saldo);
+
+            if (totalIngresos == 0)
+            {
+                MessageBox.Show("El Total de Ingresos es 0, no se pueden calcular los porcentajes.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 2. Calcular el porcentaje para cada cuenta respecto a los ingresos
+            foreach (var cuenta in cuentas)
+            {
+                cuenta.PorcentajeVertical = (cuenta.Saldo / totalIngresos) * 100;
+            }
+
+            // 3. Refrescar el DataGridView
+            dataGridViewResultados.DataSource = null;
+            dataGridViewResultados.DataSource = cuentas;
+
+            if (dataGridViewResultados.Columns["PorcentajeVertical"] != null)
+            {
+                dataGridViewResultados.Columns["PorcentajeVertical"].HeaderText = "% de Ingresos";
+                dataGridViewResultados.Columns["PorcentajeVertical"].DefaultCellStyle.Format = "N2";
+                dataGridViewResultados.Columns["PorcentajeVertical"].DisplayIndex = dataGridViewResultados.Columns["Saldo"].DisplayIndex + 1;
+            }
+
+            MessageBox.Show("Análisis vertical del Estado de Resultados calculado con éxito.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

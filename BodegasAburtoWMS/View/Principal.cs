@@ -170,10 +170,14 @@ namespace BodegasAburtoWMS.View
         {
             this.Hide();
 
-            PanelFinanciero P = new PanelFinanciero(usuarioActual, _repository);
-            P.ShowDialog();
+            // 2. Instancias y abres el panel financiero de forma modal
+            using (PanelFinanciero P = new PanelFinanciero(usuarioActual, _repository))
+            {
+                P.ShowDialog(); // Mantiene el programa activo esperando a que cierren el panel
+            }
 
-            this.Close();
+            // 3. (Opcional) Si deseas que el formulario principal reaparezca cuando salgan del panel financiero:
+            this.Show();
         }
     }
 
