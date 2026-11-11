@@ -29,7 +29,7 @@ namespace BodegasAburtoWMS.Datos
         public DbSet<PresupuestoParametro> PresupuestoParametros { get; set; }
         public DbSet<PresupuestoTrimestral> PresupuestoTrimestrales { get; set; }
         public DbSet<EstadoFinancieroProforma> EstadosFinancierosProforma { get; set; }
-        public DbSet<CuentaBalance> CuentaBalances => Set<CuentaBalance>()
+        public DbSet<CuentaBalance> CuentaBalances => Set<CuentaBalance>();
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
