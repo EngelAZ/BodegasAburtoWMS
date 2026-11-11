@@ -144,22 +144,26 @@ namespace BodegasAburtoWMS.View
             MostrarFormEnCentro(new Dashboard());
 
             // 3. Ejecutar tarea en segundo plano (Asíncrona) para registrar el último acceso sin congelar la UI
-            if (_repository != null)
+            if(InicioSesion == 0 || InicioSesion == null)
             {
-                // Usamos Task.Run o directamente el método async del repositorio
-                _ = Task.Run(async () =>
+                if (_repository != null)
                 {
-                    try
+                    // Usamos Task.Run o directamente el método async del repositorio
+                    _ = Task.Run(async () =>
                     {
-                        await _repository.RegistrarUltimoAccesoAsync(usuarioActual.IdUsuario);
-                    }
-                    catch (Exception ex)
-                    {
-                        // Manejo de errores en segundo plano (ej. log)
-                        System.Diagnostics.Debug.WriteLine($"Error al registrar último acceso: {ex.Message}");
-                    }
-                });
+                        try
+                        {
+                            await _repository.RegistrarUltimoAccesoAsync(usuarioActual.IdUsuario);
+                        }
+                        catch (Exception ex)
+                        {
+                            // Manejo de errores en segundo plano (ej. log)
+                            System.Diagnostics.Debug.WriteLine($"Error al registrar último acceso: {ex.Message}");
+                        }
+                    });
+                }
             }
+
         }
 
         private void btnGestion_Click(object sender, EventArgs e)
