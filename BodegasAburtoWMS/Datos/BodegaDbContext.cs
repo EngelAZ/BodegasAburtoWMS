@@ -26,13 +26,13 @@ namespace BodegasAburtoWMS.Datos
         public DbSet<Cliente> Clientes => Set<Cliente>();
         public DbSet<CuentaBalance> CuentaBalances { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+       /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Conexión original del repositorio WMS
             optionsBuilder.UseSqlServer(
                 @"Server=DESKTOP-U3UH9Q1\SQLEXPRESS;Database=BodegasAburtoWMSFinal;Trusted_Connection=True;TrustServerCertificate=True;"
             );
-        }
+        }*/
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
