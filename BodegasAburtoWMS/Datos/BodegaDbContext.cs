@@ -25,10 +25,11 @@ namespace BodegasAburtoWMS.Datos
         public DbSet<TipoEnvio> TiposEnvio => Set<TipoEnvio>();
         public DbSet<EstadoEnvio> EstadosEnvio => Set<EstadoEnvio>();
         public DbSet<Cliente> Clientes => Set<Cliente>();
-        public DbSet<CuentaBalance> CuentaBalances { get; set; }
+        //public DbSet<CuentaBalance> CuentaBalances { get; set; }
         public DbSet<PresupuestoParametro> PresupuestoParametros { get; set; }
         public DbSet<PresupuestoTrimestral> PresupuestoTrimestrales { get; set; }
         public DbSet<EstadoFinancieroProforma> EstadosFinancierosProforma { get; set; }
+        public DbSet<CuentaBalance> CuentaBalances => Set<CuentaBalance>()
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -64,8 +65,6 @@ namespace BodegasAburtoWMS.Datos
                 }
             }
         }*/
-
-        public DbSet<CuentaBalance> CuentaBalances => Set<CuentaBalance>();
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
