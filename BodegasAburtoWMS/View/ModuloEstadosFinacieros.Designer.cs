@@ -44,6 +44,7 @@
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new Size(800, 450);
             tabControl1.TabIndex = 0;
+            tabControl1.SelectedIndexChanged += tabControl1_SelectedIndexChanged;
             // 
             // tabBalance
             // 
@@ -65,13 +66,13 @@
             tabResultados.Text = "Estado de Resultados";
             tabResultados.UseVisualStyleBackColor = true;
             // 
-            // Gestion
+            // ModuloEstadosFinacieros
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(tabControl1);
-            Name = "Gestion";
+            Name = "ModuloEstadosFinacieros";
             Text = "Gestion";
             tabControl1.ResumeLayout(false);
             ResumeLayout(false);

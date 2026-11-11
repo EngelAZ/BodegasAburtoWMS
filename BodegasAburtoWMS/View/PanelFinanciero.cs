@@ -18,10 +18,15 @@ namespace BodegasAburtoWMS.View
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly Usuario usuarioActual;
-        private readonly IBodegasAburtoWMSRepository _repository; // Opcional si usas repositorio con DI
+        private readonly IBodegasAburtoWMSRepository _repository;
 
+<<<<<<< HEAD
         // Constructor que recibe el usuario y opcionalmente el repositorio para tareas en segundo plano
         public PanelFinanciero(Usuario usuario, IServiceProvider serviceProvider, IBodegasAburtoWMSRepository? repository = null)
+=======
+        // Constructor que recibe el usuario y el repositorio
+        public PanelFinanciero(Usuario usuario, IBodegasAburtoWMSRepository? repository = null)
+>>>>>>> 20ff628be66b085614fec40c670d42f638b80bf6
         {
             InitializeComponent();
             usuarioActual = usuario;
@@ -29,13 +34,14 @@ namespace BodegasAburtoWMS.View
             _serviceProvider = serviceProvider;
 
             // Suscribirse al evento Load para tareas asíncronas de inicio
-            this.Load += Principal_Load;
+            this.Load += PanelFinanciero_Load;
         }
 
         private const int WM_NCHITTEST = 0x84;
         private const int HTLEFT = 10; private const int HTRIGHT = 11;
         private const int HTTOP = 12; private const int HTTOPLEFT = 13; private const int HTTOPRIGHT = 14;
         private const int HTBOTTOM = 15; private const int HTBOTTOMLEFT = 16; private const int HTBOTTOMRIGHT = 17;
+
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
@@ -67,7 +73,12 @@ namespace BodegasAburtoWMS.View
                 }
                 this.PanelContenedor.Controls.Clear();
             }
-            this.PanelOpciones.Controls.Clear();
+
+            // Opcional: limpiar PanelOpciones si lo usabas para otra botonera secundaria
+            if (this.PanelOpciones != null)
+            {
+                this.PanelOpciones.Controls.Clear();
+            }
 
             formHijo.TopLevel = false;
             formHijo.FormBorderStyle = FormBorderStyle.None;
@@ -80,14 +91,9 @@ namespace BodegasAburtoWMS.View
 
         private void Principal_Load(object sender, EventArgs e)
         {
-            // 2. Cargar el dashboard inicial, cambiar el que se desea mostrar primero
-            /*
-            MostrarFormEnCentro(new Dashboard());
-            */
-            // 3. Ejecutar tarea en segundo plano (Asíncrona) para registrar el último acceso sin congelar la UI
+            // Ejecutar tarea en segundo plano (Asíncrona) para registrar el último acceso sin congelar la UI
             if (_repository != null)
             {
-                // Usamos Task.Run o directamente el método async del repositorio
                 _ = Task.Run(async () =>
                 {
                     try
@@ -96,7 +102,6 @@ namespace BodegasAburtoWMS.View
                     }
                     catch (Exception ex)
                     {
-                        // Manejo de errores en segundo plano (ej. log)
                         System.Diagnostics.Debug.WriteLine($"Error al registrar último acceso: {ex.Message}");
                     }
                 });
@@ -158,6 +163,24 @@ namespace BodegasAburtoWMS.View
 
             this.Close();
 
+        }
+
+        private void PanelFinanciero_Load(object sender, EventArgs e)
+        {
+            if (_repository != null)
+            {
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await _repository.RegistrarUltimoAccesoAsync(usuarioActual.IdUsuario);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error al registrar último acceso: {ex.Message}");
+                    }
+                });
+            }
         }
     }
 

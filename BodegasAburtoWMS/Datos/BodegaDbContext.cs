@@ -65,6 +65,9 @@ namespace BodegasAburtoWMS.Datos
             }
         }*/
 
+        public DbSet<CuentaBalance> CuentaBalances => Set<CuentaBalance>();
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configuración de Roles
@@ -167,6 +170,18 @@ namespace BodegasAburtoWMS.Datos
                 e.HasOne(x => x.ClienteDestinatario).WithMany().HasForeignKey(x => x.IdClienteDestinatario).OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(x => x.TipoEnvio).WithMany().HasForeignKey(x => x.IdTipoEnvio).OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(x => x.Estado).WithMany().HasForeignKey(x => x.IdEstado).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Configuración de Cuentas de Balance General (con soporte multi-año)
+            modelBuilder.Entity<CuentaBalance>(e =>
+            {
+                e.ToTable("CuentaBalances");
+                e.HasKey(x => x.IdCuenta);
+                e.Property(x => x.NombreCuenta).HasMaxLength(100).IsRequired();
+                e.Property(x => x.Tipo).HasMaxLength(50).IsRequired();
+                e.Property(x => x.Saldo).HasPrecision(18, 2);
+                e.Property(x => x.Anio).IsRequired();
+                e.Property(x => x.FechaActualizacion).IsRequired();
             });
         }
     }

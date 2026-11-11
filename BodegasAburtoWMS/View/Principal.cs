@@ -177,7 +177,8 @@ namespace BodegasAburtoWMS.View
             PanelFinanciero P = new PanelFinanciero(usuarioActual, _serviceProvider, _repository);
             P.ShowDialog();
 
-            this.Close();
+            // 3. (Opcional) Si deseas que el formulario principal reaparezca cuando salgan del panel financiero:
+            this.Show();
         }
     }
 

@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             panel2 = new Panel();
+            btnNuevoAnio = new Button();
+            cmbAnios = new ComboBox();
             btnEliminarCuenta = new Button();
             btnEditarCuenta = new Button();
             btnAgregarCuenta = new Button();
@@ -37,11 +39,12 @@
             lblTotalPasivos = new Label();
             lblTotalActivos = new Label();
             flowLayoutPanel1 = new FlowLayoutPanel();
-            dataGridViewBalance = new DataGridView();
             lblActivosCorrientes = new Label();
             lblActivosFijos = new Label();
             lblPasivosCorrientes = new Label();
             lblPasivosFijos = new Label();
+            dataGridViewBalance = new DataGridView();
+            btnAnalisisVertical = new Button();
             panel2.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewBalance).BeginInit();
@@ -49,19 +52,40 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(btnNuevoAnio);
+            panel2.Controls.Add(cmbAnios);
             panel2.Controls.Add(btnEliminarCuenta);
             panel2.Controls.Add(btnEditarCuenta);
             panel2.Controls.Add(btnAgregarCuenta);
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(0, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(800, 45);
+            panel2.Size = new Size(878, 45);
             panel2.TabIndex = 3;
+            // 
+            // btnNuevoAnio
+            // 
+            btnNuevoAnio.Location = new Point(0, 1);
+            btnNuevoAnio.Name = "btnNuevoAnio";
+            btnNuevoAnio.Size = new Size(148, 34);
+            btnNuevoAnio.TabIndex = 4;
+            btnNuevoAnio.Text = "+ Nuevo Año";
+            btnNuevoAnio.UseVisualStyleBackColor = true;
+            btnNuevoAnio.Click += btnNuevoAnio_Click;
+            // 
+            // cmbAnios
+            // 
+            cmbAnios.FormattingEnabled = true;
+            cmbAnios.Location = new Point(154, 3);
+            cmbAnios.Name = "cmbAnios";
+            cmbAnios.Size = new Size(182, 33);
+            cmbAnios.TabIndex = 3;
+            cmbAnios.SelectedIndexChanged += cmbAnios_SelectedIndexChanged;
             // 
             // btnEliminarCuenta
             // 
             btnEliminarCuenta.BackColor = Color.IndianRed;
-            btnEliminarCuenta.Location = new Point(641, 0);
+            btnEliminarCuenta.Location = new Point(710, 2);
             btnEliminarCuenta.Name = "btnEliminarCuenta";
             btnEliminarCuenta.Size = new Size(156, 34);
             btnEliminarCuenta.TabIndex = 2;
@@ -72,7 +96,7 @@
             // btnEditarCuenta
             // 
             btnEditarCuenta.BackColor = Color.PaleTurquoise;
-            btnEditarCuenta.Location = new Point(485, 0);
+            btnEditarCuenta.Location = new Point(557, 1);
             btnEditarCuenta.Name = "btnEditarCuenta";
             btnEditarCuenta.Size = new Size(138, 34);
             btnEditarCuenta.TabIndex = 1;
@@ -83,7 +107,7 @@
             // btnAgregarCuenta
             // 
             btnAgregarCuenta.BackColor = Color.FromArgb(255, 128, 0);
-            btnAgregarCuenta.Location = new Point(273, 0);
+            btnAgregarCuenta.Location = new Point(342, 5);
             btnAgregarCuenta.Name = "btnAgregarCuenta";
             btnAgregarCuenta.Size = new Size(184, 34);
             btnAgregarCuenta.TabIndex = 0;
@@ -137,21 +161,12 @@
             flowLayoutPanel1.Controls.Add(lblTotalPasivos);
             flowLayoutPanel1.Controls.Add(lblTotalPatrimonio);
             flowLayoutPanel1.Controls.Add(lblDiferencia);
+            flowLayoutPanel1.Controls.Add(btnAnalisisVertical);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
-            flowLayoutPanel1.Location = new Point(0, 363);
+            flowLayoutPanel1.Location = new Point(0, 457);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(800, 87);
+            flowLayoutPanel1.Size = new Size(878, 87);
             flowLayoutPanel1.TabIndex = 1;
-            // 
-            // dataGridViewBalance
-            // 
-            dataGridViewBalance.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewBalance.Dock = DockStyle.Fill;
-            dataGridViewBalance.Location = new Point(0, 45);
-            dataGridViewBalance.Name = "dataGridViewBalance";
-            dataGridViewBalance.RowHeadersWidth = 62;
-            dataGridViewBalance.Size = new Size(800, 318);
-            dataGridViewBalance.TabIndex = 4;
             // 
             // lblActivosCorrientes
             // 
@@ -189,11 +204,31 @@
             lblPasivosFijos.TabIndex = 7;
             lblPasivosFijos.Text = "PF";
             // 
+            // dataGridViewBalance
+            // 
+            dataGridViewBalance.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewBalance.Dock = DockStyle.Fill;
+            dataGridViewBalance.Location = new Point(0, 45);
+            dataGridViewBalance.Name = "dataGridViewBalance";
+            dataGridViewBalance.RowHeadersWidth = 62;
+            dataGridViewBalance.Size = new Size(878, 412);
+            dataGridViewBalance.TabIndex = 4;
+            // 
+            // btnAnalisisVertical
+            // 
+            btnAnalisisVertical.Location = new Point(303, 3);
+            btnAnalisisVertical.Name = "btnAnalisisVertical";
+            btnAnalisisVertical.Size = new Size(152, 34);
+            btnAnalisisVertical.TabIndex = 8;
+            btnAnalisisVertical.Text = "Analisis Vertical";
+            btnAnalisisVertical.UseVisualStyleBackColor = true;
+            btnAnalisisVertical.Click += btnAnalisisVertical_Click;
+            // 
             // Balance_General
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(878, 544);
             Controls.Add(dataGridViewBalance);
             Controls.Add(panel2);
             Controls.Add(flowLayoutPanel1);
@@ -222,5 +257,8 @@
         private Label lblActivosFijos;
         private Label lblPasivosCorrientes;
         private Label lblPasivosFijos;
+        private ComboBox cmbAnios;
+        private Button btnNuevoAnio;
+        private Button btnAnalisisVertical;
     }
 }

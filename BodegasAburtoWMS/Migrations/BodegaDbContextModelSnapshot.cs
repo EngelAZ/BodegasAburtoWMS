@@ -143,6 +143,9 @@ namespace BodegasAburtoWMS.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCuenta"));
 
+                    b.Property<int>("Anio")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("FechaActualizacion")
                         .HasColumnType("datetime2");
 
@@ -152,16 +155,17 @@ namespace BodegasAburtoWMS.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("Saldo")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("IdCuenta");
 
-                    b.ToTable("CuentaBalances");
+                    b.ToTable("CuentaBalances", (string)null);
                 });
 
             modelBuilder.Entity("BodegasAburtoWMS.Model.Envio", b =>

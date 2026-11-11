@@ -379,5 +379,69 @@ namespace BodegasAburtoWMS.Repository
             int filasAfectadas = await _context.SaveChangesAsync();
             return filasAfectadas > 0;
         }
+        public async Task<List<CuentaBalance>> ObtenerCuentasBalancePorAnioAsync(int anio)
+        {
+            return await _context.CuentaBalances
+                .Where(c => c.Anio == anio)
+                .OrderBy(c => c.Tipo)
+                .ThenBy(c => c.NombreCuenta)
+                .ToListAsync();
+        }
+        /*public async Task<List<int>> ObtenerAniosDisponiblesAsync()
+        {
+            return await _context.CuentaBalances
+                .Select(c => c.Anio)
+                .Distinct()
+                .OrderByDescending(a => a)
+                .ToListAsync();
+        }*/
+
+        // Años fiscales exclusivos para Balance General (Activos, Pasivos, Patrimonio)
+        public List<int> ObtenerAniosBalance()
+        {
+            return _context.CuentaBalances
+                .Where(c => c.Tipo == "Activos corrientes" || c.Tipo == "Activos fijos" ||
+                            c.Tipo == "Pasivos Corrientes" || c.Tipo == "Pasivos fijos" ||
+                            c.Tipo == "Patrimonio")
+                .Select(c => c.Anio)
+                .Distinct()
+                .OrderByDescending(a => a)
+                .ToList();
+        }
+        public List<CuentaBalance> ObtenerCuentasBalancePorAnio(int anio)
+        {
+            return _context.CuentaBalances
+                .Where(c => c.Anio == anio && (
+                    c.Tipo == "Activos corrientes" ||
+                    c.Tipo == "Activos fijos" ||
+                    c.Tipo == "Pasivos Corrientes" ||
+                    c.Tipo == "Pasivos fijos" ||
+                    c.Tipo == "Patrimonio"))
+                .OrderBy(c => c.Tipo)
+                .ThenBy(c => c.NombreCuenta)
+                .ToList();
+        }
+
+        // Años fiscales exclusivos para Estado de Resultados (Ingresos, Costos, Gastos)
+        public List<int> ObtenerAniosResultados()
+        {
+            return _context.CuentaBalances
+                .Where(c => c.Tipo == "Ingresos" || c.Tipo == "Costos" || c.Tipo == "Gastos")
+                .Select(c => c.Anio)
+                .Distinct()
+                .OrderByDescending(a => a)
+                .ToList();
+        }
+        public List<CuentaBalance> ObtenerCuentasResultadosPorAnio(int anio)
+        {
+            return _context.CuentaBalances
+                .Where(c => c.Anio == anio && (
+                    c.Tipo == "Ingresos" ||
+                    c.Tipo == "Costos" ||
+                    c.Tipo == "Gastos"))
+                .OrderBy(c => c.Tipo)
+                .ThenBy(c => c.NombreCuenta)
+                .ToList();
+        }
     }
 }

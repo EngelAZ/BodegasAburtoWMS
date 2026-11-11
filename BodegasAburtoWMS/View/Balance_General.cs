@@ -15,8 +15,9 @@ namespace BodegasAburtoWMS.View
     {
         private readonly IBodegasAburtoWMSRepository _repository;
         private bool _isProcessing = false;
+        private bool _isInitializing = true;
+        private int _anioSeleccionado = DateTime.Now.Year;
 
-        // 1. Constructor con inyección de dependencias estándar
         public Balance_General(IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
@@ -24,7 +25,6 @@ namespace BodegasAburtoWMS.View
             this.Load += Balance_General_Load;
         }
 
-        // 2. Constructor seguro y alternativo de respaldo
         public Balance_General()
         {
             InitializeComponent();
@@ -35,41 +35,64 @@ namespace BodegasAburtoWMS.View
 
         private async void Balance_General_Load(object sender, EventArgs e)
         {
-            await CargarDatosBalanceAsync();
+            _isInitializing = true;
+
+            // Carga síncrona inicial para evitar conflictos de hilos al abrir la pestaña
+            CargarAniosDisponiblesComboBox();
+            CargarDatosBalance();
+
+            _isInitializing = false;
+        }
+        private void CargarAniosDisponiblesComboBox()
+        {
+            // Método síncrono exclusivo para los años del balance
+            var aniosBD = _repository.ObtenerAniosBalance(); // Asegúrate de tener este método síncrono en tu repositorio
+
+            var aniosList = new List<int>();
+            for (int i = DateTime.Now.Year - 2; i <= DateTime.Now.Year + 3; i++)
+            {
+                aniosList.Add(i);
+            }
+
+            foreach (var anio in aniosBD)
+            {
+                if (anio > 0 && !aniosList.Contains(anio))
+                {
+                    aniosList.Add(anio);
+                }
+            }
+
+            aniosList = aniosList.OrderByDescending(a => a).ToList();
+
+            cmbAnios.DataSource = null;
+            cmbAnios.DataSource = aniosList;
+
+            if (aniosList.Contains(DateTime.Now.Year))
+            {
+                cmbAnios.SelectedItem = DateTime.Now.Year;
+            }
         }
 
-        private async Task CargarDatosBalanceAsync()
+        private void CargarDatosBalance()
         {
             if (_isProcessing) return;
             _isProcessing = true;
 
+
             try
             {
-                var cuentas = await _repository.ObtenerCuentasBalanceAsync();
+                // Carga síncrona de las cuentas del balance
+                var cuentas = _repository.ObtenerCuentasBalancePorAnio(_anioSeleccionado);
 
-                // Enlazar al DataGridView
                 dataGridViewBalance.AutoGenerateColumns = true;
-                dataGridViewBalance.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 dataGridViewBalance.DataSource = cuentas;
 
-                // Ocultar la columna ID visualmente para que no se muestre en la tabla
                 if (dataGridViewBalance.Columns["IdCuenta"] != null)
-                {
                     dataGridViewBalance.Columns["IdCuenta"].Visible = false;
-                }
 
-                // Cambiar nombres de cabeceras para mayor claridad si se generan automáticamente
-                if (dataGridViewBalance.Columns["NombreCuenta"] != null)
-                    dataGridViewBalance.Columns["NombreCuenta"].HeaderText = "Nombre de Cuenta";
-                if (dataGridViewBalance.Columns["Tipo"] != null)
-                    dataGridViewBalance.Columns["Tipo"].HeaderText = "Clasificación";
-                if (dataGridViewBalance.Columns["Saldo"] != null)
-                {
-                    dataGridViewBalance.Columns["Saldo"].HeaderText = "Saldo ($)";
-                    dataGridViewBalance.Columns["Saldo"].DefaultCellStyle.Format = "N2";
-                }
+                dataGridViewBalance.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-                // --- CÁLCULOS ESPECÍFICOS POR CLASIFICACIÓN ---
+                // Cálculos de subtotales
                 decimal activosCorrientes = cuentas.Where(c => c.Tipo != null && c.Tipo.Equals("Activos corrientes", StringComparison.OrdinalIgnoreCase)).Sum(c => c.Saldo);
                 decimal activosFijos = cuentas.Where(c => c.Tipo != null && c.Tipo.Equals("Activos fijos", StringComparison.OrdinalIgnoreCase)).Sum(c => c.Saldo);
                 decimal totalActivos = activosCorrientes + activosFijos;
@@ -80,36 +103,13 @@ namespace BodegasAburtoWMS.View
 
                 decimal patrimonio = cuentas.Where(c => c.Tipo != null && c.Tipo.Equals("Patrimonio", StringComparison.OrdinalIgnoreCase)).Sum(c => c.Saldo);
 
-                // --- MOSTRAR EN ETIQUETAS DE RESUMEN ---
-                // Asegúrate de tener estas etiquetas en tu panel inferior o ajústalas a tus nombres reales:
-                lblActivosCorrientes.Text = $"Activos Corrientes: $ {activosCorrientes:N2}";
-                lblActivosFijos.Text = $"Activos Fijos: $ {activosFijos:N2}";
-                lblTotalActivos.Text = $"TOTAL ACTIVOS: $ {totalActivos:N2}";
-
-                lblPasivosCorrientes.Text = $"Pasivos Corrientes: $ {pasivosCorrientes:N2}";
-                lblPasivosFijos.Text = $"Pasivos Fijos: $ {pasivosFijos:N2}";
+                lblTotalActivos.Text = $"TOTAL ACTIVOS ({_anioSeleccionado}): $ {totalActivos:N2}";
                 lblTotalPasivos.Text = $"TOTAL PASIVOS: $ {totalPasivos:N2}";
-
                 lblTotalPatrimonio.Text = $"Patrimonio: $ {patrimonio:N2}";
-
-                // Validación contable: Total Activos = Total Pasivos + Patrimonio
-                decimal pasivosMasPatrimonio = totalPasivos + patrimonio;
-                decimal diferencia = totalActivos - pasivosMasPatrimonio;
-
-                if (Math.Abs(diferencia) > 0.01m)
-                {
-                    lblDiferencia.ForeColor = Color.Red;
-                    lblDiferencia.Text = $"⚠️ Descuadre Contable: $ {diferencia:N2} (Activos ≠ Pasivos + Patrimonio)";
-                }
-                else
-                {
-                    lblDiferencia.ForeColor = Color.Green;
-                    lblDiferencia.Text = "✔ Balance Cuadrado Perfectamente";
-                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al cargar el Balance General: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al cargar el Balance: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -127,7 +127,7 @@ namespace BodegasAburtoWMS.View
                     if (guardado)
                     {
                         MessageBox.Show("Cuenta registrada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        await CargarDatosBalanceAsync();
+                        CargarDatosBalance();
                     }
                 }
             }
@@ -145,7 +145,7 @@ namespace BodegasAburtoWMS.View
                         if (actualizado)
                         {
                             MessageBox.Show("Cuenta actualizada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            await CargarDatosBalanceAsync();
+                            CargarDatosBalance();
                         }
                     }
                 }
@@ -167,7 +167,7 @@ namespace BodegasAburtoWMS.View
                     if (eliminado)
                     {
                         MessageBox.Show("Cuenta eliminada con éxito.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        await CargarDatosBalanceAsync();
+                        CargarDatosBalance();
                     }
                 }
             }
@@ -175,6 +175,75 @@ namespace BodegasAburtoWMS.View
             {
                 MessageBox.Show("Por favor, seleccione una cuenta de la tabla para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+        }
+
+        private async void cmbAnios_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_isInitializing) return;
+
+            if (cmbAnios.SelectedItem != null)
+            {
+                _anioSeleccionado = Convert.ToInt32(cmbAnios.SelectedItem);
+                CargarDatosBalance();
+            }
+        }
+
+        private void btnNuevoAnio_Click(object sender, EventArgs e)
+        {
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Ingrese el nuevo año fiscal:", "Nuevo Periodo", (DateTime.Now.Year + 1).ToString());
+
+            if (int.TryParse(input, out int nuevoAnio))
+            {
+                if (!((List<int>)cmbAnios.DataSource).Contains(nuevoAnio))
+                {
+                    var lista = (List<int>)cmbAnios.DataSource;
+                    lista.Insert(0, nuevoAnio);
+                    cmbAnios.DataSource = null;
+                    cmbAnios.DataSource = lista;
+                }
+                cmbAnios.SelectedItem = nuevoAnio;
+            }
+        }
+
+        private void btnAnalisisVertical_Click(object sender, EventArgs e)
+        {
+            var cuentas = dataGridViewBalance.DataSource as List<CuentaBalance>;
+            if (cuentas == null || cuentas.Count == 0)
+            {
+                MessageBox.Show("No hay datos para calcular el análisis vertical.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // 1. Calcular el Total de Activos (Base del análisis vertical en el Balance General = 100%)
+            decimal activosCorrientes = cuentas.Where(c => c.Tipo != null && c.Tipo.Equals("Activos corrientes", StringComparison.OrdinalIgnoreCase)).Sum(c => c.Saldo);
+            decimal activosFijos = cuentas.Where(c => c.Tipo != null && c.Tipo.Equals("Activos fijos", StringComparison.OrdinalIgnoreCase)).Sum(c => c.Saldo);
+            decimal totalActivos = activosCorrientes + activosFijos;
+
+            if (totalActivos == 0)
+            {
+                MessageBox.Show("El Total de Activos es 0, no se puede calcular porcentajes.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // 2. Calcular el porcentaje para cada cuenta
+            foreach (var cuenta in cuentas)
+            {
+                cuenta.PorcentajeVertical = (cuenta.Saldo / totalActivos) * 100;
+            }
+
+            // 3. Refrescar el DataGridView y configurar la nueva columna
+            dataGridViewBalance.DataSource = null;
+            dataGridViewBalance.DataSource = cuentas;
+
+            // Asegurarnos de que la columna se muestre estéticamente con el símbolo %
+            if (dataGridViewBalance.Columns["PorcentajeVertical"] != null)
+            {
+                dataGridViewBalance.Columns["PorcentajeVertical"].HeaderText = "% Análisis Vertical";
+                dataGridViewBalance.Columns["PorcentajeVertical"].DefaultCellStyle.Format = "N2"; // Formato con 2 decimales
+                dataGridViewBalance.Columns["PorcentajeVertical"].DisplayIndex = dataGridViewBalance.Columns["Saldo"].DisplayIndex + 1;
+            }
+
+            MessageBox.Show("Análisis vertical del Balance General calculado con éxito.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 
