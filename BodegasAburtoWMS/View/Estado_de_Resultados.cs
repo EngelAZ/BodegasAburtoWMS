@@ -45,8 +45,7 @@ namespace BodegasAburtoWMS.View
         }
         private void CargarAniosDisponiblesComboBox()
         {
-            // Usamos un método síncrono para prevenir concurrencia
-            var aniosBD = _repository.ObtenerAniosResultados(); // Asegúrate de tener este método síncrono o usa .ToList() en el repositorio
+            var aniosBD = _repository.ObtenerAniosResultados();
 
             var aniosList = new List<int>();
             for (int i = DateTime.Now.Year - 2; i <= DateTime.Now.Year + 3; i++)
@@ -64,12 +63,28 @@ namespace BodegasAburtoWMS.View
 
             aniosList = aniosList.OrderByDescending(a => a).ToList();
 
+            // 1. Asignar al ComboBox Principal con una nueva instancia independiente
             cboAniosResultados.DataSource = null;
-            cboAniosResultados.DataSource = aniosList;
+            cboAniosResultados.DataSource = new List<int>(aniosList);
 
+            // 2. Asignar al ComboBox Base con otra instancia independiente
+            cmbAnioBaseResultados.DataSource = null;
+            cmbAnioBaseResultados.DataSource = new List<int>(aniosList);
+
+            // Seleccionar valores por defecto de forma segura
             if (aniosList.Contains(DateTime.Now.Year))
             {
                 cboAniosResultados.SelectedItem = DateTime.Now.Year;
+            }
+
+            int anioAnterior = DateTime.Now.Year - 1;
+            if (aniosList.Contains(anioAnterior))
+            {
+                cmbAnioBaseResultados.SelectedItem = anioAnterior;
+            }
+            else if (aniosList.Count > 1)
+            {
+                cmbAnioBaseResultados.SelectedIndex = 1;
             }
         }
 
@@ -120,6 +135,7 @@ namespace BodegasAburtoWMS.View
                 _isProcessing = false;
             }
         }
+
 
         private async void btnAgregarCuenta_Click(object sender, EventArgs e)
         {
@@ -228,6 +244,57 @@ namespace BodegasAburtoWMS.View
             }
 
             MessageBox.Show("Análisis vertical del Estado de Resultados calculado con éxito.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnAnalisiHorizontalResultados_Click(object sender, EventArgs e)
+        {
+            if (cboAniosResultados.SelectedItem == null || cmbAnioBaseResultados.SelectedItem == null)
+            {
+                MessageBox.Show("Por favor seleccione tanto el año actual como el año base de comparación.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int anioActual = Convert.ToInt32(cboAniosResultados.SelectedItem);
+            int anioBase = Convert.ToInt32(cmbAnioBaseResultados.SelectedItem);
+
+            if (anioActual == anioBase)
+            {
+                MessageBox.Show("El año actual y el año base no pueden ser iguales para el análisis horizontal.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                // Llamamos al repositorio filtrando exclusivamente por el tipo "Resultados" (Ingresos, Costos, Gastos)
+                var cuentasAnalisis = _repository.ObtenerCuentasParaAnalisisHorizontal(anioActual, anioBase, "Resultados");
+
+                dataGridViewResultados.DataSource = null;
+                dataGridViewResultados.DataSource = cuentasAnalisis;
+
+                // Formatear y personalizar las columnas de variación en el DataGridView
+                if (dataGridViewResultados.Columns["VariacionAbsoluta"] != null)
+                {
+                    dataGridViewResultados.Columns["VariacionAbsoluta"].HeaderText = $"Var. Absoluta ({anioActual} vs {anioBase})";
+                    dataGridViewResultados.Columns["VariacionAbsoluta"].DefaultCellStyle.Format = "N2";
+                }
+
+                if (dataGridViewResultados.Columns["VariacionPorcentual"] != null)
+                {
+                    dataGridViewResultados.Columns["VariacionPorcentual"].HeaderText = "Var. Porcentual (%)";
+                    dataGridViewResultados.Columns["VariacionPorcentual"].DefaultCellStyle.Format = "N2";
+                }
+
+                if (dataGridViewResultados.Columns["IdCuenta"] != null)
+                    dataGridViewResultados.Columns["IdCuenta"].Visible = false;
+
+                dataGridViewResultados.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+                MessageBox.Show($"Análisis horizontal del Estado de Resultados calculado exitosamente comparando {anioActual} con {anioBase}.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al calcular el análisis horizontal: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

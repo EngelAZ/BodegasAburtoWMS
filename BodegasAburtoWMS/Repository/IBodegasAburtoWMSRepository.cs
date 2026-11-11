@@ -54,6 +54,7 @@ namespace BodegasAburtoWMS.Repository
         List<int> ObtenerAniosResultados();
         List<CuentaBalance> ObtenerCuentasBalancePorAnio(int anio);
         List<CuentaBalance> ObtenerCuentasResultadosPorAnio(int anio);
+        List<CuentaBalance> ObtenerCuentasParaAnalisisHorizontal(int anioActual, int anioAnterior, string tipoModulo);
     }
 
 }

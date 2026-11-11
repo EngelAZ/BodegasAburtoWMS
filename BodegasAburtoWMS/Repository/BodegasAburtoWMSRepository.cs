@@ -443,5 +443,43 @@ namespace BodegasAburtoWMS.Repository
                 .ThenBy(c => c.NombreCuenta)
                 .ToList();
         }
+
+        public List<CuentaBalance> ObtenerCuentasParaAnalisisHorizontal(int anioActual, int anioAnterior, string tipoModulo)
+        {
+            // Definimos los filtros según si es Balance General o Estado de Resultados
+            var tiposFiltro = tipoModulo == "Balance"
+                ? new[] { "Activos corrientes", "Activos fijos", "Pasivos Corrientes", "Pasivos fijos", "Patrimonio" }
+                : new[] { "Ingresos", "Costos", "Gastos" };
+
+            // Obtenemos las cuentas de ambos años
+            var cuentasActuales = _context.CuentaBalances
+                .Where(c => c.Anio == anioActual && tiposFiltro.Contains(c.Tipo))
+                .ToList();
+
+            var cuentasAnteriores = _context.CuentaBalances
+                .Where(c => c.Anio == anioAnterior && tiposFiltro.Contains(c.Tipo))
+                .ToList();
+
+            // Cruzamos los datos por nombre y tipo de cuenta para comparar peras con peras
+            foreach (var actual in cuentasActuales)
+            {
+                var anterior = cuentasAnteriores.FirstOrDefault(c => c.NombreCuenta.Equals(actual.NombreCuenta, StringComparison.OrdinalIgnoreCase));
+                decimal saldoAnterior = anterior != null ? anterior.Saldo : 0;
+
+                // Cálculos horizontales
+                actual.VariacionAbsoluta = actual.Saldo - saldoAnterior;
+
+                if (saldoAnterior != 0)
+                {
+                    actual.VariacionPorcentual = (actual.VariacionAbsoluta / saldoAnterior) * 100;
+                }
+                else
+                {
+                    actual.VariacionPorcentual = actual.Saldo > 0 ? 100 : 0; // Evitar división por cero
+                }
+            }
+
+            return cuentasActuales.OrderBy(c => c.Tipo).ThenBy(c => c.NombreCuenta).ToList();
+        }
     }
 }

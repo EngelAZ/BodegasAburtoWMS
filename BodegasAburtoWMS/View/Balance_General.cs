@@ -45,8 +45,7 @@ namespace BodegasAburtoWMS.View
         }
         private void CargarAniosDisponiblesComboBox()
         {
-            // Método síncrono exclusivo para los años del balance
-            var aniosBD = _repository.ObtenerAniosBalance(); // Asegúrate de tener este método síncrono en tu repositorio
+            var aniosBD = _repository.ObtenerAniosBalance();
 
             var aniosList = new List<int>();
             for (int i = DateTime.Now.Year - 2; i <= DateTime.Now.Year + 3; i++)
@@ -64,12 +63,28 @@ namespace BodegasAburtoWMS.View
 
             aniosList = aniosList.OrderByDescending(a => a).ToList();
 
+            // 1. Asignar al ComboBox Principal con una nueva instancia de lista independiente
             cmbAnios.DataSource = null;
-            cmbAnios.DataSource = aniosList;
+            cmbAnios.DataSource = new List<int>(aniosList);
 
+            // 2. Asignar al ComboBox Base con otra instancia independiente
+            cmbAnioBase.DataSource = null;
+            cmbAnioBase.DataSource = new List<int>(aniosList);
+
+            // Seleccionar valores por defecto de forma segura
             if (aniosList.Contains(DateTime.Now.Year))
             {
                 cmbAnios.SelectedItem = DateTime.Now.Year;
+            }
+
+            int anioAnterior = DateTime.Now.Year - 1;
+            if (aniosList.Contains(anioAnterior))
+            {
+                cmbAnioBase.SelectedItem = anioAnterior;
+            }
+            else if (aniosList.Count > 1)
+            {
+                cmbAnioBase.SelectedIndex = 1;
             }
         }
 
@@ -244,6 +259,57 @@ namespace BodegasAburtoWMS.View
             }
 
             MessageBox.Show("Análisis vertical del Balance General calculado con éxito.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void btnAnalisiHorizontal_Click(object sender, EventArgs e)
+        {
+            if (cmbAnios.SelectedItem == null || cmbAnioBase.SelectedItem == null)
+            {
+                MessageBox.Show("Por favor seleccione tanto el año actual como el año base de comparación.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int anioActual = Convert.ToInt32(cmbAnios.SelectedItem);
+            int anioBase = Convert.ToInt32(cmbAnioBase.SelectedItem);
+
+            if (anioActual == anioBase)
+            {
+                MessageBox.Show("El año actual y el año base no pueden ser iguales para el análisis horizontal.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                // Llamamos al repositorio pasando "Balance" para filtrar activos, pasivos y patrimonio
+                var cuentasAnalisis = _repository.ObtenerCuentasParaAnalisisHorizontal(anioActual, anioBase, "Balance");
+
+                dataGridViewBalance.DataSource = null;
+                dataGridViewBalance.DataSource = cuentasAnalisis;
+
+                // Formatear y personalizar las columnas de variación en el DataGridView
+                if (dataGridViewBalance.Columns["VariacionAbsoluta"] != null)
+                {
+                    dataGridViewBalance.Columns["VariacionAbsoluta"].HeaderText = $"Var. Absoluta ({anioActual} vs {anioBase})";
+                    dataGridViewBalance.Columns["VariacionAbsoluta"].DefaultCellStyle.Format = "N2";
+                }
+
+                if (dataGridViewBalance.Columns["VariacionPorcentual"] != null)
+                {
+                    dataGridViewBalance.Columns["VariacionPorcentual"].HeaderText = "Var. Porcentual (%)";
+                    dataGridViewBalance.Columns["VariacionPorcentual"].DefaultCellStyle.Format = "N2";
+                }
+
+                if (dataGridViewBalance.Columns["IdCuenta"] != null)
+                    dataGridViewBalance.Columns["IdCuenta"].Visible = false;
+
+                dataGridViewBalance.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+                MessageBox.Show($"Análisis horizontal del Balance General calculado exitosamente comparando {anioActual} con {anioBase}.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al calcular el análisis horizontal: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 

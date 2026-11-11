@@ -25,5 +25,10 @@ namespace BodegasAburtoWMS.Model
 
         [NotMapped]
         public decimal PorcentajeVertical { get; set; }
+
+        [NotMapped]
+        public decimal VariacionAbsoluta { get; set; }
+        [NotMapped]
+        public decimal VariacionPorcentual { get; set; }
     }
 }
