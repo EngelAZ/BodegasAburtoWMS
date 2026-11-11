@@ -1,5 +1,6 @@
 ﻿using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,21 +18,24 @@ namespace BodegasAburtoWMS.View
         private readonly Usuario usuarioActual;
         private readonly IBodegasAburtoWMSRepository _repository; // Opcional si usas repositorio con DI
         private readonly int InicioSesion;
+        private readonly IServiceProvider _serviceProvider;
         // Constructor que recibe el usuario y opcionalmente el repositorio para tareas en segundo plano
-        public Principal(Usuario usuario, IBodegasAburtoWMSRepository? repository = null)
+        public Principal(Usuario usuario, IServiceProvider serviceProvider, IBodegasAburtoWMSRepository? repository = null)
         {
             InitializeComponent();
             usuarioActual = usuario;
             _repository = repository;
+            _serviceProvider = serviceProvider;
 
             // Suscribirse al evento Load para tareas asíncronas de inicio
             this.Load += Principal_Load;
         }
-        public Principal(Usuario usuario, IBodegasAburtoWMSRepository? repository = null, int inicioSesion = 0)
+        public Principal(Usuario usuario, IServiceProvider serviceProvider, IBodegasAburtoWMSRepository? repository = null, int inicioSesion = 0)
         {
             InitializeComponent();
             usuarioActual = usuario;
             _repository = repository;
+            _serviceProvider = serviceProvider;
 
             // Suscribirse al evento Load para tareas asíncronas de inicio
             this.Load += Principal_Load;
@@ -170,7 +174,7 @@ namespace BodegasAburtoWMS.View
         {
             this.Hide();
 
-            PanelFinanciero P = new PanelFinanciero(usuarioActual, _repository);
+            PanelFinanciero P = new PanelFinanciero(usuarioActual, _serviceProvider, _repository);
             P.ShowDialog();
 
             this.Close();

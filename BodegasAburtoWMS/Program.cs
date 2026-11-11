@@ -1,6 +1,7 @@
 using BodegasAburtoWMS.Datos;
 using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
+using BodegasAburtoWMS.Service;
 using BodegasAburtoWMS.View;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +39,9 @@ namespace BodegasAburtoWMS
 
             // 3. Registrar el Repositorio como Transient
             services.AddTransient<IBodegasAburtoWMSRepository, BodegasAburtoWMSRepository>();
+            services.AddScoped<PresupuestoService>();
+            services.AddScoped<PresupuestoOperativoService>();
+            services.AddScoped<EstadoProformaService>();
 
             // 4. Registrar todos los formularios de la aplicación
             services.AddTransient<Login>();
@@ -47,6 +51,10 @@ namespace BodegasAburtoWMS
             services.AddTransient<Clientes>();
             services.AddTransient<DatosEnvios>();
             services.AddTransient<RegistroDiario>();
+            services.AddTransient<FormSupuestosBudget>();
+            services.AddTransient<FormPresupuestoOperacion>();
+            services.AddTransient<FormEstadosProforma>();
+            services.AddTransient<FormModuloPresupuesto>();
 
             // 5. Construir el proveedor de servicios
             using var serviceProvider = services.BuildServiceProvider();

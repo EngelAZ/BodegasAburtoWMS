@@ -34,6 +34,18 @@
     <Compile Update="View\Estado_de_Resultados.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="View\FormEstadosProforma.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FormModuloPresupuesto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FormPresupuestoOperacion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="View\FormSupuestosBudget.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="View\FormularioCuenta.cs">
       <SubType>Form</SubType>
     </Compile>

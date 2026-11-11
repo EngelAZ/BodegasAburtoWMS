@@ -2,6 +2,7 @@ using BodegasAburtoWMS.Helpers;
 using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
 using BodegasAburtoWMS.View;
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
 
 namespace BodegasAburtoWMS
@@ -12,12 +13,14 @@ namespace BodegasAburtoWMS
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsLocked { get; set; } = true;
         private readonly IBodegasAburtoWMSRepository _repository;
+        private readonly IServiceProvider _serviceProvider;
 
         // Inyección de dependencias del repositorio
-        public Login(IBodegasAburtoWMSRepository repository)
+        public Login(IServiceProvider serviceProvider, IBodegasAburtoWMSRepository repository)
         {
             InitializeComponent();
             _repository = repository;
+            _serviceProvider = serviceProvider;
 
             // Suscripción de eventos para los placeholders de los TextBox
             tbxContrasena.Enter += tbxContrasena_Enter;
@@ -118,7 +121,7 @@ namespace BodegasAburtoWMS
                 );
 
                 // 4. Abrir ventana Principal inyectándole el usuario y el repositorio actual
-                Principal principal = new Principal(usuario, _repository);
+                Principal principal = new Principal(usuario, _serviceProvider, _repository);
 
                 this.Hide();
 

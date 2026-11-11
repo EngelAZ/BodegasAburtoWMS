@@ -1,5 +1,8 @@
-﻿using BodegasAburtoWMS.Model;
+﻿using BodegasAburtoWMS.Datos;
+using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,15 +16,17 @@ namespace BodegasAburtoWMS.View
 {
     public partial class PanelFinanciero : Form
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly Usuario usuarioActual;
         private readonly IBodegasAburtoWMSRepository _repository; // Opcional si usas repositorio con DI
 
         // Constructor que recibe el usuario y opcionalmente el repositorio para tareas en segundo plano
-        public PanelFinanciero(Usuario usuario, IBodegasAburtoWMSRepository? repository = null)
+        public PanelFinanciero(Usuario usuario, IServiceProvider serviceProvider, IBodegasAburtoWMSRepository? repository = null)
         {
             InitializeComponent();
             usuarioActual = usuario;
             _repository = repository;
+            _serviceProvider = serviceProvider;
 
             // Suscribirse al evento Load para tareas asíncronas de inicio
             this.Load += Principal_Load;
@@ -125,7 +130,8 @@ namespace BodegasAburtoWMS.View
 
         private void btnPlaneacionPresupuestos_Click(object sender, EventArgs e)
         {
-
+            var moduloPresupuesto = _serviceProvider.GetRequiredService<FormModuloPresupuesto>();
+            MostrarFormEnCentro(moduloPresupuesto);
         }
 
         private void btnProforma_Click(object sender, EventArgs e)
@@ -147,7 +153,7 @@ namespace BodegasAburtoWMS.View
         {
             this.Hide();
 
-            Principal P = new Principal(usuarioActual, _repository, 1);
+            Principal P = new Principal(usuarioActual, _serviceProvider, _repository, 1);
             P.ShowDialog();
 
             this.Close();

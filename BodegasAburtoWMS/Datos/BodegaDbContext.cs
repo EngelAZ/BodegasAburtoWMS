@@ -6,6 +6,7 @@ namespace BodegasAburtoWMS.Datos
 {
     using BodegasAburtoWMS.Model;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
 
     public class BodegaDbContext : DbContext
     {
@@ -25,13 +26,43 @@ namespace BodegasAburtoWMS.Datos
         public DbSet<EstadoEnvio> EstadosEnvio => Set<EstadoEnvio>();
         public DbSet<Cliente> Clientes => Set<Cliente>();
         public DbSet<CuentaBalance> CuentaBalances { get; set; }
+        public DbSet<PresupuestoParametro> PresupuestoParametros { get; set; }
+        public DbSet<PresupuestoTrimestral> PresupuestoTrimestrales { get; set; }
+        public DbSet<EstadoFinancieroProforma> EstadosFinancierosProforma { get; set; }
 
-       /* protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Conexión original del repositorio WMS
-            optionsBuilder.UseSqlServer(
-                @"Server=DESKTOP-U3UH9Q1\SQLEXPRESS;Database=BodegasAburtoWMSFinal;Trusted_Connection=True;TrustServerCertificate=True;"
-            );
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(
+                    @"Server=DESKTOP-U3UH9Q1\SQLEXPRESS;Database=BodegasAburtoWMSFinal;Trusted_Connection=True;TrustServerCertificate=True;"
+                );
+            }
+        }*/
+
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                // Construir la configuración para leer el appsettings.json en tiempo de diseño
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddUserSecrets(typeof(BodegaDbContext).Assembly)
+                    .Build();
+
+                string connectionString = configuration.GetConnectionString("DefaultConnection");
+
+                if (!string.IsNullOrEmpty(connectionString))
+                {
+                    optionsBuilder.UseSqlServer(connectionString);
+                }
+                else
+                {
+                    // Opcional: Un respaldo por si el archivo no se encuentra en tiempo de diseño
+                    optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=BodegasAburtoWMSFinal;Trusted_Connection=True;TrustServerCertificate=True;");
+                }
+            }
         }*/
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

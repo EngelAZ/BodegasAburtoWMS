@@ -253,6 +253,123 @@ namespace BodegasAburtoWMS.Migrations
                     b.ToTable("EstadosEnvio", (string)null);
                 });
 
+            modelBuilder.Entity("BodegasAburtoWMS.Model.EstadoFinancieroProforma", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Anio")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("MontoProyectado")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MontoRealAnterior")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Rubro")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("TipoEstado")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("UltimaSincronizacion")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EstadosFinancierosProforma");
+                });
+
+            modelBuilder.Entity("BodegasAburtoWMS.Model.PresupuestoParametro", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Anio")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Clave")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("FechaModificacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PresupuestoParametros");
+                });
+
+            modelBuilder.Entity("BodegasAburtoWMS.Model.PresupuestoTrimestral", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Anio")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("AportesRequeridos")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CobranzasAgencias")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CostoVentas")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("GastosAdministracion")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("GastosEfectivo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("GastosVenta")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PagosCompras")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("RetirosPropietarios")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("SaldoFinalEfectivo")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Trimestre")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UltimaActualizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("VentasBodegaje")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("VentasDomicilio")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PresupuestoTrimestrales");
+                });
+
             modelBuilder.Entity("BodegasAburtoWMS.Model.Rol", b =>
                 {
                     b.Property<int>("IdRol")
