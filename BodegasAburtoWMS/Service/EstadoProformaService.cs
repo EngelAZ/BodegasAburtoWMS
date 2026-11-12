@@ -10,36 +10,23 @@ namespace BodegasAburtoWMS.Service
 {
     public class EstadoProformaService
     {
-        private readonly BodegaDbContext _context;
-
-        public EstadoProformaService(BodegaDbContext context)
+        private readonly IDbContextFactory<BodegaDbContext> _factory;
+        public EstadoProformaService(IDbContextFactory<BodegaDbContext> factory)
         {
-            _context = context;
+            _factory = factory;
         }
-
-        // Obtener los estados proforma de forma asincrónica
         public async Task<List<EstadoFinancieroProforma>> ObtenerEstadosProformaPorAnioAsync(int anio)
         {
-            return await _context.Set<EstadoFinancieroProforma>()
-                .AsNoTracking()
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.EstadosFinancierosProforma.AsNoTracking()
                 .Where(e => e.Anio == anio)
-                .OrderBy(e => e.TipoEstado)
-                .ToListAsync();
+                .OrderBy(e => e.TipoEstado).ToListAsync();
         }
 
-        // Sincronizar y recalcular estados proforma de forma asincrónica en segundo plano
         public async Task<bool> SincronizarEstadosProformaAsync(int anio)
         {
-            await Task.Run(() =>
-            {
-                // Lógica de consolidación contable:
-                // 1. Sumar ingresos de los 4 trimestres para el Estado de Resultados.
-                // 2. Calcular utilidad neta proyectada.
-                // 3. Verificar la partida doble en el Balance General (Activo = Pasivo + Patrimonio).
-                System.Threading.Thread.Sleep(300);
-            });
-
-            return true;
+            await using var context = await _factory.CreateDbContextAsync();
+            return await ProformaConsolidacion.SincronizarAsync(context, anio);
         }
     }
 }

@@ -25,12 +25,14 @@ namespace BodegasAburtoWMS.View
             this.Load += Estado_de_Resultados_Load;
         }
 
+        // Solo para el diseñador de Windows Forms. En ejecución usar DI.
         public Estado_de_Resultados()
         {
             InitializeComponent();
-            var contextLocal = new BodegaDbContext();
-            _repository = new BodegasAburtoWMSRepository(contextLocal);
-            this.Load += Estado_de_Resultados_Load;
+            if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
+                throw new InvalidOperationException(
+                    "Estado_de_Resultados debe abrirse con su constructor que recibe IBodegasAburtoWMSRepository.");
+            _repository = null!;
         }
 
         private async void Estado_de_Resultados_Load(object sender, EventArgs e)

@@ -40,7 +40,7 @@ namespace BodegasAburtoWMS.View
 
             try
             {
-                var formBalance = new Balance_General()
+                var formBalance = new Balance_General(_repository ?? throw new InvalidOperationException("Repositorio no configurado"))
                 {
                     TopLevel = false,
                     FormBorderStyle = FormBorderStyle.None,
@@ -65,7 +65,7 @@ namespace BodegasAburtoWMS.View
 
             try
             {
-                var formResultados = new Estado_de_Resultados()
+                var formResultados = new Estado_de_Resultados(_repository ?? throw new InvalidOperationException("Repositorio no configurado"))
                 {
                     TopLevel = false,
                     FormBorderStyle = FormBorderStyle.None,

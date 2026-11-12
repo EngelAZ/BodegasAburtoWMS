@@ -84,22 +84,19 @@ namespace BodegasAburtoWMS.View
             formHijo.Show();
         }
 
-        private void Principal_Load(object sender, EventArgs e)
+        private async void Principal_Load(object sender, EventArgs e)
         {
             // Ejecutar tarea en segundo plano (Asíncrona) para registrar el último acceso sin congelar la UI
             if (_repository != null)
             {
-                _ = Task.Run(async () =>
+                try
                 {
-                    try
-                    {
-                        await _repository.RegistrarUltimoAccesoAsync(usuarioActual.IdUsuario);
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Error al registrar último acceso: {ex.Message}");
-                    }
-                });
+                    await _repository.RegistrarUltimoAccesoAsync(usuarioActual.IdUsuario);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error al registrar último acceso: {ex.Message}");
+                }
             }
         }
 
@@ -160,21 +157,18 @@ namespace BodegasAburtoWMS.View
 
         }
 
-        private void PanelFinanciero_Load(object sender, EventArgs e)
+        private async void PanelFinanciero_Load(object sender, EventArgs e)
         {
             if (_repository != null)
             {
-                _ = Task.Run(async () =>
+                try
                 {
-                    try
-                    {
-                        await _repository.RegistrarUltimoAccesoAsync(usuarioActual.IdUsuario);
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Error al registrar último acceso: {ex.Message}");
-                    }
-                });
+                    await _repository.RegistrarUltimoAccesoAsync(usuarioActual.IdUsuario);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Error al registrar último acceso: {ex.Message}");
+                }
             }
         }
     }

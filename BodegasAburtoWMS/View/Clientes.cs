@@ -24,14 +24,14 @@ namespace BodegasAburtoWMS.View
         }
 
         // 2. Constructor alternativo y seguro (crea su propio contexto aislado para evitar cruce de hilos)
+        // Solo para el diseñador de Windows Forms. En ejecución usar DI.
         public Clientes()
         {
             InitializeComponent();
-
-            var contextLocal = new BodegaDbContext();
-            _repository = new BodegasAburtoWMSRepository(contextLocal);
-
-            this.Load += Clientes_Load;
+            if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
+                throw new InvalidOperationException(
+                    "Clientes debe abrirse con su constructor que recibe IBodegasAburtoWMSRepository.");
+            _repository = null!;
         }
 
         private async void Clientes_Load(object sender, EventArgs e)

@@ -127,9 +127,9 @@ namespace BodegasAburtoWMS.View
             MostrarFormEnCentro(new Reportes());
         }
 
-        private void Principal_Load(object sender, EventArgs e)
+        private async void Principal_Load(object sender, EventArgs e)
         {
-            if(InicioSesion == 0 || InicioSesion == null)
+            if (InicioSesion == 0 || InicioSesion == null)
             {
                 string nombreRol = usuarioActual.Rol?.Nombre ?? "Sin Rol Asignado";
 
@@ -147,24 +147,17 @@ namespace BodegasAburtoWMS.View
             // 2. Cargar el dashboard inicial
             MostrarFormEnCentro(new Dashboard());
 
-            // 3. Ejecutar tarea en segundo plano (Asíncrona) para registrar el último acceso sin congelar la UI
-            if(InicioSesion == 0 || InicioSesion == null)
+            // EF Core async ya libera el hilo de UI; sin Task.Run ni fire-and-forget.
+            if (InicioSesion == 0 && _repository != null)
             {
-                if (_repository != null)
+                try
                 {
-                    // Usamos Task.Run o directamente el método async del repositorio
-                    _ = Task.Run(async () =>
-                    {
-                        try
-                        {
-                            await _repository.RegistrarUltimoAccesoAsync(usuarioActual.IdUsuario);
-                        }
-                        catch (Exception ex)
-                        {
-                            // Manejo de errores en segundo plano (ej. log)
-                            System.Diagnostics.Debug.WriteLine($"Error al registrar último acceso: {ex.Message}");
-                        }
-                    });
+                    await _repository.RegistrarUltimoAccesoAsync(usuarioActual.IdUsuario);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                        $"Error al registrar último acceso: {ex.Message}");
                 }
             }
 

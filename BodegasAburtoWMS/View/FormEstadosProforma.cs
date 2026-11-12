@@ -52,8 +52,12 @@ namespace BodegasAburtoWMS.View
 
                 if (exito)
                 {
-                    MessageBox.Show("Estados Financieros Proforma sincronizados y recalculados al instante con éxito.", "Sincronización Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Rubros proforma calculables actualizados desde el presupuesto trimestral.", "Sincronización Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     await CargarEstadosProformaAsync();
+                }
+                else
+                {
+                    MessageBox.Show("No hay presupuestos y rubros proforma compatibles para ese año. No se modificaron datos.", "Sin datos para sincronizar", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)

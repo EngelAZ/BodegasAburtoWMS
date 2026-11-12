@@ -10,12 +10,12 @@ namespace BodegasAburtoWMS.Repository
 {
     public class BodegasAburtoWMSRepository : IBodegasAburtoWMSRepository
     {
-        private readonly BodegaDbContext _context;
+        private readonly IDbContextFactory<BodegaDbContext> _factory;
 
         // Inyección de dependencias única del DbContext
-        public BodegasAburtoWMSRepository(BodegaDbContext context)
+        public BodegasAburtoWMSRepository(IDbContextFactory<BodegaDbContext> factory)
         {
-            _context = context;
+            _factory = factory;
         }
 
         // ==========================================
@@ -24,7 +24,8 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<List<Usuario>> ObtenerUsuariosAsync()
         {
-            return await _context.Usuarios
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Usuarios
                 .Include(u => u.Rol)
                 .OrderBy(u => u.IdUsuario)
                 .ToListAsync();
@@ -32,48 +33,54 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<Usuario?> ObtenerUsuarioPorNombreAsync(string usuario)
         {
-            return await _context.Usuarios
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Usuarios
                 .Include(u => u.Rol) // Equivalente al INNER JOIN con Roles
                 .FirstOrDefaultAsync(u => u.UsuarioNombre == usuario && u.Activo);
         }
 
         public async Task<bool> RegistrarUsuarioAsync(Usuario usuario)
         {
+            await using var context = await _factory.CreateDbContextAsync();
             // Validar si el nombre de usuario ya existe
-            bool existe = await _context.Usuarios.AnyAsync(u => u.UsuarioNombre == usuario.UsuarioNombre);
+            bool existe = await context.Usuarios.AnyAsync(u => u.UsuarioNombre == usuario.UsuarioNombre);
             if (existe) return false; // Usuario duplicado
 
-            await _context.Usuarios.AddAsync(usuario);
-            return await _context.SaveChangesAsync() > 0;
+            await context.Usuarios.AddAsync(usuario);
+            return await context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> ActualizarUsuarioAsync(Usuario usuario)
         {
-            _context.Usuarios.Update(usuario);
-            return await _context.SaveChangesAsync() > 0;
+            await using var context = await _factory.CreateDbContextAsync();
+            context.Usuarios.Update(usuario);
+            return await context.SaveChangesAsync() > 0;
         }
 
         public async Task<bool> DesactivarUsuarioAsync(int idUsuario)
         {
-            var usuario = await _context.Usuarios.FindAsync(idUsuario);
+            await using var context = await _factory.CreateDbContextAsync();
+            var usuario = await context.Usuarios.FindAsync(idUsuario);
             if (usuario == null) return false;
 
             usuario.Activo = false;
-            return await _context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync() > 0;
         }
 
         public async Task RegistrarUltimoAccesoAsync(int idUsuario)
         {
-            var usuario = await _context.Usuarios.FindAsync(idUsuario);
+            await using var context = await _factory.CreateDbContextAsync();
+            var usuario = await context.Usuarios.FindAsync(idUsuario);
             if (usuario != null)
             {
                 usuario.UltimoAcceso = DateTime.Now;
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
         }
 
         public async Task RegistrarAuditoriaAsync(int idUsuario, string accion, string usuarioSistema, string detalle)
         {
+            await using var context = await _factory.CreateDbContextAsync();
             var auditoria = new AuditoriaUsuario
             {
                 IdUsuario = idUsuario,
@@ -83,8 +90,8 @@ namespace BodegasAburtoWMS.Repository
                 FechaRegistro = DateTime.Now
             };
 
-            await _context.AuditoriaUsuarios.AddAsync(auditoria);
-            await _context.SaveChangesAsync();
+            await context.AuditoriaUsuarios.AddAsync(auditoria);
+            await context.SaveChangesAsync();
         }
 
         // ==========================================
@@ -93,28 +100,32 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<List<ComboboxItem>> ObtenerAgenciasComboAsync()
         {
-            return await _context.Agencias
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Agencias
                 .Select(a => new ComboboxItem { Value = a.IdAgencia, Text = a.Nombre })
                 .ToListAsync();
         }
 
         public async Task<List<ComboboxItem>> ObtenerTiposEnvioComboAsync()
         {
-            return await _context.TiposEnvio
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.TiposEnvio
                 .Select(t => new ComboboxItem { Value = t.IdTipoEnvio, Text = t.Nombre })
                 .ToListAsync();
         }
 
         public async Task<List<ComboboxItem>> ObtenerEstadosEnvioComboAsync()
         {
-            return await _context.EstadosEnvio
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.EstadosEnvio
                 .Select(e => new ComboboxItem { Value = e.IdEstado, Text = e.Nombre })
                 .ToListAsync();
         }
 
         public async Task<List<ComboboxItem>> ObtenerClientesComboAsync()
         {
-            return await _context.Clientes
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Clientes
                 .Select(c => new ComboboxItem
                 {
                     Value = c.IdCliente,
@@ -125,7 +136,8 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<List<ComboboxItem>> ObtenerRolesComboAsync()
         {
-            return await _context.Roles
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Roles
                 .Select(r => new ComboboxItem { Value = r.IdRol, Text = r.Nombre })
                 .ToListAsync();
         }
@@ -136,29 +148,32 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<List<Agencia>> ObtenerAgenciasAsync()
         {
-            return await _context.Agencias
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Agencias
                 .OrderByDescending(a => a.FechaRegistro)
                 .ToListAsync();
         }
 
         public async Task<List<Agencia>> BuscarAgenciasAsync(string filtro)
         {
-            return await _context.Agencias
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Agencias
                 .Where(a => a.Nombre.Contains(filtro) || (a.Ciudad != null && a.Ciudad.Contains(filtro)))
                 .ToListAsync();
         }
 
         public async Task<bool> GuardarAgenciaAsync(Agencia agencia)
         {
+            await using var context = await _factory.CreateDbContextAsync();
             if (agencia.IdAgencia == 0)
             {
-                await _context.Agencias.AddAsync(agencia);
+                await context.Agencias.AddAsync(agencia);
             }
             else
             {
-                _context.Agencias.Update(agencia);
+                context.Agencias.Update(agencia);
             }
-            return await _context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync() > 0;
         }
 
         // ==========================================
@@ -167,29 +182,32 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<List<Cliente>> ObtenerClientesAsync()
         {
-            return await _context.Clientes
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Clientes
                 .OrderByDescending(c => c.FechaRegistro)
                 .ToListAsync();
         }
 
         public async Task<List<Cliente>> BuscarClientesAsync(string filtro)
         {
-            return await _context.Clientes
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Clientes
                 .Where(c => c.Nombre.Contains(filtro) || c.Apellido.Contains(filtro) || (c.NumeroCedula != null && c.NumeroCedula.Contains(filtro)))
                 .ToListAsync();
         }
 
         public async Task<bool> GuardarClienteAsync(Cliente cliente)
         {
+            await using var context = await _factory.CreateDbContextAsync();
             if (cliente.IdCliente == 0)
             {
-                await _context.Clientes.AddAsync(cliente);
+                await context.Clientes.AddAsync(cliente);
             }
             else
             {
-                _context.Clientes.Update(cliente);
+                context.Clientes.Update(cliente);
             }
-            return await _context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync() > 0;
         }
 
         // ==========================================
@@ -198,13 +216,15 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<bool> RegistrarEnvioAsync(Envio envio)
         {
-            await _context.Envios.AddAsync(envio);
-            return await _context.SaveChangesAsync() > 0;
+            await using var context = await _factory.CreateDbContextAsync();
+            await context.Envios.AddAsync(envio);
+            return await context.SaveChangesAsync() > 0;
         }
 
         public async Task<List<Envio>> ObtenerEnviosAsync()
         {
-            return await _context.Envios
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Envios
                 .Include(e => e.Agencia)
                 .Include(e => e.ClienteRemitente)
                 .Include(e => e.ClienteDestinatario)
@@ -216,7 +236,8 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<List<Envio>> BuscarEnviosAsync(string filtro)
         {
-            return await _context.Envios
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Envios
                 .Include(e => e.Agencia)
                 .Include(e => e.ClienteRemitente)
                 .Include(e => e.ClienteDestinatario)
@@ -236,7 +257,8 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<List<Envio>> ObtenerEnviosPorEstadoAsync(int idEstado)
         {
-            return await _context.Envios
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Envios
                 .Include(e => e.Agencia)
                 .Include(e => e.ClienteRemitente)
                 .Include(e => e.ClienteDestinatario)
@@ -250,7 +272,8 @@ namespace BodegasAburtoWMS.Repository
         // Método universal para cambiar el estado de un envío de forma controlada
         public async Task<bool> CambiarEstadoEnvioAsync(int idEnvio, int nuevoIdEstado, int idUsuarioAuditoria)
         {
-            var envio = await _context.Envios.FindAsync(idEnvio);
+            await using var context = await _factory.CreateDbContextAsync();
+            var envio = await context.Envios.FindAsync(idEnvio);
             if (envio == null) return false;
 
             int estadoAnterior = (int)envio.IdEstado;
@@ -275,13 +298,14 @@ namespace BodegasAburtoWMS.Repository
                 FechaRegistro = DateTime.Now
             };
 
-            await _context.AuditoriaUsuarios.AddAsync(auditoria);
-            return await _context.SaveChangesAsync() > 0;
+            await context.AuditoriaUsuarios.AddAsync(auditoria);
+            return await context.SaveChangesAsync() > 0;
         }
 
         public async Task<List<Envio>> ObtenerEnviosPendientesAsync()
         {
-            return await _context.Envios
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Envios
                 .Include(e => e.Agencia)
                 .Include(e => e.ClienteRemitente)
                 .Include(e => e.ClienteDestinatario)
@@ -294,7 +318,8 @@ namespace BodegasAburtoWMS.Repository
         // Registrar la salida/entrega de un envío corregido con IdEstado y las propiedades de AuditoriaUsuario
         public async Task<bool> RegistrarEntregaEnvioAsync(int idEnvio, int idUsuarioAuditoria)
         {
-            var envio = await _context.Envios.FindAsync(idEnvio);
+            await using var context = await _factory.CreateDbContextAsync();
+            var envio = await context.Envios.FindAsync(idEnvio);
             if (envio == null) return false;
 
             envio.FechaEntregaReal = DateTime.Now;
@@ -310,13 +335,14 @@ namespace BodegasAburtoWMS.Repository
                 FechaRegistro = DateTime.Now
             };
 
-            await _context.AuditoriaUsuarios.AddAsync(auditoria);
-            return await _context.SaveChangesAsync() > 0;
+            await context.AuditoriaUsuarios.AddAsync(auditoria);
+            return await context.SaveChangesAsync() > 0;
         }
 
         public async Task<List<Envio>> ObtenerEnviosHistorialAsync()
         {
-            return await _context.Envios
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.Envios
                 .Include(e => e.Agencia)
                 .Include(e => e.ClienteRemitente)
                 .Include(e => e.ClienteDestinatario)
@@ -329,7 +355,8 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<bool> RevertirEntregaEnvioAsync(int idEnvio, int idUsuarioAuditoria)
         {
-            var envio = await _context.Envios.FindAsync(idEnvio);
+            await using var context = await _factory.CreateDbContextAsync();
+            var envio = await context.Envios.FindAsync(idEnvio);
             if (envio == null) return false;
 
             // Revertir valores de entrega
@@ -345,14 +372,15 @@ namespace BodegasAburtoWMS.Repository
                 FechaRegistro = DateTime.Now
             };
 
-            await _context.AuditoriaUsuarios.AddAsync(auditoria);
-            return await _context.SaveChangesAsync() > 0;
+            await context.AuditoriaUsuarios.AddAsync(auditoria);
+            return await context.SaveChangesAsync() > 0;
         }
 
         // Balance General
         public async Task<List<CuentaBalance>> ObtenerCuentasBalanceAsync()
         {
-            return await _context.CuentaBalances
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.CuentaBalances
                 .OrderBy(c => c.Tipo)
                 .ThenBy(c => c.NombreCuenta)
                 .ToListAsync();
@@ -360,28 +388,31 @@ namespace BodegasAburtoWMS.Repository
 
         public async Task<bool> GuardarCuentaBalanceAsync(CuentaBalance cuenta)
         {
+            await using var context = await _factory.CreateDbContextAsync();
             if (cuenta.IdCuenta == 0)
             {
-                await _context.CuentaBalances.AddAsync(cuenta);
+                await context.CuentaBalances.AddAsync(cuenta);
             }
             else
             {
-                _context.CuentaBalances.Update(cuenta);
+                context.CuentaBalances.Update(cuenta);
             }
-            return await _context.SaveChangesAsync() > 0;
+            return await context.SaveChangesAsync() > 0;
         }
         public async Task<bool> EliminarCuentaBalanceAsync(int idCuenta)
         {
-            var cuenta = await _context.CuentaBalances.FindAsync(idCuenta);
+            await using var context = await _factory.CreateDbContextAsync();
+            var cuenta = await context.CuentaBalances.FindAsync(idCuenta);
             if (cuenta == null) return false;
 
-            _context.CuentaBalances.Remove(cuenta);
-            int filasAfectadas = await _context.SaveChangesAsync();
+            context.CuentaBalances.Remove(cuenta);
+            int filasAfectadas = await context.SaveChangesAsync();
             return filasAfectadas > 0;
         }
         public async Task<List<CuentaBalance>> ObtenerCuentasBalancePorAnioAsync(int anio)
         {
-            return await _context.CuentaBalances
+            await using var context = await _factory.CreateDbContextAsync();
+            return await context.CuentaBalances
                 .Where(c => c.Anio == anio)
                 .OrderBy(c => c.Tipo)
                 .ThenBy(c => c.NombreCuenta)
@@ -389,7 +420,7 @@ namespace BodegasAburtoWMS.Repository
         }
         /*public async Task<List<int>> ObtenerAniosDisponiblesAsync()
         {
-            return await _context.CuentaBalances
+            return await context.CuentaBalances
                 .Select(c => c.Anio)
                 .Distinct()
                 .OrderByDescending(a => a)
@@ -399,7 +430,8 @@ namespace BodegasAburtoWMS.Repository
         // Años fiscales exclusivos para Balance General (Activos, Pasivos, Patrimonio)
         public List<int> ObtenerAniosBalance()
         {
-            return _context.CuentaBalances
+            using var context = _factory.CreateDbContext();
+            return context.CuentaBalances
                 .Where(c => c.Tipo == "Activos corrientes" || c.Tipo == "Activos fijos" ||
                             c.Tipo == "Pasivos Corrientes" || c.Tipo == "Pasivos fijos" ||
                             c.Tipo == "Patrimonio")
@@ -410,7 +442,8 @@ namespace BodegasAburtoWMS.Repository
         }
         public List<CuentaBalance> ObtenerCuentasBalancePorAnio(int anio)
         {
-            return _context.CuentaBalances
+            using var context = _factory.CreateDbContext();
+            return context.CuentaBalances
                 .Where(c => c.Anio == anio && (
                     c.Tipo == "Activos corrientes" ||
                     c.Tipo == "Activos fijos" ||
@@ -425,7 +458,8 @@ namespace BodegasAburtoWMS.Repository
         // Años fiscales exclusivos para Estado de Resultados (Ingresos, Costos, Gastos)
         public List<int> ObtenerAniosResultados()
         {
-            return _context.CuentaBalances
+            using var context = _factory.CreateDbContext();
+            return context.CuentaBalances
                 .Where(c => c.Tipo == "Ingresos" || c.Tipo == "Costos" || c.Tipo == "Gastos")
                 .Select(c => c.Anio)
                 .Distinct()
@@ -434,7 +468,8 @@ namespace BodegasAburtoWMS.Repository
         }
         public List<CuentaBalance> ObtenerCuentasResultadosPorAnio(int anio)
         {
-            return _context.CuentaBalances
+            using var context = _factory.CreateDbContext();
+            return context.CuentaBalances
                 .Where(c => c.Anio == anio && (
                     c.Tipo == "Ingresos" ||
                     c.Tipo == "Costos" ||
@@ -446,17 +481,18 @@ namespace BodegasAburtoWMS.Repository
 
         public List<CuentaBalance> ObtenerCuentasParaAnalisisHorizontal(int anioActual, int anioAnterior, string tipoModulo)
         {
+            using var context = _factory.CreateDbContext();
             // Definimos los filtros según si es Balance General o Estado de Resultados
             var tiposFiltro = tipoModulo == "Balance"
                 ? new[] { "Activos corrientes", "Activos fijos", "Pasivos Corrientes", "Pasivos fijos", "Patrimonio" }
                 : new[] { "Ingresos", "Costos", "Gastos" };
 
             // Obtenemos las cuentas de ambos años
-            var cuentasActuales = _context.CuentaBalances
+            var cuentasActuales = context.CuentaBalances
                 .Where(c => c.Anio == anioActual && tiposFiltro.Contains(c.Tipo))
                 .ToList();
 
-            var cuentasAnteriores = _context.CuentaBalances
+            var cuentasAnteriores = context.CuentaBalances
                 .Where(c => c.Anio == anioAnterior && tiposFiltro.Contains(c.Tipo))
                 .ToList();
 

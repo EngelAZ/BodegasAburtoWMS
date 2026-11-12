@@ -35,12 +35,12 @@ namespace BodegasAburtoWMS
         }
 
         /*
-            Usuario:
-            admin
+        Usuario:
+        admin
 
-            Contraseña:
-            Admin123*
-         */
+        Contraseña:
+        Admin123*
+        */
         private async void btnInicioSesion_Click(object sender, EventArgs e)
         {
             string nombreUsuario = tbxUsuario.Text.Trim();

@@ -25,12 +25,14 @@ namespace BodegasAburtoWMS.View
             this.Load += Balance_General_Load;
         }
 
+        // Solo para el diseñador de Windows Forms. En ejecución usar DI.
         public Balance_General()
         {
             InitializeComponent();
-            var contextLocal = new BodegaDbContext();
-            _repository = new BodegasAburtoWMSRepository(contextLocal);
-            this.Load += Balance_General_Load;
+            if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
+                throw new InvalidOperationException(
+                    "Balance_General debe abrirse con su constructor que recibe IBodegasAburtoWMSRepository.");
+            _repository = null!;
         }
 
         private async void Balance_General_Load(object sender, EventArgs e)
