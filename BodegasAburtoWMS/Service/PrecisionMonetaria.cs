@@ -3,14 +3,15 @@ using System;
 namespace BodegasAburtoWMS.Service
 {
     /// <summary>
-    /// Regla monetaria única de ABURTO WMS (NIO): redondear cada saldo de
-    /// cuenta a centavos antes de persistirlo y antes de sumar importes de
-    /// presentación. No truncar; 0.005 redondea alejándose de cero.
-    /// Para cálculos intermedios (tasas, porcentajes, depreciaciones), conservar
-    /// toda la precisión decimal y redondear al terminar el importe de la cuenta.
+    /// Guarda hasta 6 decimales originales (decimal(18,6) SQL Server);
+    /// redondea a 2 SOLO cuando produce el importe final que se presenta.
+    /// No reemplaza ni ajusta centavos por diferencias contables.
     /// </summary>
     public static class PrecisionMonetaria
     {
+        public static decimal ConservarOrigen(decimal importe) =>
+            decimal.Round(importe, 6, MidpointRounding.AwayFromZero);
+
         public static decimal Redondear(decimal importe) =>
             decimal.Round(importe, 2, MidpointRounding.AwayFromZero);
     }

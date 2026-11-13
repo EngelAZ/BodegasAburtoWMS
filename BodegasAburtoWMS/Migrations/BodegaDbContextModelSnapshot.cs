@@ -539,8 +539,8 @@ namespace BodegasAburtoWMS.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Importe")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 6)
+                        .HasColumnType("decimal(18,6)");
 
                     b.Property<byte[]>("Version")
                         .IsConcurrencyToken()

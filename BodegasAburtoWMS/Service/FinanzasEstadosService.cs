@@ -148,13 +148,13 @@ namespace BodegasAburtoWMS.Service
                 {
                     IdEjercicioFinanciero = ejercicioId,
                     IdCuentaFinanciera = cuentaId,
-                    Importe = PrecisionMonetaria.Redondear(importe),
+                    Importe = PrecisionMonetaria.ConservarOrigen(importe),
                     ActualizadoUtc = DateTime.UtcNow
                 });
             }
             else
             {
-                saldo.Importe = PrecisionMonetaria.Redondear(importe);
+                saldo.Importe = PrecisionMonetaria.ConservarOrigen(importe);
                 saldo.ActualizadoUtc = DateTime.UtcNow;
             }
             await db.SaveChangesAsync(ct);

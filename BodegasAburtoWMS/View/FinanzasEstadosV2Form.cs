@@ -48,8 +48,8 @@ namespace BodegasAburtoWMS.View
         private readonly NumericUpDown _importe = new()
         {
             Width = 140, Minimum = 0, Maximum = 999999999999.99m,
-            // Admite importes calculados con hasta 6 decimales antes de
-            // guardarlos en DECIMAL(18,2) con redondeo explícito.
+            // Preserva hasta seis decimales en DECIMAL(18,6).
+            // El reporte final presenta y comprueba los importes en centavos.
             DecimalPlaces = 6, Increment = 0.001m, ThousandsSeparator = true
         };
         private readonly Label _importeRedondeado = new()
@@ -162,8 +162,8 @@ namespace BodegasAburtoWMS.View
             barra.Controls.Add(Etiqueta("C$")); barra.Controls.Add(_importe);
             barra.Controls.Add(_importeRedondeado);
             _ayuda.SetToolTip(_importe,
-                "Puedes capturar hasta 6 decimales. Al guardar se redondea a 2 " +
-                "con MidpointRounding.AwayFromZero, sin truncar.");
+                "Puedes capturar hasta 6 decimales: se conservarán en SQL Server. " +
+                "Los resultados finales se redondean a dos para su presentación.");
             _importe.ValueChanged += (_, _) => ActualizarVistaPreviaImporte();
             ActualizarVistaPreviaImporte();
             var guardar = Boton("Guardar saldo", _naranja);
@@ -329,8 +329,8 @@ namespace BodegasAburtoWMS.View
             int cuentaId = ValorSeleccionado(_cuentaCaptura);
             if (ejercicioId == 0 || cuentaId == 0)
                 throw new InvalidOperationException("Selecciona ejercicio y cuenta.");
-            // No recortar a 2 decimales aquí: el servicio recibe todos los
-            // decimales escritos y aplica la regla de redondeo una sola vez.
+            // Preservar los seis decimales: NO redondear antes de guardar.
+            // El motor hace el redondeo final cuando genera cada total.
             await _service.GuardarSaldoAsync(ejercicioId, cuentaId, _importe.Value);
             await RefrescarSaldosAsync();
         }
@@ -338,7 +338,7 @@ namespace BodegasAburtoWMS.View
         private void ActualizarVistaPreviaImporte()
         {
             _importeRedondeado.Text =
-                $"Se guardará: C$ {PrecisionMonetaria.Redondear(_importe.Value):N2}";
+                $"Original: C$ {_importe.Value:N6} · Se mostrará: C$ {PrecisionMonetaria.Redondear(_importe.Value):N2}";
         }
 
         private async Task RefrescarSaldosAsync()
@@ -419,6 +419,8 @@ namespace BodegasAburtoWMS.View
                 _resumen.Text = $"Balance General {snapshotActual.Ejercicio.Anio} ({snapshotActual.Ejercicio.Escenario})" + Environment.NewLine +
                     $"Activos C$ {b.TotalActivos:N2} = Pasivos C$ {b.TotalPasivos:N2} + Patrimonio C$ {b.Patrimonio:N2}" + Environment.NewLine +
                     $"Diferencia: C$ {b.Diferencia:N2}. Estado: {(b.EstaCuadrado ? "CUADRADO" : "NO CUADRADO — revisar saldos")}." + Environment.NewLine +
+                    "Los totales se calculan usando 6 decimales originales y se muestran con 2; " +
+                    "la suma de cifras visibles puede diferir en C$0.01 por presentación." + Environment.NewLine +
                     "El Estado de Resultados calcula la utilidad/pérdida por separado. " +
                     "Para reflejarla en el patrimonio, registra 'Resultado del ejercicio' (ganancia) " +
                     "o una cuenta de contrapatrimonio (pérdida), solo si no está incluida en otro saldo.";
@@ -435,66 +437,66 @@ namespace BodegasAburtoWMS.View
 
         private static List<FilaInforme> CrearFilasBalance(List<LineaEstadoFinanciero> lineas)
         {
-            // Las filas deben sumar exactamente lo que se muestra y se guarda.
-            lineas = lineas.Select(x => x with
-            {
-                Importe = PrecisionMonetaria.Redondear(x.Importe)
-            }).ToList();
+            // Mostrar las cuentas con dos decimales, pero calcular subtotales
+            // usando la precisión ORIGINAL, tal como Excel sin REDONDEAR por fila.
             var resultado = new List<FilaInforme>();
-            decimal Agregar(string nombre, GrupoCuentaFinanciera grupo, decimal signo = 1)
+            decimal Agregar(string seccion, GrupoCuentaFinanciera grupo, decimal signo = 1m)
             {
-                foreach (var x in lineas.Where(x => x.Grupo == grupo).OrderBy(x => x.OrdenPresentacion).ThenBy(x => x.Codigo))
-                    resultado.Add(new FilaInforme(nombre, x.Codigo, x.Nombre, x.Importe * signo));
-                return lineas.Where(x => x.Grupo == grupo).Sum(x => x.Importe) * signo;
+                var seleccionadas = lineas.Where(x => x.Grupo == grupo)
+                    .OrderBy(x => x.OrdenPresentacion).ThenBy(x => x.Codigo).ToList();
+                foreach (var x in seleccionadas)
+                    resultado.Add(new FilaInforme(seccion, x.Codigo, x.Nombre,
+                        PrecisionMonetaria.Redondear(x.Importe * signo)));
+                return seleccionadas.Sum(x => x.Importe) * signo;
             }
-            decimal corriente = Agregar("Activos corrientes", GrupoCuentaFinanciera.ActivoCorriente);
-            decimal fijo = Agregar("Activos no corrientes", GrupoCuentaFinanciera.ActivoNoCorriente);
-            decimal contra = Agregar("(-) Depreciación / contraactivo", GrupoCuentaFinanciera.ContraActivo, -1);
-            resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL ACTIVOS", corriente + fijo + contra));
-            decimal pc = Agregar("Pasivos corrientes", GrupoCuentaFinanciera.PasivoCorriente);
-            decimal pf = Agregar("Pasivos no corrientes", GrupoCuentaFinanciera.PasivoNoCorriente);
-            resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL PASIVOS", pc + pf));
-            decimal patrimonioBruto = Agregar("Patrimonio", GrupoCuentaFinanciera.Patrimonio);
-            decimal contraPatrimonio = Agregar("(-) Contrapatrimonio", GrupoCuentaFinanciera.ContraPatrimonio, -1);
-            decimal patrimonio = patrimonioBruto + contraPatrimonio;
-            resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL PATRIMONIO NETO", patrimonio));
-            resultado.Add(new FilaInforme("TOTAL", "", "PASIVO + PATRIMONIO", pc + pf + patrimonio));
-            resultado.Add(new FilaInforme("CONTROL", "", "DIFERENCIA DEL BALANCE", corriente + fijo + contra - (pc + pf + patrimonio)));
+
+            // Todos los totales proceden del mismo motor que el resumen superior.
+            var b = CalculadoraEstadosFinancieros.CalcularBalance(lineas);
+            Agregar("Activos corrientes", GrupoCuentaFinanciera.ActivoCorriente);
+            Agregar("Activos no corrientes", GrupoCuentaFinanciera.ActivoNoCorriente);
+            Agregar("(-) Depreciación / contraactivo", GrupoCuentaFinanciera.ContraActivo, -1m);
+            resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL ACTIVOS", b.TotalActivos));
+            Agregar("Pasivos corrientes", GrupoCuentaFinanciera.PasivoCorriente);
+            Agregar("Pasivos no corrientes", GrupoCuentaFinanciera.PasivoNoCorriente);
+            resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL PASIVOS", b.TotalPasivos));
+            Agregar("Patrimonio", GrupoCuentaFinanciera.Patrimonio);
+            Agregar("(-) Contrapatrimonio", GrupoCuentaFinanciera.ContraPatrimonio, -1m);
+            resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL PATRIMONIO NETO", b.Patrimonio));
+            resultado.Add(new FilaInforme("TOTAL", "", "PASIVO + PATRIMONIO", b.TotalPasivos + b.Patrimonio));
+            resultado.Add(new FilaInforme("CONTROL", "", "DIFERENCIA DEL BALANCE", b.Diferencia));
             return resultado;
         }
 
         private static List<FilaInforme> CrearFilasResultados(List<LineaEstadoFinanciero> lineas)
         {
-            // Las filas deben sumar exactamente lo que se muestra y se guarda.
-            lineas = lineas.Select(x => x with
-            {
-                Importe = PrecisionMonetaria.Redondear(x.Importe)
-            }).ToList();
             var resultado = new List<FilaInforme>();
-            decimal Agregar(string seccion, GrupoCuentaFinanciera grupo, decimal signo = 1)
+            decimal Agregar(string seccion, GrupoCuentaFinanciera grupo, decimal signo = 1m)
             {
-                foreach (var x in lineas.Where(x => x.Grupo == grupo).OrderBy(x => x.OrdenPresentacion).ThenBy(x => x.Codigo))
-                    resultado.Add(new FilaInforme(seccion, x.Codigo, x.Nombre, x.Importe * signo));
-                return lineas.Where(x => x.Grupo == grupo).Sum(x => x.Importe) * signo;
+                var seleccionadas = lineas.Where(x => x.Grupo == grupo)
+                    .OrderBy(x => x.OrdenPresentacion).ThenBy(x => x.Codigo).ToList();
+                foreach (var x in seleccionadas)
+                    resultado.Add(new FilaInforme(seccion, x.Codigo, x.Nombre,
+                        PrecisionMonetaria.Redondear(x.Importe * signo)));
+                return seleccionadas.Sum(x => x.Importe) * signo;
             }
-            void Subtotal(string nombre, decimal val) => resultado.Add(new FilaInforme("SUBTOTAL", "", nombre, val));
-            decimal ingresos = Agregar("Ingresos operativos", GrupoCuentaFinanciera.IngresoOperativo);
-            Subtotal("INGRESOS OPERATIVOS", ingresos);
-            decimal costos = Agregar("(-) Costo del servicio", GrupoCuentaFinanciera.CostoServicio, -1);
-            decimal bruta = ingresos + costos;
-            Subtotal("UTILIDAD BRUTA", bruta);
-            decimal gastos = Agregar("(-) Gastos administrativos", GrupoCuentaFinanciera.GastoAdministrativo, -1)
-                           + Agregar("(-) Gastos de ventas", GrupoCuentaFinanciera.GastoVenta, -1)
-                           + Agregar("(-) Depreciación del período", GrupoCuentaFinanciera.GastoDepreciacion, -1);
-            decimal operativa = bruta + gastos;
-            Subtotal("UTILIDAD OPERATIVA", operativa);
-            decimal otros = Agregar("Otros ingresos", GrupoCuentaFinanciera.OtroIngreso);
-            decimal fin = Agregar("(-) Gastos financieros", GrupoCuentaFinanciera.GastoFinanciero, -1)
-                        + Agregar("(-) Otros gastos", GrupoCuentaFinanciera.OtroGasto, -1);
-            decimal antes = operativa + otros + fin;
-            Subtotal("UTILIDAD ANTES DE IMPUESTOS", antes);
-            decimal impuestos = Agregar("(-) Impuesto sobre la renta", GrupoCuentaFinanciera.ImpuestoRenta, -1);
-            Subtotal("UTILIDAD NETA", antes + impuestos);
+            void Subtotal(string nombre, decimal val) =>
+                resultado.Add(new FilaInforme("SUBTOTAL", "", nombre, val));
+
+            var r = CalculadoraEstadosFinancieros.CalcularResultados(lineas);
+            Agregar("Ingresos operativos", GrupoCuentaFinanciera.IngresoOperativo);
+            Subtotal("INGRESOS OPERATIVOS", r.IngresosOperativos);
+            Agregar("(-) Costo del servicio", GrupoCuentaFinanciera.CostoServicio, -1m);
+            Subtotal("UTILIDAD BRUTA", r.UtilidadBruta);
+            Agregar("(-) Gastos administrativos", GrupoCuentaFinanciera.GastoAdministrativo, -1m);
+            Agregar("(-) Gastos de ventas", GrupoCuentaFinanciera.GastoVenta, -1m);
+            Agregar("(-) Depreciación del período", GrupoCuentaFinanciera.GastoDepreciacion, -1m);
+            Subtotal("UTILIDAD OPERATIVA", r.UtilidadOperativa);
+            Agregar("Otros ingresos", GrupoCuentaFinanciera.OtroIngreso);
+            Agregar("(-) Gastos financieros", GrupoCuentaFinanciera.GastoFinanciero, -1m);
+            Agregar("(-) Otros gastos", GrupoCuentaFinanciera.OtroGasto, -1m);
+            Subtotal("UTILIDAD ANTES DE IMPUESTOS", r.UtilidadAntesImpuestos);
+            Agregar("(-) Impuesto sobre la renta", GrupoCuentaFinanciera.ImpuestoRenta, -1m);
+            Subtotal("UTILIDAD NETA", r.UtilidadNeta);
             return resultado;
         }
 

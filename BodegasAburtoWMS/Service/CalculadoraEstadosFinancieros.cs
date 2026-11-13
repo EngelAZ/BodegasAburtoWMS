@@ -25,34 +25,40 @@ namespace BodegasAburtoWMS.Service
 
         public static BalanceCalculado CalcularBalance(IEnumerable<LineaEstadoFinanciero> lineas)
         {
-            // Presentación, totalización y validación usan los mismos centavos.
-            // Nunca truncar ni sumar importes con fracciones ocultas.
-            var datos = lineas.Select(x => x with
-            {
-                Importe = PrecisionMonetaria.Redondear(x.Importe)
-            }).ToList();
-            decimal S(GrupoCuentaFinanciera g) => datos.Where(x => x.Grupo == g).Sum(x => x.Importe);
+            // Mantener TODOS los decimales almacenados hasta finalizar cada total.
+            // No sumar valores individuales ya redondeados para visualizarlos.
+            var datos = lineas.ToList();
+            decimal S(GrupoCuentaFinanciera grupo) =>
+                datos.Where(x => x.Grupo == grupo).Sum(x => x.Importe);
+
             decimal corriente = S(GrupoCuentaFinanciera.ActivoCorriente);
             decimal noCorriente = S(GrupoCuentaFinanciera.ActivoNoCorriente);
-            decimal contra = S(GrupoCuentaFinanciera.ContraActivo);
+            decimal contraActivo = S(GrupoCuentaFinanciera.ContraActivo);
             decimal pasivoCorriente = S(GrupoCuentaFinanciera.PasivoCorriente);
             decimal pasivoNoCorriente = S(GrupoCuentaFinanciera.PasivoNoCorriente);
             decimal patrimonioBruto = S(GrupoCuentaFinanciera.Patrimonio);
             decimal contraPatrimonio = S(GrupoCuentaFinanciera.ContraPatrimonio);
-            decimal patrimonio = patrimonioBruto - contraPatrimonio;
-            decimal activos = corriente + noCorriente - contra;
-            decimal pasivos = pasivoCorriente + pasivoNoCorriente;
+
+            decimal activosRaw = corriente + noCorriente - contraActivo;
+            decimal pasivosRaw = pasivoCorriente + pasivoNoCorriente;
+            decimal patrimonioRaw = patrimonioBruto - contraPatrimonio;
+
+            // Comprobación contable coherente con los TRES totales presentados.
+            // Una diferencia de 0.01 NO se oculta ni se tolera automáticamente.
+            decimal activos = PrecisionMonetaria.Redondear(activosRaw);
+            decimal pasivos = PrecisionMonetaria.Redondear(pasivosRaw);
+            decimal patrimonio = PrecisionMonetaria.Redondear(patrimonioRaw);
             return new BalanceCalculado
             {
-                ActivoCorriente = corriente,
-                ActivoNoCorrienteBruto = noCorriente,
-                ContraActivo = contra,
+                ActivoCorriente = PrecisionMonetaria.Redondear(corriente),
+                ActivoNoCorrienteBruto = PrecisionMonetaria.Redondear(noCorriente),
+                ContraActivo = PrecisionMonetaria.Redondear(contraActivo),
                 TotalActivos = activos,
-                PasivoCorriente = pasivoCorriente,
-                PasivoNoCorriente = pasivoNoCorriente,
+                PasivoCorriente = PrecisionMonetaria.Redondear(pasivoCorriente),
+                PasivoNoCorriente = PrecisionMonetaria.Redondear(pasivoNoCorriente),
                 TotalPasivos = pasivos,
-                PatrimonioBruto = patrimonioBruto,
-                ContraPatrimonio = contraPatrimonio,
+                PatrimonioBruto = PrecisionMonetaria.Redondear(patrimonioBruto),
+                ContraPatrimonio = PrecisionMonetaria.Redondear(contraPatrimonio),
                 Patrimonio = patrimonio,
                 Diferencia = activos - (pasivos + patrimonio)
             };
@@ -60,37 +66,33 @@ namespace BodegasAburtoWMS.Service
 
         public static ResultadosCalculados CalcularResultados(IEnumerable<LineaEstadoFinanciero> lineas)
         {
-            // Presentación, totalización y validación usan los mismos centavos.
-            // Nunca truncar ni sumar importes con fracciones ocultas.
-            var datos = lineas.Select(x => x with
-            {
-                Importe = PrecisionMonetaria.Redondear(x.Importe)
-            }).ToList();
-            decimal S(GrupoCuentaFinanciera g) => datos.Where(x => x.Grupo == g).Sum(x => x.Importe);
+            var datos = lineas.ToList();
+            decimal S(GrupoCuentaFinanciera grupo) =>
+                datos.Where(x => x.Grupo == grupo).Sum(x => x.Importe);
             decimal ingresos = S(GrupoCuentaFinanciera.IngresoOperativo);
             decimal costos = S(GrupoCuentaFinanciera.CostoServicio);
-            decimal bruta = ingresos - costos;
+            decimal utilidadBruta = ingresos - costos;
             decimal gastosOperativos = S(GrupoCuentaFinanciera.GastoAdministrativo)
-                                     + S(GrupoCuentaFinanciera.GastoVenta)
-                                     + S(GrupoCuentaFinanciera.GastoDepreciacion);
-            decimal operativa = bruta - gastosOperativos;
+                                    + S(GrupoCuentaFinanciera.GastoVenta)
+                                    + S(GrupoCuentaFinanciera.GastoDepreciacion);
+            decimal utilidadOperativa = utilidadBruta - gastosOperativos;
             decimal otrosIngresos = S(GrupoCuentaFinanciera.OtroIngreso);
             decimal financierosYOtros = S(GrupoCuentaFinanciera.GastoFinanciero)
                                        + S(GrupoCuentaFinanciera.OtroGasto);
-            decimal antesImpuestos = operativa + otrosIngresos - financierosYOtros;
+            decimal antesImpuestos = utilidadOperativa + otrosIngresos - financierosYOtros;
             decimal impuesto = S(GrupoCuentaFinanciera.ImpuestoRenta);
             return new ResultadosCalculados
             {
-                IngresosOperativos = ingresos,
-                CostoServicios = costos,
-                UtilidadBruta = bruta,
-                GastosOperativos = gastosOperativos,
-                UtilidadOperativa = operativa,
-                OtrosIngresos = otrosIngresos,
-                GastosFinancierosYOtros = financierosYOtros,
-                UtilidadAntesImpuestos = antesImpuestos,
-                ImpuestoRenta = impuesto,
-                UtilidadNeta = antesImpuestos - impuesto
+                IngresosOperativos = PrecisionMonetaria.Redondear(ingresos),
+                CostoServicios = PrecisionMonetaria.Redondear(costos),
+                UtilidadBruta = PrecisionMonetaria.Redondear(utilidadBruta),
+                GastosOperativos = PrecisionMonetaria.Redondear(gastosOperativos),
+                UtilidadOperativa = PrecisionMonetaria.Redondear(utilidadOperativa),
+                OtrosIngresos = PrecisionMonetaria.Redondear(otrosIngresos),
+                GastosFinancierosYOtros = PrecisionMonetaria.Redondear(financierosYOtros),
+                UtilidadAntesImpuestos = PrecisionMonetaria.Redondear(antesImpuestos),
+                ImpuestoRenta = PrecisionMonetaria.Redondear(impuesto),
+                UtilidadNeta = PrecisionMonetaria.Redondear(antesImpuestos - impuesto)
             };
         }
 
@@ -106,14 +108,8 @@ namespace BodegasAburtoWMS.Service
             IEnumerable<LineaEstadoFinanciero> anterior,
             IEnumerable<LineaEstadoFinanciero> actual)
         {
-            var a = anterior.Select(x => x with
-            {
-                Importe = PrecisionMonetaria.Redondear(x.Importe)
-            }).ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
-            var b = actual.Select(x => x with
-            {
-                Importe = PrecisionMonetaria.Redondear(x.Importe)
-            }).ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
+            var a = anterior.ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
+            var b = actual.ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
             return a.Keys.Union(b.Keys, StringComparer.OrdinalIgnoreCase)
                 .OrderBy(c => b.TryGetValue(c, out var actualLinea) ? actualLinea.OrdenPresentacion : a[c].OrdenPresentacion)
                 .ThenBy(c => c, StringComparer.OrdinalIgnoreCase)
@@ -123,11 +119,14 @@ namespace BodegasAburtoWMS.Service
                     b.TryGetValue(codigo, out var actualLinea);
                     var nombre = actualLinea?.Nombre ?? baseLinea!.Nombre;
                     var grupo = actualLinea?.Grupo ?? baseLinea!.Grupo;
-                    decimal? baseValor = baseLinea?.Importe;
-                    decimal? actualValor = actualLinea?.Importe;
-                    decimal diferencia = (actualValor ?? 0m) - (baseValor ?? 0m);
-                    decimal? porcentaje = baseValor.HasValue && baseValor.Value != 0m
-                        ? diferencia / Math.Abs(baseValor.Value) * 100m : null;
+                    decimal? baseRaw = baseLinea?.Importe;
+                    decimal? actualRaw = actualLinea?.Importe;
+                    decimal diferenciaRaw = (actualRaw ?? 0m) - (baseRaw ?? 0m);
+                    decimal? porcentaje = baseRaw.HasValue && baseRaw.Value != 0m
+                        ? diferenciaRaw / Math.Abs(baseRaw.Value) * 100m : null;
+                    decimal? baseValor = baseRaw.HasValue ? PrecisionMonetaria.Redondear(baseRaw.Value) : null;
+                    decimal? actualValor = actualRaw.HasValue ? PrecisionMonetaria.Redondear(actualRaw.Value) : null;
+                    decimal diferencia = PrecisionMonetaria.Redondear(diferenciaRaw);
                     return new ComparacionFinanciera(codigo, nombre, grupo,
                         baseValor, actualValor, diferencia, porcentaje);
                 }).ToList();

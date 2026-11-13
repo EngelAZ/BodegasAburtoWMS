@@ -182,7 +182,7 @@ namespace BodegasAburtoWMS.Datos
                 e.ToTable("SaldosCuentasFinancieras");
                 e.HasKey(x => x.IdSaldoFinanciero);
                 e.HasIndex(x => new { x.IdEjercicioFinanciero, x.IdCuentaFinanciera }).IsUnique();
-                e.Property(x => x.Importe).HasPrecision(18, 2).IsRequired();
+                e.Property(x => x.Importe).HasPrecision(18, 6).IsRequired();
                 e.Property(x => x.Version).IsRowVersion();
                 e.HasOne(x => x.Cuenta).WithMany(x => x.Saldos)
                     .HasForeignKey(x => x.IdCuentaFinanciera).OnDelete(DeleteBehavior.Restrict);
