@@ -102,7 +102,9 @@ namespace BodegasAburtoWMS.Model
         public decimal ContraPatrimonio { get; set; }
         public decimal Patrimonio { get; set; }
         public decimal Diferencia { get; set; }
-        public bool EstaCuadrado => Math.Abs(Diferencia) < 0.01m;
+        // Los saldos ya están expresados en centavos; no considerar cuadrado
+        // un estado con un centavo de diferencia.
+        public bool EstaCuadrado => Diferencia == 0m;
     }
 
     public class ResultadosCalculados

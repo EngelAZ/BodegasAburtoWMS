@@ -148,13 +148,13 @@ namespace BodegasAburtoWMS.Service
                 {
                     IdEjercicioFinanciero = ejercicioId,
                     IdCuentaFinanciera = cuentaId,
-                    Importe = decimal.Round(importe, 2, MidpointRounding.AwayFromZero),
+                    Importe = PrecisionMonetaria.Redondear(importe),
                     ActualizadoUtc = DateTime.UtcNow
                 });
             }
             else
             {
-                saldo.Importe = decimal.Round(importe, 2, MidpointRounding.AwayFromZero);
+                saldo.Importe = PrecisionMonetaria.Redondear(importe);
                 saldo.ActualizadoUtc = DateTime.UtcNow;
             }
             await db.SaveChangesAsync(ct);
@@ -274,80 +274,6 @@ namespace BodegasAburtoWMS.Service
                 .ToListAsync(ct);
         }
 
-        /// <summary>
-        /// Importación explícita, no destructiva, solo desde CuentaBalances.
-        /// El catálogo legacy no distingue intereses/impuestos/contraactivo;
-        /// esas clasificaciones necesitan revisión humana después de importar.
-        /// Nunca llama a este método durante el inicio automático.
-        /// </summary>
-        public async Task<int> ImportarCuentaBalancesLegacyAsync(CancellationToken ct = default)
-        {
-            await using var db = await _factory.CreateDbContextAsync(ct);
-            await using var transaccion = await db.Database.BeginTransactionAsync(ct);
-            if (await db.CatalogoCuentasFinancieras.AnyAsync(ct) ||
-                await db.EjerciciosFinancieros.AnyAsync(ct))
-                throw new InvalidOperationException("El nuevo módulo ya tiene datos. Importación cancelada para evitar duplicaciones.");
-            var originales = await db.CuentaBalances.AsNoTracking().OrderBy(x => x.IdCuenta).ToListAsync(ct);
-            if (originales.Count == 0) return 0;
-            if (originales.Any(x => x.Saldo < 0))
-                throw new InvalidOperationException("Hay saldos negativos heredados: revisa su naturaleza antes de importar.");
-            var duplicados = originales.GroupBy(x => new
-            {
-                x.Anio,
-                Tipo = (x.Tipo ?? "").Trim().ToUpperInvariant(),
-                Nombre = (x.NombreCuenta ?? "").Trim().ToUpperInvariant()
-            }).Where(g => g.Count() > 1).ToList();
-            if (duplicados.Count > 0)
-                throw new InvalidOperationException("Se encontraron cuentas repetidas en un mismo año y tipo. Depura antes de importar.");
-
-            int indice = 1;
-            var catalogo = new Dictionary<string, CatalogoCuentaFinanciera>();
-            var ejercicios = new Dictionary<int, EjercicioFinanciero>();
-            foreach (var c in originales)
-            {
-                if (c.Anio < 2000 || c.Anio > 2100)
-                    throw new InvalidOperationException($"Año inválido en CuentaBalance #{c.IdCuenta}.");
-                string clave = (c.Tipo ?? "").Trim().ToUpperInvariant() + "|" + (c.NombreCuenta ?? "").Trim().ToUpperInvariant();
-                if (!catalogo.TryGetValue(clave, out var nuevaCuenta))
-                {
-                    nuevaCuenta = new CatalogoCuentaFinanciera
-                    {
-                        Codigo = $"LEG-{indice++:D5}",
-                        Nombre = c.NombreCuenta.Trim(),
-                        Grupo = MapearTipoLegacy(c.Tipo, c.NombreCuenta),
-                        Naturaleza = NaturalezaEsperada(MapearTipoLegacy(c.Tipo, c.NombreCuenta)),
-                        Activa = true,
-                        Nota = "Importación preliminar de CuentaBalances: revisar clasificación y saldos."
-                    };
-                    catalogo.Add(clave, nuevaCuenta);
-                    db.CatalogoCuentasFinancieras.Add(nuevaCuenta);
-                }
-                if (!ejercicios.TryGetValue(c.Anio, out var ejercicio))
-                {
-                    ejercicio = new EjercicioFinanciero
-                    {
-                        Anio = c.Anio,
-                        FechaInicio = new DateTime(c.Anio, 1, 1),
-                        FechaFin = new DateTime(c.Anio, 12, 31),
-                        Escenario = "Academico", Estado = "Borrador",
-                        Moneda = "NIO", FuenteDatos = "Importación CuentaBalances (requiere revisión)"
-                    };
-                    ejercicios.Add(c.Anio, ejercicio);
-                    db.EjerciciosFinancieros.Add(ejercicio);
-                }
-                db.SaldosCuentasFinancieras.Add(new SaldoCuentaFinanciera
-                {
-                    Cuenta = nuevaCuenta,
-                    Ejercicio = ejercicio,
-                    Importe = c.Saldo,
-                    ActualizadoUtc = DateTime.UtcNow
-                });
-            }
-            await db.SaveChangesAsync(ct);
-            await transaccion.CommitAsync(ct);
-            return originales.Count;
-        }
-
         private static NaturalezaCuentaFinanciera NaturalezaEsperada(GrupoCuentaFinanciera grupo)
             => grupo switch
             {
@@ -360,41 +286,5 @@ namespace BodegasAburtoWMS.Service
                 _ => NaturalezaCuentaFinanciera.Deudora
             };
 
-        private static GrupoCuentaFinanciera MapearTipoLegacy(string tipo, string nombre)
-        {
-            string n = (nombre ?? "").Trim().ToUpperInvariant();
-            // Sugerencias de clasificación, no sustituyen la revisión humana.
-            bool depreciacion = n.Contains("DEPRECIACION") || n.Contains("DEPRECIACIÓN");
-            if (tipo.Trim().Equals("Activos fijos", StringComparison.OrdinalIgnoreCase)
-                && depreciacion && (n.Contains("ACUMULADA") || n.Contains("ACUMULADO")))
-                return GrupoCuentaFinanciera.ContraActivo;
-            if (tipo.Trim().Equals("Patrimonio", StringComparison.OrdinalIgnoreCase) &&
-                (n.Contains("RETIROS DEL PROPIETARIO") || n.Contains("PÉRDIDAS ACUMULADAS") || n.Contains("PERDIDAS ACUMULADAS")))
-                return GrupoCuentaFinanciera.ContraPatrimonio;
-            // Resultados acumulados al inicio NO es automáticamente una cuenta negativa:
-            // utilidades acumuladas = Patrimonio; pérdidas acumuladas = ContraPatrimonio.
-            if (tipo.Trim().Equals("Gastos", StringComparison.OrdinalIgnoreCase))
-            {
-                if (depreciacion) return GrupoCuentaFinanciera.GastoDepreciacion;
-                if (n.Contains("INTERESES") || n.Contains("FINANCIER"))
-                    return GrupoCuentaFinanciera.GastoFinanciero;
-                if (n.Contains("IMPUESTO SOBRE LA RENTA") || n.Contains("IMPUESTO A LA RENTA"))
-                    return GrupoCuentaFinanciera.ImpuestoRenta;
-                if (n.Contains("PUBLICIDAD") || n.Contains("COMISIONES DE VENTAS"))
-                    return GrupoCuentaFinanciera.GastoVenta;
-            }
-            return (tipo ?? "").Trim().ToUpperInvariant() switch
-            {
-                "ACTIVOS CORRIENTES" => GrupoCuentaFinanciera.ActivoCorriente,
-                "ACTIVOS FIJOS" => GrupoCuentaFinanciera.ActivoNoCorriente,
-                "PASIVOS CORRIENTES" => GrupoCuentaFinanciera.PasivoCorriente,
-                "PASIVOS FIJOS" => GrupoCuentaFinanciera.PasivoNoCorriente,
-                "PATRIMONIO" => GrupoCuentaFinanciera.Patrimonio,
-                "INGRESOS" => GrupoCuentaFinanciera.IngresoOperativo,
-                "COSTOS" => GrupoCuentaFinanciera.CostoServicio,
-                "GASTOS" => GrupoCuentaFinanciera.GastoAdministrativo,
-                _ => throw new InvalidOperationException($"Tipo legacy desconocido: {tipo}")
-            };
-        }
     }
 }

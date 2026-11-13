@@ -25,7 +25,12 @@ namespace BodegasAburtoWMS.Service
 
         public static BalanceCalculado CalcularBalance(IEnumerable<LineaEstadoFinanciero> lineas)
         {
-            var datos = lineas.ToList();
+            // Presentación, totalización y validación usan los mismos centavos.
+            // Nunca truncar ni sumar importes con fracciones ocultas.
+            var datos = lineas.Select(x => x with
+            {
+                Importe = PrecisionMonetaria.Redondear(x.Importe)
+            }).ToList();
             decimal S(GrupoCuentaFinanciera g) => datos.Where(x => x.Grupo == g).Sum(x => x.Importe);
             decimal corriente = S(GrupoCuentaFinanciera.ActivoCorriente);
             decimal noCorriente = S(GrupoCuentaFinanciera.ActivoNoCorriente);
@@ -55,7 +60,12 @@ namespace BodegasAburtoWMS.Service
 
         public static ResultadosCalculados CalcularResultados(IEnumerable<LineaEstadoFinanciero> lineas)
         {
-            var datos = lineas.ToList();
+            // Presentación, totalización y validación usan los mismos centavos.
+            // Nunca truncar ni sumar importes con fracciones ocultas.
+            var datos = lineas.Select(x => x with
+            {
+                Importe = PrecisionMonetaria.Redondear(x.Importe)
+            }).ToList();
             decimal S(GrupoCuentaFinanciera g) => datos.Where(x => x.Grupo == g).Sum(x => x.Importe);
             decimal ingresos = S(GrupoCuentaFinanciera.IngresoOperativo);
             decimal costos = S(GrupoCuentaFinanciera.CostoServicio);
@@ -96,8 +106,14 @@ namespace BodegasAburtoWMS.Service
             IEnumerable<LineaEstadoFinanciero> anterior,
             IEnumerable<LineaEstadoFinanciero> actual)
         {
-            var a = anterior.ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
-            var b = actual.ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
+            var a = anterior.Select(x => x with
+            {
+                Importe = PrecisionMonetaria.Redondear(x.Importe)
+            }).ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
+            var b = actual.Select(x => x with
+            {
+                Importe = PrecisionMonetaria.Redondear(x.Importe)
+            }).ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
             return a.Keys.Union(b.Keys, StringComparer.OrdinalIgnoreCase)
                 .OrderBy(c => b.TryGetValue(c, out var actualLinea) ? actualLinea.OrdenPresentacion : a[c].OrdenPresentacion)
                 .ThenBy(c => c, StringComparer.OrdinalIgnoreCase)

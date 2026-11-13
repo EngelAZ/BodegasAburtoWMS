@@ -35,7 +35,11 @@ namespace BodegasAburtoWMS.View
         private readonly DataGridView _tablaEjercicios = NuevaTabla();
         private readonly NumericUpDown _anio = new() { Width = 90, Minimum = 2000, Maximum = 2100 };
         private readonly ComboBox _escenario = NuevoCombo(110);
-        private readonly TextBox _fuente = new() { Width = 190 };
+        private readonly TextBox _fuente = new()
+        {
+            Width = 190,
+            PlaceholderText = "Origen de datos (opcional)"
+        };
         private readonly ComboBox _ejercicioParaCerrar = NuevoCombo(185);
         private readonly TextBox _motivoReapertura = new() { Width = 200 };
 
@@ -44,7 +48,13 @@ namespace BodegasAburtoWMS.View
         private readonly NumericUpDown _importe = new()
         {
             Width = 140, Minimum = 0, Maximum = 999999999999.99m,
-            DecimalPlaces = 2, ThousandsSeparator = true
+            // Admite importes calculados con hasta 6 decimales antes de
+            // guardarlos en DECIMAL(18,2) con redondeo explícito.
+            DecimalPlaces = 6, Increment = 0.001m, ThousandsSeparator = true
+        };
+        private readonly Label _importeRedondeado = new()
+        {
+            AutoSize = true, Padding = new Padding(3, 7, 3, 0)
         };
         private readonly DataGridView _tablaSaldos = NuevaTabla();
 
@@ -113,7 +123,10 @@ namespace BodegasAburtoWMS.View
             _escenario.SelectedIndex = 0;
             barra.Controls.Add(Etiqueta("Año")); barra.Controls.Add(_anio);
             barra.Controls.Add(Etiqueta("Escenario")); barra.Controls.Add(_escenario);
-            barra.Controls.Add(Etiqueta("Fuente")); barra.Controls.Add(_fuente);
+            barra.Controls.Add(Etiqueta("Fuente (opcional)")); barra.Controls.Add(_fuente);
+            _ayuda.SetToolTip(_fuente,
+                "Procedencia de los saldos: registros de la bodega, Excel, " +
+                "estimaciones académicas o proyecciones. No modifica los cálculos.");
             var nuevo = Boton("Crear ejercicio", _naranja);
             nuevo.Click += async (_, _) => await EjecutarAsync(CrearEjercicioAsync);
             barra.Controls.Add(nuevo);
@@ -128,12 +141,8 @@ namespace BodegasAburtoWMS.View
             var verHistorial = Boton("Ver historial", _azul);
             verHistorial.Click += async (_, _) => await EjecutarAsync(MostrarHistorialAsync);
             barra.Controls.Add(verHistorial);
-            var importar = Boton("Importar legacy (una vez)", _azul);
-            importar.Click += async (_, _) => await EjecutarAsync(ImportarLegacyAsync);
-            barra.Controls.Add(importar);
             _ayuda.SetToolTip(cerrar, "Comprueba el balance y bloquea la captura de saldos del ejercicio.");
             _ayuda.SetToolTip(reabrir, "Vuelve a Borrador un ejercicio cerrado, registrando el motivo.");
-            _ayuda.SetToolTip(importar, "Traspasa una sola vez CuentaBalances. Solo funciona si V2 está vacío.");
             _tablaEjercicios.CellClick += (_, e) =>
             {
                 if (e.RowIndex >= 0 && _tablaEjercicios.Rows[e.RowIndex].Cells["IdEjercicioFinanciero"].Value is int id)
@@ -151,6 +160,12 @@ namespace BodegasAburtoWMS.View
             barra.Controls.Add(Etiqueta("Ejercicio")); barra.Controls.Add(_ejercicioCaptura);
             barra.Controls.Add(Etiqueta("Cuenta")); barra.Controls.Add(_cuentaCaptura);
             barra.Controls.Add(Etiqueta("C$")); barra.Controls.Add(_importe);
+            barra.Controls.Add(_importeRedondeado);
+            _ayuda.SetToolTip(_importe,
+                "Puedes capturar hasta 6 decimales. Al guardar se redondea a 2 " +
+                "con MidpointRounding.AwayFromZero, sin truncar.");
+            _importe.ValueChanged += (_, _) => ActualizarVistaPreviaImporte();
+            ActualizarVistaPreviaImporte();
             var guardar = Boton("Guardar saldo", _naranja);
             guardar.Click += async (_, _) => await EjecutarAsync(GuardarSaldoAsync);
             barra.Controls.Add(guardar);
@@ -308,26 +323,22 @@ namespace BodegasAburtoWMS.View
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private async Task ImportarLegacyAsync()
-        {
-            if (MessageBox.Show(
-                "Se importarán las cuentas de la tabla LEGACY CuentaBalances como escenario Académico. " +
-                "Se cancelará si el módulo nuevo contiene datos. Los rubros importados requieren revisión manual. ¿Continuar?",
-                "Importación conservadora", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
-                return;
-            int cantidad = await _service.ImportarCuentaBalancesLegacyAsync();
-            await RefrescarTodoAsync();
-            MessageBox.Show($"Se importaron {cantidad} saldos. REVISA su clasificación antes de usar los reportes.");
-        }
-
         private async Task GuardarSaldoAsync()
         {
             int ejercicioId = ValorSeleccionado(_ejercicioCaptura);
             int cuentaId = ValorSeleccionado(_cuentaCaptura);
             if (ejercicioId == 0 || cuentaId == 0)
                 throw new InvalidOperationException("Selecciona ejercicio y cuenta.");
+            // No recortar a 2 decimales aquí: el servicio recibe todos los
+            // decimales escritos y aplica la regla de redondeo una sola vez.
             await _service.GuardarSaldoAsync(ejercicioId, cuentaId, _importe.Value);
             await RefrescarSaldosAsync();
+        }
+
+        private void ActualizarVistaPreviaImporte()
+        {
+            _importeRedondeado.Text =
+                $"Se guardará: C$ {PrecisionMonetaria.Redondear(_importe.Value):N2}";
         }
 
         private async Task RefrescarSaldosAsync()
@@ -424,6 +435,11 @@ namespace BodegasAburtoWMS.View
 
         private static List<FilaInforme> CrearFilasBalance(List<LineaEstadoFinanciero> lineas)
         {
+            // Las filas deben sumar exactamente lo que se muestra y se guarda.
+            lineas = lineas.Select(x => x with
+            {
+                Importe = PrecisionMonetaria.Redondear(x.Importe)
+            }).ToList();
             var resultado = new List<FilaInforme>();
             decimal Agregar(string nombre, GrupoCuentaFinanciera grupo, decimal signo = 1)
             {
@@ -449,6 +465,11 @@ namespace BodegasAburtoWMS.View
 
         private static List<FilaInforme> CrearFilasResultados(List<LineaEstadoFinanciero> lineas)
         {
+            // Las filas deben sumar exactamente lo que se muestra y se guarda.
+            lineas = lineas.Select(x => x with
+            {
+                Importe = PrecisionMonetaria.Redondear(x.Importe)
+            }).ToList();
             var resultado = new List<FilaInforme>();
             decimal Agregar(string seccion, GrupoCuentaFinanciera grupo, decimal signo = 1)
             {
