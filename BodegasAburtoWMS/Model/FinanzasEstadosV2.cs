@@ -98,6 +98,8 @@ namespace BodegasAburtoWMS.Model
         public decimal PasivoCorriente { get; set; }
         public decimal PasivoNoCorriente { get; set; }
         public decimal TotalPasivos { get; set; }
+        // Total final calculado a partir de pasivos y patrimonio SIN redondear.
+        public decimal TotalPasivosMasPatrimonio { get; set; }
         public decimal PatrimonioBruto { get; set; }
         public decimal ContraPatrimonio { get; set; }
         public decimal Patrimonio { get; set; }

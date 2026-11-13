@@ -48,6 +48,8 @@ namespace BodegasAburtoWMS.Service
             decimal activos = PrecisionMonetaria.Redondear(activosRaw);
             decimal pasivos = PrecisionMonetaria.Redondear(pasivosRaw);
             decimal patrimonio = PrecisionMonetaria.Redondear(patrimonioRaw);
+            // Los sumandos originales se agregan antes de redondear el total.
+            decimal pasivoMasPatrimonio = PrecisionMonetaria.Redondear(pasivosRaw + patrimonioRaw);
             return new BalanceCalculado
             {
                 ActivoCorriente = PrecisionMonetaria.Redondear(corriente),
@@ -57,10 +59,11 @@ namespace BodegasAburtoWMS.Service
                 PasivoCorriente = PrecisionMonetaria.Redondear(pasivoCorriente),
                 PasivoNoCorriente = PrecisionMonetaria.Redondear(pasivoNoCorriente),
                 TotalPasivos = pasivos,
+                TotalPasivosMasPatrimonio = pasivoMasPatrimonio,
                 PatrimonioBruto = PrecisionMonetaria.Redondear(patrimonioBruto),
                 ContraPatrimonio = PrecisionMonetaria.Redondear(contraPatrimonio),
                 Patrimonio = patrimonio,
-                Diferencia = activos - (pasivos + patrimonio)
+                Diferencia = activos - pasivoMasPatrimonio
             };
         }
 

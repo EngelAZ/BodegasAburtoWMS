@@ -462,7 +462,7 @@ namespace BodegasAburtoWMS.View
             Agregar("Patrimonio", GrupoCuentaFinanciera.Patrimonio);
             Agregar("(-) Contrapatrimonio", GrupoCuentaFinanciera.ContraPatrimonio, -1m);
             resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL PATRIMONIO NETO", b.Patrimonio));
-            resultado.Add(new FilaInforme("TOTAL", "", "PASIVO + PATRIMONIO", b.TotalPasivos + b.Patrimonio));
+            resultado.Add(new FilaInforme("TOTAL", "", "PASIVO + PATRIMONIO", b.TotalPasivosMasPatrimonio));
             resultado.Add(new FilaInforme("CONTROL", "", "DIFERENCIA DEL BALANCE", b.Diferencia));
             return resultado;
         }
