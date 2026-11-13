@@ -18,7 +18,8 @@ namespace BodegasAburtoWMS.Service
             GrupoCuentaFinanciera.ContraActivo or
             GrupoCuentaFinanciera.PasivoCorriente or
             GrupoCuentaFinanciera.PasivoNoCorriente or
-            GrupoCuentaFinanciera.Patrimonio => true,
+            GrupoCuentaFinanciera.Patrimonio or
+            GrupoCuentaFinanciera.ContraPatrimonio => true,
             _ => false
         };
 
@@ -31,7 +32,9 @@ namespace BodegasAburtoWMS.Service
             decimal contra = S(GrupoCuentaFinanciera.ContraActivo);
             decimal pasivoCorriente = S(GrupoCuentaFinanciera.PasivoCorriente);
             decimal pasivoNoCorriente = S(GrupoCuentaFinanciera.PasivoNoCorriente);
-            decimal patrimonio = S(GrupoCuentaFinanciera.Patrimonio);
+            decimal patrimonioBruto = S(GrupoCuentaFinanciera.Patrimonio);
+            decimal contraPatrimonio = S(GrupoCuentaFinanciera.ContraPatrimonio);
+            decimal patrimonio = patrimonioBruto - contraPatrimonio;
             decimal activos = corriente + noCorriente - contra;
             decimal pasivos = pasivoCorriente + pasivoNoCorriente;
             return new BalanceCalculado
@@ -43,6 +46,8 @@ namespace BodegasAburtoWMS.Service
                 PasivoCorriente = pasivoCorriente,
                 PasivoNoCorriente = pasivoNoCorriente,
                 TotalPasivos = pasivos,
+                PatrimonioBruto = patrimonioBruto,
+                ContraPatrimonio = contraPatrimonio,
                 Patrimonio = patrimonio,
                 Diferencia = activos - (pasivos + patrimonio)
             };
@@ -94,7 +99,8 @@ namespace BodegasAburtoWMS.Service
             var a = anterior.ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
             var b = actual.ToDictionary(x => x.Codigo, StringComparer.OrdinalIgnoreCase);
             return a.Keys.Union(b.Keys, StringComparer.OrdinalIgnoreCase)
-                .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
+                .OrderBy(c => b.TryGetValue(c, out var actualLinea) ? actualLinea.OrdenPresentacion : a[c].OrdenPresentacion)
+                .ThenBy(c => c, StringComparer.OrdinalIgnoreCase)
                 .Select(codigo =>
                 {
                     a.TryGetValue(codigo, out var baseLinea);

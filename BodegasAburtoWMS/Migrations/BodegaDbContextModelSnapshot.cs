@@ -93,6 +93,42 @@ namespace BodegasAburtoWMS.Migrations
                     b.ToTable("AuditoriaUsuarios", (string)null);
                 });
 
+            modelBuilder.Entity("BodegasAburtoWMS.Model.CambioEstadoEjercicioFinanciero", b =>
+                {
+                    b.Property<int>("IdCambioEstado")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCambioEstado"));
+
+                    b.Property<string>("EstadoAnterior")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("EstadoNuevo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("FechaUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdEjercicioFinanciero")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Motivo")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("IdCambioEstado");
+
+                    b.HasIndex("IdEjercicioFinanciero", "FechaUtc");
+
+                    b.ToTable("HistorialEstadosEjercicios", (string)null);
+                });
+
             modelBuilder.Entity("BodegasAburtoWMS.Model.CatalogoCuentaFinanciera", b =>
                 {
                     b.Property<int>("IdCuentaFinanciera")
@@ -603,6 +639,17 @@ namespace BodegasAburtoWMS.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("BodegasAburtoWMS.Model.CambioEstadoEjercicioFinanciero", b =>
+                {
+                    b.HasOne("BodegasAburtoWMS.Model.EjercicioFinanciero", "Ejercicio")
+                        .WithMany("HistorialEstados")
+                        .HasForeignKey("IdEjercicioFinanciero")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Ejercicio");
+                });
+
             modelBuilder.Entity("BodegasAburtoWMS.Model.Envio", b =>
                 {
                     b.HasOne("BodegasAburtoWMS.Model.Agencia", "Agencia")
@@ -681,6 +728,8 @@ namespace BodegasAburtoWMS.Migrations
 
             modelBuilder.Entity("BodegasAburtoWMS.Model.EjercicioFinanciero", b =>
                 {
+                    b.Navigation("HistorialEstados");
+
                     b.Navigation("Saldos");
                 });
 #pragma warning restore 612, 618

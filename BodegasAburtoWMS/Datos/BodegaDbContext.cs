@@ -31,6 +31,8 @@ namespace BodegasAburtoWMS.Datos
         public DbSet<CatalogoCuentaFinanciera> CatalogoCuentasFinancieras => Set<CatalogoCuentaFinanciera>();
         public DbSet<EjercicioFinanciero> EjerciciosFinancieros => Set<EjercicioFinanciero>();
         public DbSet<SaldoCuentaFinanciera> SaldosCuentasFinancieras => Set<SaldoCuentaFinanciera>();
+        public DbSet<CambioEstadoEjercicioFinanciero> HistorialEstadosEjercicios
+            => Set<CambioEstadoEjercicioFinanciero>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -159,6 +161,20 @@ namespace BodegasAburtoWMS.Datos
                 e.Property(x => x.Estado).HasMaxLength(20).IsRequired();
                 e.Property(x => x.Moneda).HasMaxLength(3).IsRequired();
                 e.Property(x => x.FuenteDatos).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<CambioEstadoEjercicioFinanciero>(e =>
+            {
+                e.ToTable("HistorialEstadosEjercicios");
+                e.HasKey(x => x.IdCambioEstado);
+                e.Property(x => x.EstadoAnterior).HasMaxLength(20).IsRequired();
+                e.Property(x => x.EstadoNuevo).HasMaxLength(20).IsRequired();
+                e.Property(x => x.Motivo).HasMaxLength(500).IsRequired();
+                e.Property(x => x.FechaUtc).IsRequired();
+                e.HasIndex(x => new { x.IdEjercicioFinanciero, x.FechaUtc });
+                e.HasOne(x => x.Ejercicio).WithMany(x => x.HistorialEstados)
+                    .HasForeignKey(x => x.IdEjercicioFinanciero)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<SaldoCuentaFinanciera>(e =>

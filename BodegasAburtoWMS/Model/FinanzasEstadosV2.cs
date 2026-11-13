@@ -20,7 +20,8 @@ namespace BodegasAburtoWMS.Model
         OtroIngreso = 12,
         GastoFinanciero = 13,
         OtroGasto = 14,
-        ImpuestoRenta = 15
+        ImpuestoRenta = 15,
+        ContraPatrimonio = 16 // Agregado al final para conservar valores previos
     }
 
     public enum NaturalezaCuentaFinanciera { Deudora = 1, Acreedora = 2 }
@@ -50,6 +51,19 @@ namespace BodegasAburtoWMS.Model
         public string? FuenteDatos { get; set; }
         public DateTime CreadoUtc { get; set; } = DateTime.UtcNow;
         public List<SaldoCuentaFinanciera> Saldos { get; set; } = new();
+        public List<CambioEstadoEjercicioFinanciero> HistorialEstados { get; set; } = new();
+    }
+
+    // Auditoría de cierres y reaperturas; nunca se reemplaza una entrada anterior.
+    public class CambioEstadoEjercicioFinanciero
+    {
+        public int IdCambioEstado { get; set; }
+        public int IdEjercicioFinanciero { get; set; }
+        public string EstadoAnterior { get; set; } = "";
+        public string EstadoNuevo { get; set; } = "";
+        public string Motivo { get; set; } = "";
+        public DateTime FechaUtc { get; set; } = DateTime.UtcNow;
+        public EjercicioFinanciero Ejercicio { get; set; } = null!;
     }
 
     public class SaldoCuentaFinanciera
@@ -66,7 +80,7 @@ namespace BodegasAburtoWMS.Model
     }
 
     // DTO independiente de EF y WinForms: reutilizable en razones financieras y Dupont.
-    public record LineaEstadoFinanciero(string Codigo, string Nombre, GrupoCuentaFinanciera Grupo, decimal Importe);
+    public record LineaEstadoFinanciero(string Codigo, string Nombre, GrupoCuentaFinanciera Grupo, decimal Importe, int OrdenPresentacion = 0);
     public record ComparacionFinanciera(
         string Codigo, string Nombre, GrupoCuentaFinanciera Grupo,
         decimal? Base, decimal? Actual, decimal Diferencia, decimal? VariacionPorcentual)
@@ -84,6 +98,8 @@ namespace BodegasAburtoWMS.Model
         public decimal PasivoCorriente { get; set; }
         public decimal PasivoNoCorriente { get; set; }
         public decimal TotalPasivos { get; set; }
+        public decimal PatrimonioBruto { get; set; }
+        public decimal ContraPatrimonio { get; set; }
         public decimal Patrimonio { get; set; }
         public decimal Diferencia { get; set; }
         public bool EstaCuadrado => Math.Abs(Diferencia) < 0.01m;

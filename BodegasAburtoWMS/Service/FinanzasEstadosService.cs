@@ -77,6 +77,25 @@ namespace BodegasAburtoWMS.Service
             return existente;
         }
 
+        /// <summary>
+        /// Elimina únicamente cuentas SIN saldos históricos. Para cuentas usadas,
+        /// desactivar desde el catálogo: nunca se pierde la trazabilidad.
+        /// </summary>
+        public async Task EliminarCuentaSinSaldosAsync(int idCuenta, CancellationToken ct = default)
+        {
+            await using var db = await _factory.CreateDbContextAsync(ct);
+            var cuenta = await db.CatalogoCuentasFinancieras.FindAsync(new object[] { idCuenta }, ct)
+                ?? throw new InvalidOperationException("La cuenta ya no existe.");
+            if (await db.SaldosCuentasFinancieras.AnyAsync(x => x.IdCuentaFinanciera == idCuenta, ct))
+                throw new InvalidOperationException("La cuenta tiene saldos históricos. No se puede eliminar: desmarca 'Activa' y guarda para conservar el historial.");
+            db.CatalogoCuentasFinancieras.Remove(cuenta);
+            try { await db.SaveChangesAsync(ct); }
+            catch (DbUpdateException ex)
+            {
+                throw new InvalidOperationException("No se puede eliminar la cuenta porque está vinculada a otros registros. Desactívala en su lugar.", ex);
+            }
+        }
+
         public async Task<List<EjercicioFinanciero>> ListarEjerciciosAsync(CancellationToken ct = default)
         {
             await using var db = await _factory.CreateDbContextAsync(ct);
@@ -149,13 +168,14 @@ namespace BodegasAburtoWMS.Service
                 ?? throw new InvalidOperationException("No existe el ejercicio seleccionado.");
             var datos = await db.SaldosCuentasFinancieras.AsNoTracking()
                 .Where(x => x.IdEjercicioFinanciero == ejercicioId)
-                .Select(x => new { x.Cuenta.Codigo, x.Cuenta.Nombre, x.Cuenta.Grupo, x.Importe })
-                .OrderBy(x => x.Codigo)
+                .Select(x => new { x.Cuenta.Codigo, x.Cuenta.Nombre, x.Cuenta.Grupo,
+                    x.Cuenta.OrdenPresentacion, x.Importe })
+                .OrderBy(x => x.OrdenPresentacion).ThenBy(x => x.Codigo)
                 .ToListAsync(ct);
             return new EjercicioSnapshot
             {
                 Ejercicio = ejercicio,
-                Lineas = datos.Select(x => new LineaEstadoFinanciero(x.Codigo, x.Nombre, x.Grupo, x.Importe)).ToList()
+                Lineas = datos.Select(x => new LineaEstadoFinanciero(x.Codigo, x.Nombre, x.Grupo, x.Importe, x.OrdenPresentacion)).ToList()
             };
         }
 
@@ -207,7 +227,51 @@ namespace BodegasAburtoWMS.Service
             if (!balance.EstaCuadrado)
                 throw new InvalidOperationException($"El balance no cuadra. Diferencia: C$ {balance.Diferencia:N2}.");
             ejercicio.Estado = "Cerrado";
+            db.HistorialEstadosEjercicios.Add(new CambioEstadoEjercicioFinanciero
+            {
+                IdEjercicioFinanciero = ejercicioId,
+                EstadoAnterior = "Borrador",
+                EstadoNuevo = "Cerrado",
+                Motivo = "Cierre manual tras validar el balance.",
+                FechaUtc = DateTime.UtcNow
+            });
             await db.SaveChangesAsync(ct);
+        }
+
+        /// <summary>
+        /// La reapertura vuelve el ejercicio editable; exige un motivo trazable.
+        /// </summary>
+        public async Task ReabrirEjercicioAsync(int ejercicioId, string motivo, CancellationToken ct = default)
+        {
+            motivo = (motivo ?? "").Trim();
+            if (motivo.Length < 5 || motivo.Length > 500)
+                throw new ArgumentException("Indica un motivo de reapertura (5 a 500 caracteres).");
+            await using var db = await _factory.CreateDbContextAsync(ct);
+            var ejercicio = await db.EjerciciosFinancieros.FindAsync(new object[] { ejercicioId }, ct)
+                ?? throw new InvalidOperationException("No existe el ejercicio.");
+            if (ejercicio.Estado != "Cerrado")
+                throw new InvalidOperationException("Solo se puede reabrir un ejercicio cerrado.");
+            ejercicio.Estado = "Borrador";
+            db.HistorialEstadosEjercicios.Add(new CambioEstadoEjercicioFinanciero
+            {
+                IdEjercicioFinanciero = ejercicioId,
+                EstadoAnterior = "Cerrado",
+                EstadoNuevo = "Borrador",
+                Motivo = motivo,
+                FechaUtc = DateTime.UtcNow
+            });
+            await db.SaveChangesAsync(ct);
+        }
+
+        public async Task<List<CambioEstadoEjercicioFinanciero>> ListarHistorialEstadoAsync(
+            int ejercicioId, CancellationToken ct = default)
+        {
+            await using var db = await _factory.CreateDbContextAsync(ct);
+            return await db.HistorialEstadosEjercicios.AsNoTracking()
+                .Where(x => x.IdEjercicioFinanciero == ejercicioId)
+                .OrderByDescending(x => x.FechaUtc)
+                .ThenByDescending(x => x.IdCambioEstado)
+                .ToListAsync(ct);
         }
 
         /// <summary>
@@ -304,6 +368,11 @@ namespace BodegasAburtoWMS.Service
             if (tipo.Trim().Equals("Activos fijos", StringComparison.OrdinalIgnoreCase)
                 && depreciacion && (n.Contains("ACUMULADA") || n.Contains("ACUMULADO")))
                 return GrupoCuentaFinanciera.ContraActivo;
+            if (tipo.Trim().Equals("Patrimonio", StringComparison.OrdinalIgnoreCase) &&
+                (n.Contains("RETIROS DEL PROPIETARIO") || n.Contains("PÉRDIDAS ACUMULADAS") || n.Contains("PERDIDAS ACUMULADAS")))
+                return GrupoCuentaFinanciera.ContraPatrimonio;
+            // Resultados acumulados al inicio NO es automáticamente una cuenta negativa:
+            // utilidades acumuladas = Patrimonio; pérdidas acumuladas = ContraPatrimonio.
             if (tipo.Trim().Equals("Gastos", StringComparison.OrdinalIgnoreCase))
             {
                 if (depreciacion) return GrupoCuentaFinanciera.GastoDepreciacion;

@@ -21,6 +21,8 @@ namespace BodegasAburtoWMS.View
         private readonly Color _azul = ColorTranslator.FromHtml("#1E4D8F");
         private readonly Color _naranja = ColorTranslator.FromHtml("#F28C28");
         private bool _ocupado;
+        private bool _limpiandoCuenta;
+        private readonly ToolTip _ayuda = new();
 
         private readonly DataGridView _tablaCuentas = NuevaTabla();
         private readonly TextBox _codigo = new() { Width = 95 };
@@ -35,6 +37,7 @@ namespace BodegasAburtoWMS.View
         private readonly ComboBox _escenario = NuevoCombo(110);
         private readonly TextBox _fuente = new() { Width = 190 };
         private readonly ComboBox _ejercicioParaCerrar = NuevoCombo(185);
+        private readonly TextBox _motivoReapertura = new() { Width = 200 };
 
         private readonly ComboBox _ejercicioCaptura = NuevoCombo(190);
         private readonly ComboBox _cuentaCaptura = NuevoCombo(280);
@@ -85,9 +88,15 @@ namespace BodegasAburtoWMS.View
             var guardar = Boton("Guardar cuenta", _naranja);
             guardar.Click += async (_, _) => await EjecutarAsync(GuardarCuentaAsync);
             barra.Controls.Add(guardar);
-            var nuevo = Boton("Nueva / limpiar", _azul);
+            var nuevo = Boton("Nueva cuenta / limpiar", _azul);
             nuevo.Click += (_, _) => LimpiarCuenta();
             barra.Controls.Add(nuevo);
+            var eliminar = Boton("Eliminar cuenta", Color.Firebrick);
+            eliminar.Click += async (_, _) => await EjecutarAsync(EliminarCuentaAsync);
+            barra.Controls.Add(eliminar);
+            _ayuda.SetToolTip(_orden, "Orden de aparición dentro del grupo financiero. No modifica los cálculos.");
+            _ayuda.SetToolTip(nuevo, "Limpia los campos para crear una nueva cuenta; NO elimina cuentas.");
+            _ayuda.SetToolTip(eliminar, "Solo elimina cuentas sin saldos. Desactiva las que ya tienen historial.");
             _grupo.DataSource = Enum.GetValues<GrupoCuentaFinanciera>();
             _tablaCuentas.SelectionChanged += (_, _) => SeleccionarCuentaEnTabla();
             tab.Controls.Add(_tablaCuentas);
@@ -98,7 +107,7 @@ namespace BodegasAburtoWMS.View
         private TabPage CrearEjercicios()
         {
             var tab = new TabPage("Ejercicios fiscales") { BackColor = Color.White };
-            var barra = Barra(116);
+            var barra = Barra(160);
             _anio.Value = Math.Min((int)_anio.Maximum, DateTime.Now.Year);
             _escenario.Items.AddRange(new object[] { "Academico", "Real", "Proyectado" });
             _escenario.SelectedIndex = 0;
@@ -108,13 +117,28 @@ namespace BodegasAburtoWMS.View
             var nuevo = Boton("Crear ejercicio", _naranja);
             nuevo.Click += async (_, _) => await EjecutarAsync(CrearEjercicioAsync);
             barra.Controls.Add(nuevo);
-            barra.Controls.Add(Etiqueta("Cerrar ejercicio")); barra.Controls.Add(_ejercicioParaCerrar);
-            var cerrar = Boton("Cerrar", _azul);
+            barra.Controls.Add(Etiqueta("Ejercicio a cerrar / reabrir")); barra.Controls.Add(_ejercicioParaCerrar);
+            var cerrar = Boton("Cerrar ejercicio", _azul);
             cerrar.Click += async (_, _) => await EjecutarAsync(CerrarEjercicioAsync);
             barra.Controls.Add(cerrar);
+            barra.Controls.Add(Etiqueta("Motivo de reapertura")); barra.Controls.Add(_motivoReapertura);
+            var reabrir = Boton("Reabrir ejercicio", _naranja);
+            reabrir.Click += async (_, _) => await EjecutarAsync(ReabrirEjercicioAsync);
+            barra.Controls.Add(reabrir);
+            var verHistorial = Boton("Ver historial", _azul);
+            verHistorial.Click += async (_, _) => await EjecutarAsync(MostrarHistorialAsync);
+            barra.Controls.Add(verHistorial);
             var importar = Boton("Importar legacy (una vez)", _azul);
             importar.Click += async (_, _) => await EjecutarAsync(ImportarLegacyAsync);
             barra.Controls.Add(importar);
+            _ayuda.SetToolTip(cerrar, "Comprueba el balance y bloquea la captura de saldos del ejercicio.");
+            _ayuda.SetToolTip(reabrir, "Vuelve a Borrador un ejercicio cerrado, registrando el motivo.");
+            _ayuda.SetToolTip(importar, "Traspasa una sola vez CuentaBalances. Solo funciona si V2 está vacío.");
+            _tablaEjercicios.CellClick += (_, e) =>
+            {
+                if (e.RowIndex >= 0 && _tablaEjercicios.Rows[e.RowIndex].Cells["IdEjercicioFinanciero"].Value is int id)
+                    _ejercicioParaCerrar.SelectedValue = id;
+            };
             tab.Controls.Add(_tablaEjercicios);
             tab.Controls.Add(barra);
             return tab;
@@ -197,7 +221,15 @@ namespace BodegasAburtoWMS.View
             AsignarOpciones(_ejercicioCaptura, opcionesEjercicios);
             AsignarOpciones(_ejercicioParaCerrar, opcionesEjercicios);
             AsignarOpciones(_ejercicioReporte, opcionesEjercicios);
-            AsignarOpciones(_ejercicioBase, opcionesEjercicios);
+            // Cada ComboBox necesita un DataSource propio: una lista compartida
+            // comparte CurrencyManager y sincroniza accidentalmente la selección.
+            int idActual = ValorSeleccionado(_ejercicioReporte);
+            var ejercicioActual = _ejercicios.FirstOrDefault(x => x.IdEjercicioFinanciero == idActual);
+            int? baseSugerida = ejercicioActual == null ? null : _ejercicios
+                .Where(x => x.Anio < ejercicioActual.Anio && x.Escenario == ejercicioActual.Escenario)
+                .OrderByDescending(x => x.Anio)
+                .Select(x => (int?)x.IdEjercicioFinanciero).FirstOrDefault();
+            AsignarOpciones(_ejercicioBase, opcionesEjercicios, baseSugerida);
             await RefrescarSaldosAsync();
         }
 
@@ -217,6 +249,19 @@ namespace BodegasAburtoWMS.View
             LimpiarCuenta();
         }
 
+        private async Task EliminarCuentaAsync()
+        {
+            if (_cuentaEnEdicion == 0)
+                throw new InvalidOperationException("Selecciona una cuenta existente en la tabla.");
+            if (MessageBox.Show("¿Eliminar esta cuenta del catálogo? Solo se permite si no tiene saldos en ningún ejercicio. Para conservar el historial, desactívala.",
+                "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                return;
+            await _service.EliminarCuentaSinSaldosAsync(_cuentaEnEdicion);
+            await RefrescarTodoAsync();
+            LimpiarCuenta();
+            MessageBox.Show("Cuenta eliminada correctamente.", "Catálogo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private async Task CrearEjercicioAsync()
         {
             await _service.CrearEjercicioAsync((int)_anio.Value, _escenario.SelectedItem?.ToString() ?? "Academico", _fuente.Text.Trim());
@@ -231,6 +276,36 @@ namespace BodegasAburtoWMS.View
                 return;
             await _service.CerrarEjercicioAsync(id);
             await RefrescarTodoAsync();
+        }
+
+        private async Task ReabrirEjercicioAsync()
+        {
+            int id = ValorSeleccionado(_ejercicioParaCerrar);
+            if (id == 0) throw new InvalidOperationException("Selecciona el ejercicio que deseas reabrir.");
+            string motivo = _motivoReapertura.Text.Trim();
+            if (motivo.Length < 5)
+                throw new InvalidOperationException("Indica un motivo de reapertura de al menos 5 caracteres.");
+            if (MessageBox.Show("¿Reabrir el ejercicio para modificar sus saldos? Esta acción quedará en el historial.",
+                "Confirmar reapertura", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                return;
+            await _service.ReabrirEjercicioAsync(id, motivo);
+            _motivoReapertura.Clear();
+            await RefrescarTodoAsync();
+            MessageBox.Show("Ejercicio reabierto. Sus saldos vuelven a estar editables.",
+                "Ejercicios fiscales", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private async Task MostrarHistorialAsync()
+        {
+            int id = ValorSeleccionado(_ejercicioParaCerrar);
+            if (id == 0) throw new InvalidOperationException("Selecciona un ejercicio.");
+            var eventos = await _service.ListarHistorialEstadoAsync(id);
+            string mensaje = eventos.Count == 0
+                ? "No existen cambios de estado registrados en la versión actual."
+                : string.Join(Environment.NewLine + Environment.NewLine,
+                    eventos.Select(e => $"{e.FechaUtc:yyyy-MM-dd HH:mm} UTC · {e.EstadoAnterior} → {e.EstadoNuevo}{Environment.NewLine}{e.Motivo}"));
+            MessageBox.Show(mensaje, "Historial de cierres y reaperturas",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async Task ImportarLegacyAsync()
@@ -333,7 +408,9 @@ namespace BodegasAburtoWMS.View
                 _resumen.Text = $"Balance General {snapshotActual.Ejercicio.Anio} ({snapshotActual.Ejercicio.Escenario})" + Environment.NewLine +
                     $"Activos C$ {b.TotalActivos:N2} = Pasivos C$ {b.TotalPasivos:N2} + Patrimonio C$ {b.Patrimonio:N2}" + Environment.NewLine +
                     $"Diferencia: C$ {b.Diferencia:N2}. Estado: {(b.EstaCuadrado ? "CUADRADO" : "NO CUADRADO — revisar saldos")}." + Environment.NewLine +
-                    "La utilidad neta NO se agrega automáticamente al patrimonio: registrar explícitamente el resultado del ejercicio sin duplicarlo.";
+                    "El Estado de Resultados calcula la utilidad/pérdida por separado. " +
+                    "Para reflejarla en el patrimonio, registra 'Resultado del ejercicio' (ganancia) " +
+                    "o una cuenta de contrapatrimonio (pérdida), solo si no está incluida en otro saldo.";
             }
             else
             {
@@ -350,7 +427,7 @@ namespace BodegasAburtoWMS.View
             var resultado = new List<FilaInforme>();
             decimal Agregar(string nombre, GrupoCuentaFinanciera grupo, decimal signo = 1)
             {
-                foreach (var x in lineas.Where(x => x.Grupo == grupo).OrderBy(x => x.Codigo))
+                foreach (var x in lineas.Where(x => x.Grupo == grupo).OrderBy(x => x.OrdenPresentacion).ThenBy(x => x.Codigo))
                     resultado.Add(new FilaInforme(nombre, x.Codigo, x.Nombre, x.Importe * signo));
                 return lineas.Where(x => x.Grupo == grupo).Sum(x => x.Importe) * signo;
             }
@@ -361,8 +438,10 @@ namespace BodegasAburtoWMS.View
             decimal pc = Agregar("Pasivos corrientes", GrupoCuentaFinanciera.PasivoCorriente);
             decimal pf = Agregar("Pasivos no corrientes", GrupoCuentaFinanciera.PasivoNoCorriente);
             resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL PASIVOS", pc + pf));
-            decimal patrimonio = Agregar("Patrimonio", GrupoCuentaFinanciera.Patrimonio);
-            resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL PATRIMONIO", patrimonio));
+            decimal patrimonioBruto = Agregar("Patrimonio", GrupoCuentaFinanciera.Patrimonio);
+            decimal contraPatrimonio = Agregar("(-) Contrapatrimonio", GrupoCuentaFinanciera.ContraPatrimonio, -1);
+            decimal patrimonio = patrimonioBruto + contraPatrimonio;
+            resultado.Add(new FilaInforme("SUBTOTAL", "", "TOTAL PATRIMONIO NETO", patrimonio));
             resultado.Add(new FilaInforme("TOTAL", "", "PASIVO + PATRIMONIO", pc + pf + patrimonio));
             resultado.Add(new FilaInforme("CONTROL", "", "DIFERENCIA DEL BALANCE", corriente + fijo + contra - (pc + pf + patrimonio)));
             return resultado;
@@ -373,7 +452,7 @@ namespace BodegasAburtoWMS.View
             var resultado = new List<FilaInforme>();
             decimal Agregar(string seccion, GrupoCuentaFinanciera grupo, decimal signo = 1)
             {
-                foreach (var x in lineas.Where(x => x.Grupo == grupo).OrderBy(x => x.Codigo))
+                foreach (var x in lineas.Where(x => x.Grupo == grupo).OrderBy(x => x.OrdenPresentacion).ThenBy(x => x.Codigo))
                     resultado.Add(new FilaInforme(seccion, x.Codigo, x.Nombre, x.Importe * signo));
                 return lineas.Where(x => x.Grupo == grupo).Sum(x => x.Importe) * signo;
             }
@@ -400,7 +479,8 @@ namespace BodegasAburtoWMS.View
 
         private void SeleccionarCuentaEnTabla()
         {
-            if (_ocupado || _tablaCuentas.CurrentRow == null) return;
+            if (_ocupado || _limpiandoCuenta || _tablaCuentas.CurrentRow == null ||
+                !_tablaCuentas.CurrentRow.Selected) return;
             if (_tablaCuentas.CurrentRow.Cells["IdCuentaFinanciera"].Value is not int id) return;
             var c = _cuentas.FirstOrDefault(x => x.IdCuentaFinanciera == id);
             if (c == null) return;
@@ -414,12 +494,21 @@ namespace BodegasAburtoWMS.View
 
         private void LimpiarCuenta()
         {
-            _cuentaEnEdicion = 0;
-            _codigo.Clear(); _nombre.Clear();
-            _grupo.SelectedIndex = 0;
-            _orden.Value = 0;
-            _activa.Checked = true;
-            _tablaCuentas.ClearSelection();
+            // ClearSelection puede disparar SelectionChanged incluso si CurrentRow persiste.
+            // Bloqueamos temporalmente la selección para no rellenar otra vez los campos.
+            _limpiandoCuenta = true;
+            try
+            {
+                _tablaCuentas.CurrentCell = null;
+                _tablaCuentas.ClearSelection();
+                _cuentaEnEdicion = 0;
+                _codigo.Clear();
+                _nombre.Clear();
+                _grupo.SelectedIndex = 0;
+                _orden.Value = 0;
+                _activa.Checked = true;
+            }
+            finally { _limpiandoCuenta = false; }
         }
 
         private async Task EjecutarAsync(Func<Task> accion)
@@ -458,12 +547,16 @@ namespace BodegasAburtoWMS.View
             AutoGenerateColumns = true, AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
             BackgroundColor = Color.White
         };
-        private static void AsignarOpciones(ComboBox combo, List<Opcion> items)
+        private static void AsignarOpciones(ComboBox combo, List<Opcion> items, int? idPorDefecto = null)
         {
+            int idAnterior = ValorSeleccionado(combo);
+            // ToList() es esencial: no compartir la MISMA lista enlazada entre combos WinForms.
             combo.DataSource = null;
             combo.DisplayMember = nameof(Opcion.Titulo);
             combo.ValueMember = nameof(Opcion.Id);
-            combo.DataSource = items;
+            combo.DataSource = items.ToList();
+            int idObjetivo = items.Any(x => x.Id == idAnterior) ? idAnterior : (idPorDefecto ?? 0);
+            if (items.Any(x => x.Id == idObjetivo)) combo.SelectedValue = idObjetivo;
         }
         private static int ValorSeleccionado(ComboBox combo) => combo.SelectedValue is int i ? i : 0;
         private static void OcultarId(DataGridView tabla, string campo)
