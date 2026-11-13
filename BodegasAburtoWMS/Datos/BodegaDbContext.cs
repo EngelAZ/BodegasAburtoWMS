@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -26,8 +26,16 @@ namespace BodegasAburtoWMS.Datos
         public DbSet<EstadoFinancieroProforma> EstadosFinancierosProforma { get; set; }
         public DbSet<CuentaBalance> CuentaBalances => Set<CuentaBalance>();
 
+        // Nuevo modelo: catálogo estable + ejercicios + saldos por ejercicio.
+        // CuentaBalances se mantiene intacta como tabla legacy.
+        public DbSet<CatalogoCuentaFinanciera> CatalogoCuentasFinancieras => Set<CatalogoCuentaFinanciera>();
+        public DbSet<EjercicioFinanciero> EjerciciosFinancieros => Set<EjercicioFinanciero>();
+        public DbSet<SaldoCuentaFinanciera> SaldosCuentasFinancieras => Set<SaldoCuentaFinanciera>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // Configuración de Roles
             modelBuilder.Entity<Rol>(e =>
             {
@@ -128,6 +136,42 @@ namespace BodegasAburtoWMS.Datos
                 e.HasOne(x => x.ClienteDestinatario).WithMany().HasForeignKey(x => x.IdClienteDestinatario).OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(x => x.TipoEnvio).WithMany().HasForeignKey(x => x.IdTipoEnvio).OnDelete(DeleteBehavior.Restrict);
                 e.HasOne(x => x.Estado).WithMany().HasForeignKey(x => x.IdEstado).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<CatalogoCuentaFinanciera>(e =>
+            {
+                e.ToTable("CatalogoCuentasFinancieras");
+                e.HasKey(x => x.IdCuentaFinanciera);
+                e.Property(x => x.Codigo).HasMaxLength(30).IsRequired();
+                e.HasIndex(x => x.Codigo).IsUnique();
+                e.Property(x => x.Nombre).HasMaxLength(120).IsRequired();
+                e.Property(x => x.Grupo).HasConversion<string>().HasMaxLength(40).IsRequired();
+                e.Property(x => x.Naturaleza).HasConversion<string>().HasMaxLength(10).IsRequired();
+                e.Property(x => x.Nota).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<EjercicioFinanciero>(e =>
+            {
+                e.ToTable("EjerciciosFinancieros");
+                e.HasKey(x => x.IdEjercicioFinanciero);
+                e.HasIndex(x => new { x.Anio, x.Escenario }).IsUnique();
+                e.Property(x => x.Escenario).HasMaxLength(20).IsRequired();
+                e.Property(x => x.Estado).HasMaxLength(20).IsRequired();
+                e.Property(x => x.Moneda).HasMaxLength(3).IsRequired();
+                e.Property(x => x.FuenteDatos).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<SaldoCuentaFinanciera>(e =>
+            {
+                e.ToTable("SaldosCuentasFinancieras");
+                e.HasKey(x => x.IdSaldoFinanciero);
+                e.HasIndex(x => new { x.IdEjercicioFinanciero, x.IdCuentaFinanciera }).IsUnique();
+                e.Property(x => x.Importe).HasPrecision(18, 2).IsRequired();
+                e.Property(x => x.Version).IsRowVersion();
+                e.HasOne(x => x.Cuenta).WithMany(x => x.Saldos)
+                    .HasForeignKey(x => x.IdCuentaFinanciera).OnDelete(DeleteBehavior.Restrict);
+                e.HasOne(x => x.Ejercicio).WithMany(x => x.Saldos)
+                    .HasForeignKey(x => x.IdEjercicioFinanciero).OnDelete(DeleteBehavior.Restrict);
             });
 
             // Configuración de Cuentas de Balance General (con soporte multi-año)

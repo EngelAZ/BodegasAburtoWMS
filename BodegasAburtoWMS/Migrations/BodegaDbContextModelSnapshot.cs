@@ -93,6 +93,52 @@ namespace BodegasAburtoWMS.Migrations
                     b.ToTable("AuditoriaUsuarios", (string)null);
                 });
 
+            modelBuilder.Entity("BodegasAburtoWMS.Model.CatalogoCuentaFinanciera", b =>
+                {
+                    b.Property<int>("IdCuentaFinanciera")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCuentaFinanciera"));
+
+                    b.Property<bool>("Activa")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Codigo")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Grupo")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("Naturaleza")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<string>("Nota")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("OrdenPresentacion")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdCuentaFinanciera");
+
+                    b.HasIndex("Codigo")
+                        .IsUnique();
+
+                    b.ToTable("CatalogoCuentasFinancieras", (string)null);
+                });
+
             modelBuilder.Entity("BodegasAburtoWMS.Model.Cliente", b =>
                 {
                     b.Property<int>("IdCliente")
@@ -166,6 +212,53 @@ namespace BodegasAburtoWMS.Migrations
                     b.HasKey("IdCuenta");
 
                     b.ToTable("CuentaBalances", (string)null);
+                });
+
+            modelBuilder.Entity("BodegasAburtoWMS.Model.EjercicioFinanciero", b =>
+                {
+                    b.Property<int>("IdEjercicioFinanciero")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEjercicioFinanciero"));
+
+                    b.Property<int>("Anio")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreadoUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Escenario")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("FechaFin")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FuenteDatos")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Moneda")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.HasKey("IdEjercicioFinanciero");
+
+                    b.HasIndex("Anio", "Escenario")
+                        .IsUnique();
+
+                    b.ToTable("EjerciciosFinancieros", (string)null);
                 });
 
             modelBuilder.Entity("BodegasAburtoWMS.Model.Envio", b =>
@@ -392,6 +485,43 @@ namespace BodegasAburtoWMS.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
+            modelBuilder.Entity("BodegasAburtoWMS.Model.SaldoCuentaFinanciera", b =>
+                {
+                    b.Property<int>("IdSaldoFinanciero")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdSaldoFinanciero"));
+
+                    b.Property<DateTime>("ActualizadoUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdCuentaFinanciera")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdEjercicioFinanciero")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Importe")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("IdSaldoFinanciero");
+
+                    b.HasIndex("IdCuentaFinanciera");
+
+                    b.HasIndex("IdEjercicioFinanciero", "IdCuentaFinanciera")
+                        .IsUnique();
+
+                    b.ToTable("SaldosCuentasFinancieras", (string)null);
+                });
+
             modelBuilder.Entity("BodegasAburtoWMS.Model.TipoEnvio", b =>
                 {
                     b.Property<int>("IdTipoEnvio")
@@ -514,6 +644,25 @@ namespace BodegasAburtoWMS.Migrations
                     b.Navigation("TipoEnvio");
                 });
 
+            modelBuilder.Entity("BodegasAburtoWMS.Model.SaldoCuentaFinanciera", b =>
+                {
+                    b.HasOne("BodegasAburtoWMS.Model.CatalogoCuentaFinanciera", "Cuenta")
+                        .WithMany("Saldos")
+                        .HasForeignKey("IdCuentaFinanciera")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BodegasAburtoWMS.Model.EjercicioFinanciero", "Ejercicio")
+                        .WithMany("Saldos")
+                        .HasForeignKey("IdEjercicioFinanciero")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Cuenta");
+
+                    b.Navigation("Ejercicio");
+                });
+
             modelBuilder.Entity("BodegasAburtoWMS.Model.Usuario", b =>
                 {
                     b.HasOne("BodegasAburtoWMS.Model.Rol", "Rol")
@@ -523,6 +672,16 @@ namespace BodegasAburtoWMS.Migrations
                         .IsRequired();
 
                     b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("BodegasAburtoWMS.Model.CatalogoCuentaFinanciera", b =>
+                {
+                    b.Navigation("Saldos");
+                });
+
+            modelBuilder.Entity("BodegasAburtoWMS.Model.EjercicioFinanciero", b =>
+                {
+                    b.Navigation("Saldos");
                 });
 #pragma warning restore 612, 618
         }

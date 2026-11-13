@@ -1,8 +1,9 @@
-﻿using BodegasAburtoWMS.Datos;
+using BodegasAburtoWMS.Datos;
 using BodegasAburtoWMS.Model;
 using BodegasAburtoWMS.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using BodegasAburtoWMS.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -102,7 +103,8 @@ namespace BodegasAburtoWMS.View
 
         private void btnEstadosFinancieros_Click(object sender, EventArgs e)
         {
-            MostrarFormEnCentro(new ModuloEstadosFinacieros(_repository));
+            var servicio = _serviceProvider.GetRequiredService<FinanzasEstadosService>();
+            MostrarFormEnCentro(new FinanzasEstadosV2Form(servicio));
         }
 
         private void btnAnalisisFinanciero_Click(object sender, EventArgs e)
