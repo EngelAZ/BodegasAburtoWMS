@@ -169,6 +169,12 @@ namespace BodegasAburtoWMS.View
             var guardar = Boton("Guardar saldo", _naranja);
             guardar.Click += async (_, _) => await EjecutarAsync(GuardarSaldoAsync);
             barra.Controls.Add(guardar);
+            var eliminarSaldo = Boton("Eliminar saldo", Color.Firebrick);
+            eliminarSaldo.Click += async (_, _) => await EjecutarAsync(EliminarSaldoAsync);
+            barra.Controls.Add(eliminarSaldo);
+            _ayuda.SetToolTip(eliminarSaldo,
+                "Selecciona una fila en la tabla. Solo elimina el saldo de esa cuenta " +
+                "en el ejercicio seleccionado, si está en Borrador.");
             _ejercicioCaptura.SelectedIndexChanged += async (_, _) =>
             {
                 if (!_ocupado) await EjecutarAsync(RefrescarSaldosAsync);
@@ -335,6 +341,53 @@ namespace BodegasAburtoWMS.View
             await RefrescarSaldosAsync();
         }
 
+        private async Task EliminarSaldoAsync()
+        {
+            int ejercicioId = ValorSeleccionado(_ejercicioCaptura);
+            if (ejercicioId == 0)
+                throw new InvalidOperationException("Selecciona un ejercicio fiscal.");
+
+            // Se toma la FILA elegida, no solo el ComboBox de captura:
+            // así nunca se elimina por accidente una cuenta distinta.
+            if (_tablaSaldos.SelectedRows.Count != 1)
+                throw new InvalidOperationException(
+                    "Selecciona en la tabla el saldo que deseas eliminar.");
+
+            var fila = _tablaSaldos.SelectedRows[0];
+            if (fila.Cells["IdCuentaFinanciera"].Value is not int cuentaId || cuentaId <= 0)
+                throw new InvalidOperationException("La fila seleccionada no tiene una cuenta válida.");
+
+            var ejercicio = _ejercicios.FirstOrDefault(x => x.IdEjercicioFinanciero == ejercicioId)
+                ?? throw new InvalidOperationException("No se encontró el ejercicio seleccionado.");
+            if (ejercicio.Estado != "Borrador")
+                throw new InvalidOperationException(
+                    "El ejercicio está cerrado. Reábrelo en 'Ejercicios fiscales' antes de eliminar saldos.");
+
+            string codigo = fila.Cells["Codigo"].Value?.ToString() ?? "";
+            string nombre = fila.Cells["Nombre"].Value?.ToString() ?? "";
+            string importe = fila.Cells["Importe"].Value is decimal valor
+                ? $"C$ {valor:N6}" : "(sin importe)";
+
+            string mensaje =
+                $"¿Eliminar el saldo de esta cuenta?{Environment.NewLine}{Environment.NewLine}" +
+                $"Ejercicio: {ejercicio.Anio} · {ejercicio.Escenario}{Environment.NewLine}" +
+                $"Cuenta: {codigo} · {nombre}{Environment.NewLine}" +
+                $"Saldo guardado: {importe}{Environment.NewLine}{Environment.NewLine}" +
+                "Se eliminará solo este saldo. La cuenta del catálogo y los saldos " +
+                "de otros ejercicios se conservarán. No se puede deshacer sin un respaldo.";
+
+            if (MessageBox.Show(mensaje, "Confirmar eliminación de saldo",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                return;
+
+            await _service.EliminarSaldoAsync(ejercicioId, cuentaId);
+            await RefrescarSaldosAsync();
+            _importe.Value = 0;
+            MessageBox.Show("Saldo eliminado correctamente del ejercicio seleccionado.",
+                "Saldos por ejercicio", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void ActualizarVistaPreviaImporte()
         {
             _importeRedondeado.Text =
@@ -354,6 +407,10 @@ namespace BodegasAburtoWMS.View
             }).ToList();
             OcultarId(_tablaSaldos, "IdCuentaFinanciera");
             FormatearMoneda(_tablaSaldos, "Importe");
+            // Evita que WinForms deje seleccionada por defecto la primera fila
+            // y que el usuario la elimine sin haberla elegido expresamente.
+            _tablaSaldos.ClearSelection();
+            _tablaSaldos.CurrentCell = null;
         }
 
         private async Task MostrarReporteAsync()

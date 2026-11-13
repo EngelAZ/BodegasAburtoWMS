@@ -160,6 +160,48 @@ namespace BodegasAburtoWMS.Service
             await db.SaveChangesAsync(ct);
         }
 
+        /// <summary>
+        /// Elimina únicamente el saldo registrado para UNA cuenta y UN ejercicio.
+        /// No elimina la cuenta del catálogo ni modifica saldos de otros ejercicios.
+        /// Solo se permite en ejercicios que permanezcan en estado Borrador.
+        /// </summary>
+        public async Task EliminarSaldoAsync(int ejercicioId, int cuentaId, CancellationToken ct = default)
+        {
+            if (ejercicioId <= 0 || cuentaId <= 0)
+                throw new ArgumentException("Debes seleccionar un ejercicio y una cuenta válidos.");
+
+            await using var db = await _factory.CreateDbContextAsync(ct);
+            var ejercicio = await db.EjerciciosFinancieros
+                .SingleOrDefaultAsync(x => x.IdEjercicioFinanciero == ejercicioId, ct)
+                ?? throw new InvalidOperationException("El ejercicio seleccionado ya no existe.");
+
+            if (ejercicio.Estado != "Borrador")
+                throw new InvalidOperationException(
+                    "No se pueden eliminar saldos de un ejercicio cerrado. Reábrelo primero.");
+
+            var saldo = await db.SaldosCuentasFinancieras
+                .SingleOrDefaultAsync(x => x.IdEjercicioFinanciero == ejercicioId &&
+                                           x.IdCuentaFinanciera == cuentaId, ct)
+                ?? throw new InvalidOperationException(
+                    "No se encontró ese saldo para el ejercicio seleccionado; puede haber sido eliminado.");
+
+            db.SaldosCuentasFinancieras.Remove(saldo);
+            try
+            {
+                await db.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new InvalidOperationException(
+                    "El saldo cambió o fue eliminado desde otra operación. Actualiza la tabla y vuelve a intentarlo.", ex);
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new InvalidOperationException(
+                    "No se puede eliminar el saldo porque existen registros relacionados en la base de datos.", ex);
+            }
+        }
+
         public async Task<EjercicioSnapshot> ObtenerSnapshotAsync(int ejercicioId, CancellationToken ct = default)
         {
             await using var db = await _factory.CreateDbContextAsync(ct);
